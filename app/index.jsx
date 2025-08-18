@@ -1,10 +1,5 @@
-import { View, Text } from "react-native";
-import React from "react";
+import { Redirect } from "expo-router";
 
-export default function HomeScreen() {
-  return (
-    <View>
-      <Text>HomeScreen</Text>
-    </View>
-  );
+export default function Index() {
+  return <Redirect href="/(auth)/welcome" />;
 }
