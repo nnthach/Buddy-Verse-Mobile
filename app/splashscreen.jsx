@@ -14,10 +14,8 @@ export default function SplashScreen() {
   }, []);
 
   return (
-    <View className="flex-1 items-center justify-center bg-red-500">
-      <Text className="text-xl font-bold text-blue-500">
-        Buddy Verse Splash Screen
-      </Text>
+    <View className="flex-1 items-center justify-center bg-beige-primary">
+      <Text className="text-xl font-bold text-purple-primary">Buddy Verse</Text>
     </View>
   );
 }

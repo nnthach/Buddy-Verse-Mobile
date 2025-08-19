@@ -15,23 +15,24 @@ import {
 import React, { useState } from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
-export default function SignInScreen() {
+export default function SignUpScreen() {
   const screenWidth = Dimensions.get("window").width;
 
-  const [signinForm, setSignInForm] = useState({
+  const [signupForm, setSignUpForm] = useState({
     username: "",
     password: "",
+    confirmPassword: "",
   });
 
   const handleChange = (name, value) => {
-    setSignInForm((prev) => ({
+    setSignUpForm((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
-  const handleSignIn = () => {
-    console.log("sign in form", signinForm);
+  const handleSignUp = () => {
+    console.log("sign up form", signupForm);
   };
 
   return (
@@ -54,7 +55,7 @@ export default function SignInScreen() {
                 resizeMode="cover"
               />
               <Text className="absolute bottom-1 left-4 text-beige-primary font-bold text-5xl">
-                Sign In
+                Sign Up
               </Text>
             </View>
 
@@ -63,32 +64,36 @@ export default function SignInScreen() {
               <TextInput
                 placeholder="Username"
                 className="border border-purple-primary pb-1 h-14 px-4 rounded-xl text-xl text-purple-primary"
-                value={signinForm.username}
+                value={signupForm.username}
                 onChangeText={(text) => handleChange("username", text)}
                 textAlignVertical="center"
               />
               <TextInput
                 placeholder="Password"
                 className="border border-purple-primary pb-1 h-14 px-4 rounded-xl text-xl text-purple-primary"
-                value={signinForm.password}
+                value={signupForm.password}
                 onChangeText={(text) => handleChange("password", text)}
+                textAlignVertical="center"
+                secureTextEntry
+              />
+              <TextInput
+                placeholder="Confirm Password"
+                className="border border-purple-primary pb-1 h-14 px-4 rounded-xl text-xl text-purple-primary"
+                value={signupForm.confirmPassword}
+                onChangeText={(text) => handleChange("confirmPassword", text)}
                 textAlignVertical="center"
                 secureTextEntry
               />
 
               <TouchableOpacity
                 activeOpacity={0.8}
-                onPress={handleSignIn}
+                onPress={handleSignUp}
                 className="h-14 bg-purple-primary rounded-[50px] items-center justify-center mt-3"
               >
                 <Text className="text-beige-primary text-xl font-medium">
-                  Sign In
+                  Create Account
                 </Text>
               </TouchableOpacity>
-
-              <Text className="text-center text-purple-primary text-xl font-medium">
-                Forgot Password
-              </Text>
             </View>
 
             {/*Other way to login */}
