@@ -7,13 +7,12 @@
     "icon": "./assets/images/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
-    "splash": {
-      "image": "./assets/images/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.nnthach.buddyverse",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -22,9 +21,21 @@
       },
       "edgeToEdgeEnabled": true
     },
-    "web": {
-      "favicon": "./assets/images/favicon.png"
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
     },
-    "plugins": ["expo-router", "expo-font"]
+    "web": {
+      "favicon": "./assets/images/favicon.png",
+      "bundler": "metro"
+    },
+    "plugins": ["expo-router", "expo-font"],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "b0c5902f-dff2-47b3-810f-c2fd7ee253df"
+      }
+    }
   }
 }

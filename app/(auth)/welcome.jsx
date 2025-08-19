@@ -4,7 +4,7 @@ import React from "react";
 export default function WelcomeScreen() {
   return (
     <SafeAreaView>
-      <View>
+      <View className="bg-purple-primary">
         <Text>WelcomeScreen</Text>
       </View>
     </SafeAreaView>
