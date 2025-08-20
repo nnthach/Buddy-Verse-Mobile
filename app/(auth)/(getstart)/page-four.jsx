@@ -16,7 +16,7 @@ export default function GetStartFourScreen() {
       <View className="flex-1 bg-beige-primary px-8">
         {/*Heading */}
         <View className="mt-8">
-          <Text className="text-[38px] text-purple-primary font-bold text-center">
+          <Text className="text-[38px] text-purple-secondary font-bold text-center">
             Terms &{"\n"}Conditions
           </Text>
         </View>
