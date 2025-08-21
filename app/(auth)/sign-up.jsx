@@ -11,9 +11,12 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
+  StatusBar,
 } from "react-native";
 import React, { useState } from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import TextInputAuth from "../../components/TextInputAuth";
 
 export default function SignUpScreen() {
   const screenWidth = Dimensions.get("window").width;
@@ -23,6 +26,7 @@ export default function SignUpScreen() {
     password: "",
     confirmPassword: "",
   });
+  const [errors, setErrors] = useState({});
 
   const handleChange = (name, value) => {
     setSignUpForm((prev) => ({
@@ -31,7 +35,40 @@ export default function SignUpScreen() {
     }));
   };
 
+  const handleValidation = () => {
+    let errors = {};
+
+    // Validate username
+    if (!signupForm.username) {
+      errors.username = "Username is required!";
+    } else if (
+      signupForm.username.length < 6 ||
+      signupForm.username.length > 15
+    ) {
+      errors.username = "Username is require in range 6-15 characters.";
+    }
+
+    // Validate password
+    if (!signupForm.password) {
+      errors.password = "Password is required!";
+    } else if (signupForm.password.length < 6) {
+      errors.password = "Password must be at least 6 characters.";
+    }
+
+    // Validate confirm password
+    if (!signupForm.confirmPassword) {
+      errors.confirmPassword = "Confirm Password is required!";
+    } else if (signupForm.confirmPassword !== signupForm.password) {
+      errors.confirmPassword = "Password do not match!";
+    }
+
+    setErrors(errors);
+
+    return Object.keys(errors).length === 0;
+  };
+
   const handleSignUp = () => {
+    if (!handleValidation()) return;
     console.log("sign up form", signupForm);
   };
 
@@ -40,9 +77,14 @@ export default function SignUpScreen() {
       <SafeAreaView className="flex-1 bg-beige-primary">
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={0}
           className="flex-1"
         >
-          <View className="flex-1 bg-beige-primary">
+          <ScrollView
+            contentContainerStyle={{ flexGrow: 1 }}
+            keyboardShouldPersistTaps="handled"
+            bounces={false}
+          >
             {/*Banner */}
             <View className="relative bg-red-200 h-[300px] w-full overflow-hidden">
               <Image
@@ -61,28 +103,28 @@ export default function SignUpScreen() {
 
             {/*Form */}
             <View className="my-6 px-4 gap-4">
-              <TextInput
-                placeholder="Username"
-                className="border border-purple-primary pb-1 h-14 px-4 rounded-xl text-xl text-purple-primary"
+              <TextInputAuth
+                label={"Username"}
                 value={signupForm.username}
                 onChangeText={(text) => handleChange("username", text)}
-                textAlignVertical="center"
+                error={errors.username}
               />
-              <TextInput
-                placeholder="Password"
-                className="border border-purple-primary pb-1 h-14 px-4 rounded-xl text-xl text-purple-primary"
+
+              <TextInputAuth
+                label={"Password"}
                 value={signupForm.password}
                 onChangeText={(text) => handleChange("password", text)}
-                textAlignVertical="center"
-                secureTextEntry
+                error={errors.password}
+                secureTextEntry={true}
               />
-              <TextInput
-                placeholder="Confirm Password"
-                className="border border-purple-primary pb-1 h-14 px-4 rounded-xl text-xl text-purple-primary"
+
+              <TextInputAuth
+                label={"Confirm Password"}
                 value={signupForm.confirmPassword}
                 onChangeText={(text) => handleChange("confirmPassword", text)}
-                textAlignVertical="center"
-                secureTextEntry
+                error={errors.confirmPassword}
+                secureTextEntry={true}
+                customLeftCSSOnblur="left-6"
               />
 
               <TouchableOpacity
@@ -95,6 +137,7 @@ export default function SignUpScreen() {
                 </Text>
               </TouchableOpacity>
             </View>
+            {/*End form */}
 
             {/*Other way to login */}
             <View className="items-center justify-center flex-row gap-3 mt-auto mb-10">
@@ -102,7 +145,7 @@ export default function SignUpScreen() {
               <AntDesign name="google" size={32} color={"#361F5C"} />
               <AntDesign name="facebook-square" size={32} color={"#361F5C"} />
             </View>
-          </View>
+          </ScrollView>
         </KeyboardAvoidingView>
       </SafeAreaView>
     </TouchableWithoutFeedback>
