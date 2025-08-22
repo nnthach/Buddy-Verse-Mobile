@@ -16,6 +16,7 @@ import {
 import React, { useState } from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import TextInputAuth from "../../components/TextInputAuth";
+import { router } from "expo-router";
 
 export default function SignInScreen() {
   const screenWidth = Dimensions.get("window").width;
@@ -63,6 +64,8 @@ export default function SignInScreen() {
     if (!handleValidation()) return;
 
     console.log("sign in form", signinForm);
+
+    router.replace("/(root)/(tabs)/home");
   };
 
   return (

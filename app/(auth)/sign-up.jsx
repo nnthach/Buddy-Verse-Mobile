@@ -17,6 +17,7 @@ import {
 import React, { useState } from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import TextInputAuth from "../../components/TextInputAuth";
+import { router } from "expo-router";
 
 export default function SignUpScreen() {
   const screenWidth = Dimensions.get("window").width;
@@ -70,6 +71,7 @@ export default function SignUpScreen() {
   const handleSignUp = () => {
     if (!handleValidation()) return;
     console.log("sign up form", signupForm);
+    router.replace("/sign-in");
   };
 
   return (

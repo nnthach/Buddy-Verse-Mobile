@@ -48,3 +48,48 @@ export const fakePageTwoGetStart = [
   { id: 24, title: "Writing" },
   { id: 25, title: "Language Learning" },
 ];
+
+export const fakeDataDiscover = [
+  {
+    image:
+      "https://m.media-amazon.com/images/S/pv-target-images/16627900db04b76fae3b64266ca161511422059cd24062fb5d900971003a0b70._SX1080_FMjpg_.jpg",
+    name: "Hai Anh",
+    age: 20,
+    address: "Ho Chi Minh",
+  },
+  {
+    image:
+      "https://m.media-amazon.com/images/S/pv-target-images/16627900db04b76fae3b64266ca161511422059cd24062fb5d900971003a0b70._SX1080_FMjpg_.jpg",
+    name: "Hai Anh",
+    age: 20,
+    address: "Ho Chi Minh",
+  },
+  {
+    image:
+      "https://m.media-amazon.com/images/S/pv-target-images/16627900db04b76fae3b64266ca161511422059cd24062fb5d900971003a0b70._SX1080_FMjpg_.jpg",
+    name: "Hai Anh",
+    age: 20,
+    address: "Ho Chi Minh",
+  },
+  {
+    image:
+      "https://m.media-amazon.com/images/S/pv-target-images/16627900db04b76fae3b64266ca161511422059cd24062fb5d900971003a0b70._SX1080_FMjpg_.jpg",
+    name: "Hai Anh",
+    age: 20,
+    address: "Ho Chi Minh",
+  },
+  {
+    image:
+      "https://m.media-amazon.com/images/S/pv-target-images/16627900db04b76fae3b64266ca161511422059cd24062fb5d900971003a0b70._SX1080_FMjpg_.jpg",
+    name: "Hai Anh",
+    age: 20,
+    address: "Ho Chi Minh",
+  },
+  {
+    image:
+      "https://m.media-amazon.com/images/S/pv-target-images/16627900db04b76fae3b64266ca161511422059cd24062fb5d900971003a0b70._SX1080_FMjpg_.jpg",
+    name: "Hai Anh",
+    age: 20,
+    address: "Ho Chi Minh",
+  },
+];
