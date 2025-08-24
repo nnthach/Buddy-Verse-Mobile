@@ -36,7 +36,7 @@ export default function GetStartTwoScreen() {
           <Text className="text-[38px] text-purple-secondary font-bold">
             Select your interests
           </Text>
-          <Text className="text-xl text-purple-secondary /70">
+          <Text className="text-xl text-purple-secondary/70">
             for better matches
           </Text>
         </View>
