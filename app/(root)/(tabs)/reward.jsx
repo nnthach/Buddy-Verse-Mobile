@@ -13,6 +13,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Feather from "@expo/vector-icons/Feather";
 import ModalRewardHistory from "@components/ModalRewardHistory";
+import { router } from "expo-router";
 
 export default function RewardScreen() {
   const [points, setPoints] = useState(8868);
@@ -62,7 +63,14 @@ export default function RewardScreen() {
                     />
                     <Text className="text-purple-primary font-bold">8,868</Text>
                   </View>
-                  <AntDesign name="pluscircleo" size={18} color="#F1F3E7" />
+                  <TouchableOpacity
+                    onPress={() => {
+                      console.log("Add points");
+                      router.push("/(root)/(stack)/reward/payment");
+                    }}
+                  >
+                    <AntDesign name="pluscircleo" size={18} color="#F1F3E7" />
+                  </TouchableOpacity>
                 </View>
               </LinearGradient>
             </View>
@@ -93,9 +101,16 @@ export default function RewardScreen() {
               </Text>
             </View>
             {/*Bottom */}
+
+            <View className="bg-purple-primary/30 w-full h-6 my-auto rounded-full overflow-hidden">
+              <View className="h-full bg-purple-four w-[calc(8686/10000*100%)] rounded-full" />
+            </View>
           </View>
           {/*Leader board */}
-          <View className="h-24 w-24 overflow-hidden rounded-2xl">
+          <TouchableOpacity
+            onPress={() => router.push(`/(root)/(stack)/reward/leaderBoard`)}
+            className="h-24 w-24 overflow-hidden rounded-2xl"
+          >
             <Image
               source={{
                 uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzz7di0LYIulQDtDANj-jYuZhNS8btD9KEOg&s.png",
@@ -103,7 +118,7 @@ export default function RewardScreen() {
               className="w-full h-full"
               resizeMode="cover"
             />
-          </View>
+          </TouchableOpacity>
         </TouchableOpacity>
 
         {/*Daily check in */}

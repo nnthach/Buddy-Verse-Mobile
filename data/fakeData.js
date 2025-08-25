@@ -536,3 +536,76 @@ export const fakeDataHistoryReward = [
     date: "03 Jul 2025, 09:00 PM",
   },
 ];
+
+export const fakeDataRanking = [
+  {
+    id: 1,
+    name: "Alice Johnson",
+    points: 20000,
+    avatar:
+      "https://m.media-amazon.com/images/S/pv-target-images/16627900db04b76fae3b64266ca161511422059cd24062fb5d900971003a0b70._SX1080_FMjpg_.jpg",
+  },
+  {
+    id: 2,
+    name: "Michael Smith",
+    points: 18500,
+    avatar:
+      "https://m.media-amazon.com/images/S/pv-target-images/16627900db04b76fae3b64266ca161511422059cd24062fb5d900971003a0b70._SX1080_FMjpg_.jpg",
+  },
+  {
+    id: 3,
+    name: "Sophia Brown",
+    points: 17200,
+    avatar:
+      "https://m.media-amazon.com/images/S/pv-target-images/16627900db04b76fae3b64266ca161511422059cd24062fb5d900971003a0b70._SX1080_FMjpg_.jpg",
+  },
+  {
+    id: 4,
+    name: "James Wilson",
+    points: 16000,
+    avatar:
+      "https://m.media-amazon.com/images/S/pv-target-images/16627900db04b76fae3b64266ca161511422059cd24062fb5d900971003a0b70._SX1080_FMjpg_.jpg",
+  },
+  {
+    id: 5,
+    name: "Emma Davis",
+    points: 15000,
+    avatar:
+      "https://m.media-amazon.com/images/S/pv-target-images/16627900db04b76fae3b64266ca161511422059cd24062fb5d900971003a0b70._SX1080_FMjpg_.jpg",
+  },
+  {
+    id: 6,
+    name: "Daniel Miller",
+    points: 13800,
+    avatar:
+      "https://m.media-amazon.com/images/S/pv-target-images/16627900db04b76fae3b64266ca161511422059cd24062fb5d900971003a0b70._SX1080_FMjpg_.jpg",
+  },
+  {
+    id: 7,
+    name: "Olivia Martinez",
+    points: 12500,
+    avatar:
+      "https://m.media-amazon.com/images/S/pv-target-images/16627900db04b76fae3b64266ca161511422059cd24062fb5d900971003a0b70._SX1080_FMjpg_.jpg",
+  },
+  {
+    id: 8,
+    name: "William Anderson",
+    points: 11200,
+    avatar:
+      "https://m.media-amazon.com/images/S/pv-target-images/16627900db04b76fae3b64266ca161511422059cd24062fb5d900971003a0b70._SX1080_FMjpg_.jpg",
+  },
+  {
+    id: 9,
+    name: "Ava Thomas",
+    points: 9800,
+    avatar:
+      "https://m.media-amazon.com/images/S/pv-target-images/16627900db04b76fae3b64266ca161511422059cd24062fb5d900971003a0b70._SX1080_FMjpg_.jpg",
+  },
+  {
+    id: 10,
+    name: "Ethan Garcia",
+    points: 8500,
+    avatar:
+      "https://m.media-amazon.com/images/S/pv-target-images/16627900db04b76fae3b64266ca161511422059cd24062fb5d900971003a0b70._SX1080_FMjpg_.jpg",
+  },
+];

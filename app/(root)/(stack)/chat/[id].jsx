@@ -1,6 +1,13 @@
-import { View, Text, Image, ScrollView, TextInput } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
 import React, { useState } from "react";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -17,7 +24,13 @@ export default function ChatDetail() {
       <View className="h-16 flex-row justify-between items-center px-4 border-b border-yellow-50">
         {/*Left */}
         <View className="flex-row items-center gap-4 w-[80%]">
-          <MaterialIcons name="keyboard-arrow-left" size={34} color="#57298D" />
+          <TouchableOpacity onPress={() => router.back()}>
+            <MaterialIcons
+              name="keyboard-arrow-left"
+              size={34}
+              color="#57298D"
+            />
+          </TouchableOpacity>
           <View className="flex-row gap-2 items-center">
             <Image
               source={{

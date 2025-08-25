@@ -10,9 +10,17 @@ module.exports = {
           primary: "#57298D",
           secondary: "#371661",
           third: "#361F5C",
+          four: "#552196",
+          five: "#CEACE3",
         },
         beige: {
           primary: "#F1F3E7",
+        },
+        blue: {
+          primary: "#EDF0F7",
+        },
+        green: {
+          success: "#79E34B",
         },
       },
       fontFamily: {
