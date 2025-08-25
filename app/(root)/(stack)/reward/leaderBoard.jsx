@@ -20,7 +20,7 @@ export default function LeaderBoard() {
   const rankingItem = ({ item, index }) => {
     return (
       <View className="bg-white flex-row items-center gap-4 py-4 px-4 rounded-full">
-        <Text className="text-lg font-semibold">{index + 1}</Text>
+        <Text className="text-lg font-semibold">{item.id}</Text>
         <View className="flex-row items-center gap-2">
           <Image
             source={{ uri: item.avatar }}
@@ -126,7 +126,7 @@ export default function LeaderBoard() {
       {/*List ranking */}
       <View className="px-6 flex-1">
         <FlatList
-          data={rankingList}
+          data={rankingList.slice(3)}
           keyExtractor={(item) => item.id.toString()}
           renderItem={rankingItem}
           showsVerticalScrollIndicator={false}

@@ -609,3 +609,138 @@ export const fakeDataRanking = [
       "https://m.media-amazon.com/images/S/pv-target-images/16627900db04b76fae3b64266ca161511422059cd24062fb5d900971003a0b70._SX1080_FMjpg_.jpg",
   },
 ];
+
+export const fakeDataTransaction = [
+  {
+    id: 1,
+    title: "Cash-in",
+    time: "2 Jul 2025, 10:34 AM",
+    total: 599999,
+    status: "Success",
+  },
+  {
+    id: 2,
+    title: "Cash-in",
+    time: "3 Jul 2025, 09:15 AM",
+    total: 450000,
+    status: "Cancel",
+  },
+  {
+    id: 3,
+    title: "Cash-out",
+    time: "4 Jul 2025, 01:22 PM",
+    total: 250000,
+    status: "Success",
+  },
+  {
+    id: 4,
+    title: "Cash-out",
+    time: "5 Jul 2025, 07:10 PM",
+    total: 800000,
+    status: "Cancel",
+  },
+  {
+    id: 5,
+    title: "Transfer",
+    time: "6 Jul 2025, 08:45 AM",
+    total: 1200000,
+    status: "Success",
+  },
+  {
+    id: 6,
+    title: "Transfer",
+    time: "7 Jul 2025, 05:55 PM",
+    total: 300000,
+    status: "Cancel",
+  },
+  {
+    id: 7,
+    title: "Payment",
+    time: "8 Jul 2025, 03:20 PM",
+    total: 459000,
+    status: "Success",
+  },
+  {
+    id: 8,
+    title: "Payment",
+    time: "9 Jul 2025, 11:40 AM",
+    total: 120000,
+    status: "Cancel",
+  },
+  {
+    id: 9,
+    title: "Cash-in",
+    time: "10 Jul 2025, 06:15 AM",
+    total: 999999,
+    status: "Success",
+  },
+  {
+    id: 10,
+    title: "Cash-in",
+    time: "11 Jul 2025, 08:50 PM",
+    total: 350000,
+    status: "Cancel",
+  },
+];
+
+export const membershipPlansData = {
+  Basic: {
+    info: {
+      name: "Basic",
+      price: "29,999",
+      rule: "Per member, per month",
+      description:
+        "For all individuals and starters who want to start with domaining.",
+    },
+    benefits: [
+      { label: "Access to All Features", available: true },
+      { label: "1k lookups / per month", available: true },
+      { label: "No API Credits", available: false },
+      { label: "10 Monitoring Quota", available: true },
+      { label: "60 minutes Monitoring interval", available: true },
+      { label: "20% discount on backorders", available: true },
+      { label: "Domain Name Appraisal", available: true, tag: "Coming Soon" },
+    ],
+  },
+  Monthly: {
+    info: {
+      tag: "Popular",
+      name: "Premium",
+      price: "49,999",
+      rule: "Per member, per month",
+      description:
+        "For professional domain names investors with a big portfolio.",
+    },
+    benefits: [
+      { label: "Access to All Features", available: true },
+      { label: "1k lookups / per month", available: true },
+      { label: "30k API Credits / month", available: true },
+      { label: "10 Monitoring Quota", available: true },
+      { label: "60 minutes Monitoring interval", available: true },
+      { label: "20% discount on backorders", available: true },
+      { label: "Domain Name Appraisal", available: true, tag: "Coming Soon" },
+      { label: "IP Monitoring", available: true, tag: "Coming Soon" },
+      { label: "Backlink Monitoring", available: true, tag: "Coming Soon" },
+    ],
+  },
+  Yearly: {
+    info: {
+      name: "ADVANCED",
+      price: "499,999",
+      rule: "Per member, per year",
+      description:
+        "For professional domain names investors with a big portfolio.",
+    },
+    benefits: [
+      { label: "Access to All Features", available: true },
+      { label: "1k lookups / per month", available: true },
+      { label: "30k API Credits / month", available: true },
+      { label: "10 Monitoring Quota", available: true },
+      { label: "60 minutes Monitoring interval", available: true },
+      { label: "20% discount on backorders", available: true },
+      { label: "Domain Name Appraisal", available: true, tag: "Coming Soon" },
+      { label: "IP Monitoring", available: true, tag: "Coming Soon" },
+      { label: "Backlink Monitoring", available: true, tag: "Coming Soon" },
+    ],
+  },
+};
