@@ -145,11 +145,13 @@ export default function Membership() {
 
               {/*Button */}
               <View className="mt-2">
-                <Text
-                  className={` ${selectMembership == "Basic" ? "bg-black text-white" : "bg-yellow-300/70 text-black"} text-center p-2 font-medium rounded-lg`}
-                >
-                  Start free 14-days trial
-                </Text>
+                <TouchableOpacity onPress={() => router.push("/membershipPayment/payment")}>
+                  <Text
+                    className={` ${selectMembership == "Basic" ? "bg-black text-white" : "bg-yellow-300/70 text-black"} text-center p-2 font-medium rounded-lg`}
+                  >
+                    Start free 14-days trial
+                  </Text>
+                </TouchableOpacity>
                 <Text
                   className={`text-center mt-2 text-sm ${selectMembership == "Basic" ? " text-black" : " text-white"}`}
                 >

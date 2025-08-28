@@ -41,6 +41,7 @@ export default function Layout() {
           transform: [{ translateY: -10 }],
         },
         tabBarShowLabel: false,
+        gestureEnabled: false,
       }}
     >
       <Tabs.Screen
