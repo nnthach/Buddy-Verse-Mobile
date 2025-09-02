@@ -31,6 +31,9 @@ module.exports = {
         regular: ["PoppinsRegular"],
         light: ["PoppinsLight"],
       },
+      boxShadow: {
+        custom: "0px 0px 10px rgba(0, 0, 0, 0.4)",
+      },
     },
   },
   plugins: [],
