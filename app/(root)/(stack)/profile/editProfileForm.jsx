@@ -199,7 +199,7 @@ export default function EditProfileForm() {
               <InputField
                 label={"Date of Birth"}
                 placeholder={"Date/Month/Year"}
-                type="select"
+                type="date"
                 openSelect={openSelect === "dob"}
                 name="dob"
                 setUserProfile={setUserProfile}

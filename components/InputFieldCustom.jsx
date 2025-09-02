@@ -6,6 +6,8 @@ import {
   View,
 } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { useState } from "react";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const InputField = ({
   type = "text",
@@ -22,10 +24,12 @@ const InputField = ({
   value,
   ...props
 }) => {
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
   return (
     <View className="gap-1">
       <Text className="text-purple-primary text-xl">{label}</Text>
-      {type == "text" ? (
+      {type == "text" && (
         <View className="bg-white h-14 rounded-xl border border-blue-50">
           <TextInput
             className="h-full w-full px-4 pb-1 text-xl text-black "
@@ -42,7 +46,9 @@ const InputField = ({
             {...props}
           />
         </View>
-      ) : (
+      )}
+
+      {type == "select" && (
         <>
           <TouchableOpacity
             activeOpacity={0.5}
@@ -84,6 +90,33 @@ const InputField = ({
               </ScrollView>
             </View>
           )}
+        </>
+      )}
+
+      {type === "date" && (
+        <>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => setDatePickerVisibility(true)}
+          >
+            <View className="bg-white h-14 px-4 rounded-xl border border-blue-50 flex-row w-full justify-between items-center">
+              <Text>{value ? value : `Select ${label}`}</Text>
+              <MaterialIcons name="calendar-today" size={22} color="#57298D" />
+            </View>
+          </TouchableOpacity>
+
+          <DateTimePickerModal
+            isVisible={isDatePickerVisible}
+            mode="date"
+            onConfirm={(date) => {
+              setDatePickerVisibility(false);
+              setUserProfile((prev) => ({
+                ...prev,
+                [name]: date.toISOString().split("T")[0], // yyyy-mm-dd
+              }));
+            }}
+            onCancel={() => setDatePickerVisibility(false)}
+          />
         </>
       )}
     </View>
