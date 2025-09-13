@@ -96,9 +96,13 @@ export default function SettingProfile() {
             className="w-32 h-32 rounded-full"
             resizeMode="cover"
           />
-          <Text className="text-xl text-purple-primary font-bold mt-3 mb-1">
-            Nguyen Ngoc Thach
-          </Text>
+          <TouchableOpacity
+            onPress={() => router.push("/profile/characterCartoon")}
+          >
+            <Text className="text-xl text-purple-primary font-bold mt-3 mb-1">
+              Nguyen Ngoc Thach
+            </Text>
+          </TouchableOpacity>
         </View>
 
         {/*Content */}

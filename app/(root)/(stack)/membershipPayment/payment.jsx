@@ -111,7 +111,15 @@ export default function Payment() {
         {/*Accept BTN */}
         <TouchableOpacity
           disabled={!isChecked}
-          onPress={() => router.replace("/membershipPayment/paymentLoading")}
+          onPress={() =>
+            router.replace({
+              pathname: "/membershipPayment/paymentLoading",
+              params: {
+                label: "Purchase Loading...",
+                next: "/membershipPayment/paymentResult",
+              },
+            })
+          }
           className={`bg-purple-primary py-3 rounded-xl items-center mt-8 ${
             isChecked ? "" : "opacity-50"
           }`}

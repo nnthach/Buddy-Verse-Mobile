@@ -1,22 +1,10 @@
 import { View, Text, Image, ActivityIndicator } from "react-native";
 import React, { useEffect } from "react";
-import { router, useLocalSearchParams } from "expo-router";
+import { router } from "expo-router";
 
-export default function PaymentLoading() {
-  const { label, next } = useLocalSearchParams();
-
-  useEffect(() => {
-    if (!next) return;
-
-    const timer = setTimeout(() => {
-      router.replace(next);
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  }, [next]);
-
+export default function LoadingCustom({ label }) {
   return (
-    <View className="flex-1 justify-center items-center bg-beige-primary">
+    <View className="absolute top-0 left-0 right-0 bottom-0  flex-1 justify-center items-center bg-beige-primary z-10">
       <View className="justify-center items-center">
         <View className="w-36 h-36 rounded-full border-4 border-purple-primary mb-4 items-center justify-center">
           <ActivityIndicator
@@ -25,9 +13,7 @@ export default function PaymentLoading() {
             className="scale-150"
           />
         </View>
-        <Text className="font-bold text-purple-primary text-2xl">
-          {label || "Loading..."}
-        </Text>
+        <Text className="font-bold text-purple-primary text-2xl">{label}</Text>
         <View className="flex-row items-center gap-2">
           <Image
             source={require("@assets/icons/light_bulb.png")}
