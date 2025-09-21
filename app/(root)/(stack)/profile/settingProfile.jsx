@@ -200,7 +200,7 @@ export default function SettingProfile() {
           </View>
 
           <View className="mt-4">
-            <TouchableOpacity className="bg-purple-third py-4 px-6 rounded-full w-full">
+            <TouchableOpacity onPress={() => router.replace("/(auth)/sign-in")} className="bg-purple-third py-4 px-6 rounded-full w-full">
               <Text className="text-white text-xl font-medium text-center">
                 Sign Out
               </Text>

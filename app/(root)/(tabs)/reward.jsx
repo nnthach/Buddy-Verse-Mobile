@@ -1,7 +1,6 @@
 import {
   View,
   Text,
-  SafeAreaView,
   Image,
   FlatList,
   TouchableOpacity,
@@ -14,6 +13,8 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Feather from "@expo/vector-icons/Feather";
 import ModalRewardHistory from "@components/ModalRewardHistory";
 import { router } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
+
 
 export default function RewardScreen() {
   const [points, setPoints] = useState(8868);

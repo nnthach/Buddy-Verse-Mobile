@@ -9,6 +9,7 @@ import {
 import React, { useState } from "react";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import { router } from "expo-router";
 
 export default function CharacterCartoon() {
   const [selectType, setSelectType] = useState("tee");
@@ -143,7 +144,7 @@ export default function CharacterCartoon() {
 
         {/*Product list */}
         <ScrollView className="p-6">
-          <View className="flex-row flex-wrap gap-5">
+          <View className="flex-row flex-wrap gap-2">
             {productList[selectType].map((item, index) => (
               <TouchableOpacity
                 key={index}

@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { useFonts } from "expo-font";
 import { Image, View } from "react-native";
 import "./global.css";
+import { AuthProvider } from "../context/AuthContext";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -30,7 +31,11 @@ export default function RootLayout() {
     return null;
   }
 
-  return <RootLayoutNav />;
+  return (
+    <AuthProvider>
+      <RootLayoutNav />
+    </AuthProvider>
+  );
 }
 
 function RootLayoutNav() {

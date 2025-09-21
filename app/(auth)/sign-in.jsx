@@ -4,8 +4,6 @@ import {
   SafeAreaView,
   Image,
   Dimensions,
-  TextInput,
-  Touchable,
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
@@ -13,16 +11,19 @@ import {
   Platform,
   ScrollView,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import TextInputAuth from "../../components/TextInputAuth";
+import { loginAPI } from "../../services/authService";
+import { AuthContext } from "../../context/AuthContext";
 import { router } from "expo-router";
 
 export default function SignInScreen() {
   const screenWidth = Dimensions.get("window").width;
+  const { userId, setUserId } = useContext(AuthContext);
 
   const [signinForm, setSignInForm] = useState({
-    username: "",
+    email: "",
     password: "",
   });
 
@@ -33,39 +34,56 @@ export default function SignInScreen() {
       ...prev,
       [name]: value,
     }));
+
+    setErrors((prev) => ({
+      ...prev,
+      [name]: null,
+    }));
   };
 
   const handleValidation = () => {
     let errors = {};
+    let isError = false;
 
-    // Validate username
-    if (!signinForm.username) {
-      errors.username = "Username is required!";
-    } else if (
-      signinForm.username.length < 6 ||
-      signinForm.username.length > 15
-    ) {
-      errors.username = "Username is require in range 6-15 characters.";
+    // Validate email
+    if (!signinForm.email) {
+      errors.email = "Email is required!";
+      isError = true;
+    } else {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(signinForm.email)) {
+        errors.email = "Invalid email format";
+        isError = true;
+      }
     }
 
     // Validate password
     if (!signinForm.password) {
       errors.password = "Password is required!";
+      isError = true;
     } else if (signinForm.password.length < 6) {
       errors.password = "Password must be at least 6 characters.";
+      isError = true;
     }
 
     setErrors(errors);
 
-    return Object.keys(errors).length === 0;
+    return isError;
   };
 
-  const handleSignIn = () => {
-    if (!handleValidation()) return;
+  const handleSignIn = async () => {
+    if (handleValidation()) return;
 
     console.log("sign in form", signinForm);
 
-    router.replace("/(root)/(tabs)/home");
+    try {
+      const res = await loginAPI(signinForm);
+      console.log("login res", res);
+      // router.replace("/(root)/(tabs)/home");
+    } catch (error) {
+      console.log("login err", error);
+      alert(error?.data?.message);
+    }
   };
 
   return (
@@ -100,10 +118,10 @@ export default function SignInScreen() {
             {/*Form */}
             <View className="my-6 px-4 gap-4">
               <TextInputAuth
-                label={"Username"}
-                value={signinForm.username}
-                onChangeText={(text) => handleChange("username", text)}
-                error={errors.username}
+                label={"Email"}
+                value={signinForm.email}
+                onChangeText={(text) => handleChange("email", text)}
+                error={errors.email}
               />
               <TextInputAuth
                 label={"Password"}
@@ -123,9 +141,29 @@ export default function SignInScreen() {
                 </Text>
               </TouchableOpacity>
 
-              <Text className="text-center text-purple-primary text-xl font-medium">
-                Forgot Password
-              </Text>
+              <View className=" gap-4 ">
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  onPress={() => {
+                    console.log("fotget pw");
+                    router.push("/forget-password");
+                  }}
+                >
+                  <Text className="text-center text-purple-primary text-xl font-medium">
+                    Forgot Password
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  onPress={() => {
+                    router.push("/(getstart)");
+                  }}
+                >
+                  <Text className="text-center text-purple-primary text-xl font-medium">
+                    Get Start
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
 
             {/*Other way to login */}
