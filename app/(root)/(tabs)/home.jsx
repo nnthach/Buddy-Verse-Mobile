@@ -11,17 +11,17 @@ export default function HomeScreen() {
   const [stats, setStats] = useState([
     {
       number: 29,
-      label: "Streaks",
+      label: "Chuỗi",
       icon: require("@assets/icons/fire.png"),
     },
     {
       number: 45,
-      label: "Trust Scores",
+      label: "Độ uy tín",
       icon: require("@assets/icons/trustscore.png"),
     },
     {
       number: 6.868,
-      label: "Points",
+      label: "Điểm",
       icon: require("@assets/icons/point.png"),
     },
   ]);
@@ -129,10 +129,10 @@ export default function HomeScreen() {
             {/*Discover header */}
             <View className="w-full flex-row items-center justify-between">
               <Text className="text-purple-primary text-2xl font-bold">
-                Discover
+                Khám phá
               </Text>
               <View className="flex-row items-center">
-                <Text className="text-purple-primary/50 text-lg">See more</Text>
+                <Text className="text-purple-primary/50 text-lg">Xem thêm</Text>
                 <MaterialIcons
                   name="keyboard-arrow-right"
                   size={24}
@@ -169,7 +169,7 @@ export default function HomeScreen() {
                     }}
                   />
                   <Text className="absolute top-2 left-2 text-[8px] py-[2px] px-[6px] rounded-lg bg-purple-primary text-white">
-                    NEW
+                    Mới
                   </Text>
                   <View className="absolute bottom-1 left-0 right-0 items-center z-">
                     <Text className="text-xs font-bold text-beige-primary">
@@ -189,10 +189,10 @@ export default function HomeScreen() {
             {/*Header */}
             <View className="w-full flex-row items-center justify-between">
               <Text className="text-purple-primary text-2xl font-bold">
-                Special Offers
+                Uư đãi đặc biệt
               </Text>
               <View className="flex-row items-center">
-                <Text className="text-purple-primary/50 text-lg">See more</Text>
+                <Text className="text-purple-primary/50 text-lg">Xem thêm</Text>
                 <MaterialIcons
                   name="keyboard-arrow-right"
                   size={24}

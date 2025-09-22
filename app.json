@@ -30,7 +30,18 @@
       "favicon": "./assets/images/favicon.png",
       "bundler": "metro"
     },
-    "plugins": ["expo-router", "expo-font"],
+    "plugins": [
+      "expo-router",
+      "expo-font",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Accept to access photo",
+          "cameraPermission": true,
+          "microphonePermission": false
+        }
+      ]
+    ],
     "extra": {
       "router": {},
       "eas": {

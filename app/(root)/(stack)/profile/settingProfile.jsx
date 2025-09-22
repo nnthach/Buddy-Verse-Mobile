@@ -13,6 +13,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import Feather from "@expo/vector-icons/Feather";
 import Entypo from "@expo/vector-icons/Entypo";
 import { router } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function SettingProfile() {
   const [isEnabled, setIsEnabled] = useState(false);
@@ -69,6 +70,15 @@ export default function SettingProfile() {
       type: "nest",
     },
   ];
+
+  const handleLogout = async () => {
+    try {
+      await AsyncStorage.multiRemove(["userId", "accessToken", "refreshToken"]);
+      router.replace("/(auth)/welcome");
+    } catch (error) {
+      console.log("Logout error:", error);
+    }
+  };
   return (
     <SafeAreaView className="flex-1 bg-beige-primary">
       <ScrollView className="flex-1 px-6">
@@ -200,7 +210,10 @@ export default function SettingProfile() {
           </View>
 
           <View className="mt-4">
-            <TouchableOpacity onPress={() => router.replace("/(auth)/sign-in")} className="bg-purple-third py-4 px-6 rounded-full w-full">
+            <TouchableOpacity
+              onPress={handleLogout}
+              className="bg-purple-third py-4 px-6 rounded-full w-full"
+            >
               <Text className="text-white text-xl font-medium text-center">
                 Sign Out
               </Text>

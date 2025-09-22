@@ -17,13 +17,10 @@ export default function GetStartTwoScreen() {
   const [interestList, setInterestList] = useState([]);
   const { submitRegisterForm, setSubmitRegisterForm } = useContext(AuthContext);
 
-  console.log("interest list", submitRegisterForm.interestIds);
-
   useEffect(() => {
     const handleGetInterestList = async () => {
       try {
         const res = await getInterestListAPI();
-        console.log("res interest list", res);
         setInterestList(res.data);
       } catch (error) {
         console.log("get interest list err", error);
@@ -34,8 +31,6 @@ export default function GetStartTwoScreen() {
   }, []);
 
   const handleAddInterestList = (item) => {
-    console.log("item", item);
-
     setSubmitRegisterForm((prev) => {
       const isSelected = prev.interestIds.includes(item);
 

@@ -82,8 +82,8 @@ export default function SignUpScreen() {
                 }}
                 resizeMode="cover"
               />
-              <Text className="absolute bottom-1 left-4 text-beige-primary font-bold text-5xl">
-                Sign Up
+              <Text className="absolute bottom-[12px] left-4 text-beige-primary font-bold text-4xl">
+                Đăng ký
               </Text>
             </View>
 
@@ -92,13 +92,13 @@ export default function SignUpScreen() {
               {signupStep == 1 ? (
                 <>
                   <TextInputAuth
-                    label={"First Name"}
+                    label={"Tên đầu"}
                     value={submitRegisterForm.firstname}
                     onChangeText={(text) => handleChange("firstname", text)}
                     error={errors?.firstname}
                   />
                   <TextInputAuth
-                    label={"Last Name"}
+                    label={"Tên cuối"}
                     value={submitRegisterForm.lastname}
                     onChangeText={(text) => handleChange("lastname", text)}
                     error={errors?.lastname}
@@ -118,7 +118,7 @@ export default function SignUpScreen() {
                                 .charAt(0)
                                 .toUpperCase() +
                               submitRegisterForm?.gender.slice(1)
-                            : "Select Gender"}
+                            : "Chọn giới tính"}
                         </Text>
                         <MaterialIcons
                           name="keyboard-arrow-down"
@@ -138,26 +138,26 @@ export default function SignUpScreen() {
                             onPress={() => {
                               setSubmitRegisterForm((prev) => ({
                                 ...prev,
-                                gender: "male",
+                                gender: "nam",
                               }));
                               setOpenSelect(false);
                             }}
                             className="bg-white p-4"
                           >
-                            <Text>Male</Text>
+                            <Text>Nam</Text>
                           </TouchableOpacity>
                           <TouchableOpacity
                             activeOpacity={0.9}
                             onPress={() => {
                               setSubmitRegisterForm((prev) => ({
                                 ...prev,
-                                gender: "female",
+                                gender: "nữ",
                               }));
                               setOpenSelect(false);
                             }}
                             className="bg-white p-4"
                           >
-                            <Text>Female</Text>
+                            <Text>Nữ</Text>
                           </TouchableOpacity>
                         </ScrollView>
                       </View>
@@ -174,7 +174,7 @@ export default function SignUpScreen() {
                         <Text>
                           {submitRegisterForm?.dob
                             ? submitRegisterForm?.dob
-                            : "Select DOB"}
+                            : "Chọn ngày sinh"}
                         </Text>
                         <MaterialIcons
                           name="calendar-today"
@@ -201,7 +201,7 @@ export default function SignUpScreen() {
               ) : (
                 <>
                   <TextInputAuth
-                    label={"Username"}
+                    label={"Tên đăng nhập"}
                     value={submitRegisterForm.username}
                     onChangeText={(text) => handleChange("username", text)}
                     error={errors?.username}
@@ -214,14 +214,14 @@ export default function SignUpScreen() {
                     error={errors?.email}
                   />
                   <TextInputAuth
-                    label={"Password"}
+                    label={"Mật khẩu"}
                     value={submitRegisterForm.password}
                     onChangeText={(text) => handleChange("password", text)}
                     error={errors?.password}
                     secureTextEntry={true}
                   />
                   <TextInputAuth
-                    label={"Confirm Password"}
+                    label={"Nhập lại mật khẩu"}
                     value={submitRegisterForm.confirmPassword}
                     onChangeText={(text) =>
                       handleChange("confirmPassword", text)
@@ -238,12 +238,12 @@ export default function SignUpScreen() {
                 className="h-14 bg-purple-primary rounded-[50px] items-center justify-center mt-3"
               >
                 <Text className="text-beige-primary text-xl font-medium">
-                  {signupStep == 1 ? "Continue" : "Create Account"}
+                  {signupStep == 1 ? "Tiếp tục" : "Tạo tài khoản"}
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => router.replace("/sign-in")}>
                 <Text className="text-center text-purple-primary text-xl font-medium">
-                  Already have an account?
+                  Đã có tài khoản?
                 </Text>
               </TouchableOpacity>
             </View>

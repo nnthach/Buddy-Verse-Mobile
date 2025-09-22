@@ -127,7 +127,7 @@ export default function SignInScreen() {
             bounces={false}
           >
             {/*Banner */}
-            <View className="relative bg-red-200 h-[300px] w-full overflow-hidden">
+            <View className="relative bg-gray-200 h-[300px] w-full overflow-hidden">
               <Image
                 source={require("../../assets/images/signinbanner.jpg")}
                 style={{
@@ -137,8 +137,8 @@ export default function SignInScreen() {
                 }}
                 resizeMode="cover"
               />
-              <Text className="absolute bottom-1 left-4 text-beige-primary font-bold text-5xl">
-                Sign In
+              <Text className="absolute bottom-[12px] left-4 text-beige-primary font-bold text-4xl">
+                Đăng nhập
               </Text>
             </View>
 
@@ -151,7 +151,7 @@ export default function SignInScreen() {
                 error={errors.email}
               />
               <TextInputAuth
-                label={"Password"}
+                label={"Mật khẩu"}
                 value={signinForm.password}
                 onChangeText={(text) => handleChange("password", text)}
                 error={errors.password}
@@ -164,7 +164,7 @@ export default function SignInScreen() {
                 className="h-14 bg-purple-primary rounded-[50px] items-center justify-center mt-3"
               >
                 <Text className="text-beige-primary text-xl font-medium">
-                  Sign In
+                  Đăng nhập
                 </Text>
               </TouchableOpacity>
 
@@ -177,7 +177,7 @@ export default function SignInScreen() {
                   }}
                 >
                   <Text className="text-center text-purple-primary text-xl font-medium">
-                    Forgot Password
+                    Quên mật khẩu
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -187,7 +187,7 @@ export default function SignInScreen() {
                   }}
                 >
                   <Text className="text-center text-purple-primary text-xl font-medium">
-                    Get Start
+                    Bắt đầu
                   </Text>
                 </TouchableOpacity>
               </View>
