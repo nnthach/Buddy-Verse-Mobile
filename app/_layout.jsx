@@ -6,6 +6,8 @@ import { useFonts } from "expo-font";
 import { Image, View } from "react-native";
 import "./global.css";
 import { AuthProvider } from "../context/AuthContext";
+import Toast from "react-native-toast-message";
+import toastConfig from "@components/CustomToast";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -34,6 +36,7 @@ export default function RootLayout() {
   return (
     <AuthProvider>
       <RootLayoutNav />
+      <Toast config={toastConfig} />
     </AuthProvider>
   );
 }

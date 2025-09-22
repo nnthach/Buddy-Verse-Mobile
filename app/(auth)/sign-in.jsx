@@ -17,10 +17,12 @@ import TextInputAuth from "../../components/TextInputAuth";
 import { loginAPI } from "../../services/authService";
 import { AuthContext } from "../../context/AuthContext";
 import { router } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Toast from "react-native-toast-message";
 
 export default function SignInScreen() {
   const screenWidth = Dimensions.get("window").width;
-  const { userId, setUserId } = useContext(AuthContext);
+  const { setUserId, handleGetUserById } = useContext(AuthContext);
 
   const [signinForm, setSignInForm] = useState({
     email: "",
@@ -79,10 +81,35 @@ export default function SignInScreen() {
     try {
       const res = await loginAPI(signinForm);
       console.log("login res", res);
-      // router.replace("/(root)/(tabs)/home");
+      console.log("login res data", res.data);
+      const { accessToken, refreshToken, accountId } = res.data;
+
+      AsyncStorage.setItem("accessToken", accessToken);
+      AsyncStorage.setItem("refreshToken", refreshToken);
+      AsyncStorage.setItem("userId", accountId);
+
+      setUserId(accountId);
+
+      await handleGetUserById(accountId);
+
+      Toast.show({
+        type: "success",
+        text1: "Đăng nhập thành công!",
+        text2: "Chào mừng bạn",
+      });
+
+      setSignInForm({ email: "", password: "" });
+
+      setTimeout(() => {
+        router.replace("/(root)/(tabs)/home");
+      }, 1500);
     } catch (error) {
       console.log("login err", error);
-      alert(error?.data?.message);
+      Toast.show({
+        type: "error",
+        text1: error?.data?.message,
+        text2: "Thử lại nhé",
+      });
     }
   };
 

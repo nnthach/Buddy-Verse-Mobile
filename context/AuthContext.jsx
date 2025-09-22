@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createContext, useEffect, useState } from "react";
+import { getUserByIdAPI } from "../services/userService";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext({
@@ -7,7 +8,7 @@ export const AuthContext = createContext({
 });
 
 export const AuthProvider = ({ children }) => {
-  const [userId, setUserId] = useState("65B5CBDC-EB96-F011-9055-9400122256FC");
+  const [userId, setUserId] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
 
   const [modalType, setModalType] = useState("");
@@ -45,6 +46,18 @@ export const AuthProvider = ({ children }) => {
     loadUserId();
   }, []);
 
+  const handleGetUserById = async (id) => {
+    console.log("run get user by id");
+    try {
+      const res = await getUserByIdAPI(id);
+      console.log("get user by id res", res);
+      console.log("get user by id res.data", res.data);
+      setUserInfo(res.data);
+    } catch (error) {
+      console.log("get user by id err", error);
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -58,6 +71,7 @@ export const AuthProvider = ({ children }) => {
         submitRegisterForm,
         setSubmitRegisterForm,
         initialRegisterForm,
+        handleGetUserById,
       }}
     >
       {children}

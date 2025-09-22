@@ -1,10 +1,11 @@
 import { View, Text, Image, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { fakeDataDiscover } from "data/fakeData";
 import { LinearGradient } from "expo-linear-gradient";
+import { AuthContext } from "../../../context/AuthContext";
 
 export default function HomeScreen() {
   const [stats, setStats] = useState([
@@ -27,6 +28,12 @@ export default function HomeScreen() {
 
   const [discoverList, setDiscoverList] = useState(fakeDataDiscover);
 
+  const { userInfo } = useContext(AuthContext);
+
+  useEffect(() => {
+    console.log("user info in home", userInfo);
+  }, []);
+
   return (
     <SafeAreaView edges={["top"]} className="flex-1 bg-beige-primary">
       <ScrollView
@@ -47,20 +54,26 @@ export default function HomeScreen() {
           <View className=" justify-center items-center">
             {/*Name */}
             <View className="border border-purple-primary p-3 px-5 rounded-2xl flex-row gap-3 items-center">
-              <Text className="text-purple-primary text-2xl">Khoa</Text>
+              <Text className="text-purple-primary text-2xl">
+                {userInfo?.firstname}
+              </Text>
               <FontAwesome5 name="award" size={20} color="#57298D" />
             </View>
             {/*Avatar */}
             <View className="mt-6 justify-center items-center">
-              <Image
-                source={{
-                  uri: "https://m.media-amazon.com/images/S/pv-target-images/16627900db04b76fae3b64266ca161511422059cd24062fb5d900971003a0b70._SX1080_FMjpg_.jpg",
-                }}
-                className="w-32 h-32 rounded-full"
-                resizeMode="cover"
-              />
+              <View className="bg-gray-300 w-32 h-32 rounded-full p-2">
+                <Image
+                  source={
+                    userInfo?.photos?.[0]
+                      ? { uri: userInfo.photos[0] }
+                      : require("@assets/images/avatar.png")
+                  }
+                  className="w-full h-full rounded-full"
+                  resizeMode="cover"
+                />
+              </View>
               <Text className="text-xl text-purple-primary font-bold mt-3 mb-1">
-                Nguyen Ngoc Thach
+                {userInfo?.lastname} {userInfo?.firstname}
               </Text>
               <Text className="text-md text-purple-primary">
                 District 3, Ho Chi Minh

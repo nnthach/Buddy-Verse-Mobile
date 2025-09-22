@@ -3,11 +3,8 @@ import {
   Text,
   SafeAreaView,
   Image,
-  TouchableOpacity,
 } from "react-native";
 import React from "react";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { router } from "expo-router";
 import FooterGetStart from "../../../components/FooterGetStart";
 
 export default function GetStartOneScreen() {
@@ -38,25 +35,4 @@ export default function GetStartOneScreen() {
       </View>
     </SafeAreaView>
   );
-}
-
-{
-  /* <View className="mt-auto mb-6 flex-row justify-between items-center">
-  <View className=" flex-row gap-3">
-    {[...Array(3)].map((_, index) => (
-      <View
-        key={index}
-        className={`w-[16px] h-[16px] rounded-full border border-purple-primary ${index == 0 && "bg-purple-primary"}`}
-      />
-    ))}
-  </View>
-
-  <TouchableOpacity
-    activeOpacity={0.8}
-    onPress={() => router.push("/page-two")}
-    className="rounded-full w-14 h-14 bg-purple-primary items-center justify-center"
-  >
-    <MaterialIcons name="keyboard-arrow-right" size={36} color="#F1F3E7" />
-  </TouchableOpacity>
-</View>; */
 }
