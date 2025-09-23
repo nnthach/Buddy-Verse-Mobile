@@ -19,6 +19,8 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { AuthContext } from "../../context/AuthContext";
 import { registerAPI } from "services/authService";
+import { pickImage, removeImage } from "../../utils/imagePickerUtils";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 export default function SignUpScreen() {
   const screenWidth = Dimensions.get("window").width;
@@ -32,6 +34,26 @@ export default function SignUpScreen() {
   const [openSelect, setOpenSelect] = useState(false);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
+  const handleImagePick = async () => {
+    const selectedAssets = await pickImage();
+    if (selectedAssets.length > 0) {
+      setSubmitRegisterForm((prev) => ({
+        ...prev,
+        photoUrls: [
+          ...prev.photoUrls,
+          ...selectedAssets.map((asset) => asset.uri),
+        ],
+      }));
+    }
+  };
+
+  const handleRemoveImage = (index) => {
+    setSubmitRegisterForm((prev) => ({
+      ...prev,
+      photoUrls: removeImage(prev.photoUrls, index),
+    }));
+  };
+
   const handleChange = (name, value) => {
     setSubmitRegisterForm((prev) => ({
       ...prev,
@@ -44,6 +66,11 @@ export default function SignUpScreen() {
 
     if (signupStep === 1) {
       setSignupStep(2);
+      return;
+    }
+
+    if (signupStep === 2) {
+      setSignupStep(3);
       return;
     }
 
@@ -198,7 +225,7 @@ export default function SignUpScreen() {
                     />
                   </View>
                 </>
-              ) : (
+              ) : signupStep == 2 ? (
                 <>
                   <TextInputAuth
                     label={"Tên đăng nhập"}
@@ -231,14 +258,48 @@ export default function SignUpScreen() {
                     customLeftCSSOnblur="left-6"
                   />
                 </>
+              ) : (
+                <>
+                  {submitRegisterForm.photoUrls.length < 1 && (
+                    // add image
+                    <TouchableOpacity
+                      className="bg-red-50 p-2 mb-4"
+                      onPress={handleImagePick}
+                    >
+                      <Text style={{ color: "black" }}>Add Images</Text>
+                    </TouchableOpacity>
+                  )}
+
+                  {submitRegisterForm?.photoUrls.length > 0 && (
+                    <View>
+                      {submitRegisterForm?.photoUrls.map((media, index) => (
+                        <View key={index} className="w-24 h-24 overflow-hidden">
+                          <Image
+                            source={{ uri: media }}
+                            className="w-full h-full"
+                          />
+
+                          <Ionicons
+                            name="close"
+                            size={20}
+                            color="black"
+                            className="absolute right-0"
+                            onPress={() => handleRemoveImage(index)}
+                          />
+                        </View>
+                      ))}
+                    </View>
+                  )}
+                </>
               )}
+
               <TouchableOpacity
                 activeOpacity={0.8}
                 onPress={handleSignUp}
                 className="h-14 bg-purple-primary rounded-[50px] items-center justify-center mt-3"
               >
                 <Text className="text-beige-primary text-xl font-medium">
-                  {signupStep == 1 ? "Tiếp tục" : "Tạo tài khoản"}
+                  {signupStep == 1 || 2 ? "Tiếp tục" : "Tạo tài khoản"}
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => router.replace("/sign-in")}>

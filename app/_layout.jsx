@@ -3,9 +3,9 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { useFonts } from "expo-font";
-import { Image, View } from "react-native";
 import "./global.css";
 import { AuthProvider } from "../context/AuthContext";
+import { MatchProvider } from "../context/MatchContext";
 import Toast from "react-native-toast-message";
 import toastConfig from "@components/CustomToast";
 
@@ -35,8 +35,10 @@ export default function RootLayout() {
 
   return (
     <AuthProvider>
-      <RootLayoutNav />
-      <Toast config={toastConfig} />
+      <MatchProvider>
+        <RootLayoutNav />
+        <Toast config={toastConfig} />
+      </MatchProvider>
     </AuthProvider>
   );
 }

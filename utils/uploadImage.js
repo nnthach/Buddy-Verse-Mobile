@@ -14,7 +14,7 @@ const uploadImage = async (asset) => {
   console.log("blob", blob);
   const storageRef = ref(
     storage,
-    asset.fileName || `TravelDiary/${Date.now()}.jpg`
+    asset.fileName || `BuddyVerse/${Date.now()}.jpg`
   );
   console.log("storageRef", storageRef);
   await uploadBytes(storageRef, blob);

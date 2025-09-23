@@ -22,9 +22,7 @@ export const AuthProvider = ({ children }) => {
     lastname: "",
     dob: "",
     gender: "",
-    photoUrls: [
-      "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
-    ],
+    photoUrls: [],
     interestIds: [],
   };
   const [submitRegisterForm, setSubmitRegisterForm] =
@@ -47,11 +45,8 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const handleGetUserById = async (id) => {
-    console.log("run get user by id");
     try {
       const res = await getUserByIdAPI(id);
-      console.log("get user by id res", res);
-      console.log("get user by id res.data", res.data);
       setUserInfo(res.data);
     } catch (error) {
       console.log("get user by id err", error);

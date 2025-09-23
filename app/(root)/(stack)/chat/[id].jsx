@@ -16,7 +16,14 @@ import { fakeDataChatting } from "data/fakeData";
 
 export default function ChatDetail() {
   const { id } = useLocalSearchParams();
-  const [message, setMessage] = useState("");
+  console.log("roomId", id);
+
+  const [sendMessageForm, setSendMessageForm] = useState({
+    roomId: "",
+    senderId: "",
+    content: "",
+    replyTo: null,
+  });
 
   return (
     <SafeAreaView className="flex-1 bg-beige-primary">
@@ -94,9 +101,15 @@ export default function ChatDetail() {
           </View>
           <TextInput
             className="flex-1 h-full px-3 pb-1 text-xl text-purple-primary"
-            onChangeText={(text) => setMessage(text)}
+            onChangeText={(text) =>
+              setSendMessageForm((prev) => ({
+                ...prev,
+                content: text,
+              }))
+            }
+            value={sendMessageForm.content}
             textAlignVertical="center"
-            placeholder="Message..."
+            placeholder="Nhập tin nhắn..."
             placeholderTextColor="#00000050"
           />
         </View>
