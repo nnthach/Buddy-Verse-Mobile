@@ -10,13 +10,16 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router, useFocusEffect } from "expo-router";
 import axios from "axios";
 import InputField from "@components/InputFieldCustom";
 import LoadingCustom from "@components/LoadingCustom";
+import { AuthContext } from "../../../../context/AuthContext";
+import { updateUserProfileAPI } from "@services/userService";
+import Toast from "react-native-toast-message";
 
 export default function EditProfileForm() {
   const ADDRESS_BASE_URL = "https://countriesnow.space/api/v0.1";
@@ -26,24 +29,37 @@ export default function EditProfileForm() {
     city: "",
   });
 
+  const { userId, userInfo, handleGetUserById } = useContext(AuthContext);
+
   const [userProfile, setUserProfile] = useState({
-    name: "John",
-    username: "nnthach",
-    email: "nnthach2301@gmail.com",
-    password: "123456",
-    country: "",
-    state: "",
-    city: "",
-    dob: "",
-    permanentAddress: "",
-    presentAddress: "",
-    postalCode: "",
+    firstname: userInfo?.firstname,
+    lastname: userInfo?.lastname,
+    username: userInfo?.username,
+    gender: userInfo?.gender,
+    dob: userInfo?.dob,
+    interestIds: userInfo?.interests || [],
+    photoUrls: userInfo?.photos || [],
+    // phone: userInfo?.phone,
+    // country: "",
+    // state: "",
+    // city: "",
+    // permanentAddress: "",
+    // presentAddress: "",
+    // postalCode: "",
   });
 
   const [countries, setCountries] = useState([]);
   const [cities, setCities] = useState([]);
   const [states, setStates] = useState([]);
   const [isLoadingFetchCountry, setIsLoadingFetchCountry] = useState(false);
+  const genderData = [
+    {
+      label: "nam",
+    },
+    {
+      label: "nữ",
+    },
+  ];
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -129,12 +145,35 @@ export default function EditProfileForm() {
     handleGetAllCity();
   }, [userProfile.state]);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     console.log("edit form data", userProfile);
     setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
+    try {
+      const res = await updateUserProfileAPI(userId, userProfile);
+
+      await handleGetUserById(userId);
+
+      setTimeout(async () => {
+        setIsLoading(false);
+      }, 1500);
+
+      Toast.show({
+        type: "success",
+        text1: "Cập nhật thông tin thành công!",
+        text2: "Thành công",
+      });
+    } catch (error) {
+      console.log("update profile err", error);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1500);
+
+      Toast.show({
+        type: "error",
+        text1: "Cập nhật thông tin thất bại!",
+        text2: "Thử lại nhé",
+      });
+    }
   };
 
   return (
@@ -157,7 +196,7 @@ export default function EditProfileForm() {
                   />
                 </TouchableOpacity>
                 <Text className="text-purple-primary font-semibold text-2xl">
-                  Manage Account
+                  Thông tin cá nhân
                 </Text>
                 <Text className="w-[34px]" />
               </View>
@@ -165,51 +204,54 @@ export default function EditProfileForm() {
               {/*Avatar */}
               <View className="mt-6 justify-center items-center">
                 <Image
-                  source={{
-                    uri: "https://m.media-amazon.com/images/S/pv-target-images/16627900db04b76fae3b64266ca161511422059cd24062fb5d900971003a0b70._SX1080_FMjpg_.jpg",
-                  }}
+                  source={{ uri: userInfo?.photos[0] }}
                   className="w-32 h-32 rounded-full"
                   resizeMode="cover"
                 />
                 <Text className="text-lg text-purple-primary mt-1 mb-1">
-                  Change Avatar
+                  Thay đổi hình ảnh
                 </Text>
               </View>
 
               {/*Form */}
               <View className="mt-8 gap-6">
                 <InputField
-                  label={"Your Name"}
-                  placeholder={"Johnny Hawak"}
-                  value={userProfile.name}
-                  name="name"
+                  label={"Tên đầu"}
+                  placeholder={"Johnny"}
+                  value={userProfile.firstname}
+                  name="firstname"
                   setUserProfile={setUserProfile}
                 />
                 <InputField
-                  label={"Username"}
+                  label={"Tên cuối"}
+                  placeholder={"Johnny"}
+                  value={userProfile.lastname}
+                  name="lastname"
+                  setUserProfile={setUserProfile}
+                />
+                <InputField
+                  label={"Tên đăng nhập"}
                   placeholder={"johnny_fhf"}
                   value={userProfile.username}
                   name="username"
                   setUserProfile={setUserProfile}
                 />
                 <InputField
-                  label={"Email"}
-                  placeholder={"johnnyexample@gmail.com"}
-                  keyboardType="email-address"
-                  name="email"
+                  label={"Giới tính"}
+                  placeholder={userProfile?.gender || "Chọn giới tính"}
+                  type="select"
+                  openSelect={openSelect === "gender"}
+                  isLoading={isLoadingFetchCountry}
+                  setOpenSelect={() =>
+                    setOpenSelect(openSelect === "gender" ? null : "gender")
+                  }
+                  data={genderData}
                   setUserProfile={setUserProfile}
-                  value={userProfile.email}
+                  name="gender"
+                  value={userProfile.gender}
                 />
                 <InputField
-                  label={"Password"}
-                  placeholder={"*******"}
-                  secureTextEntry
-                  value={userProfile.password}
-                  name="password"
-                  setUserProfile={setUserProfile}
-                />
-                <InputField
-                  label={"Date of Birth"}
+                  label={"Ngày sinh"}
                   placeholder={"Date/Month/Year"}
                   type="date"
                   openSelect={openSelect === "dob"}
@@ -220,7 +262,7 @@ export default function EditProfileForm() {
                   }
                   value={userProfile.dob}
                 />
-                <InputField
+                {/* <InputField
                   label={"Country"}
                   placeholder={"Country"}
                   type="select"
@@ -281,7 +323,7 @@ export default function EditProfileForm() {
                   value={userProfile.postalCode}
                   name="postalCode"
                   setUserProfile={setUserProfile}
-                />
+                /> */}
               </View>
 
               <View className="mt-4">
@@ -290,7 +332,7 @@ export default function EditProfileForm() {
                   className="bg-purple-third py-4 px-6 rounded-full w-full"
                 >
                   <Text className="text-white text-xl font-medium text-center">
-                    Edit Profile
+                    Cập nhật thông tin
                   </Text>
                 </TouchableOpacity>
               </View>

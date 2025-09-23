@@ -259,11 +259,12 @@ export default function SignUpScreen() {
                   />
                 </>
               ) : (
-                <>
+                <View>
+                  <Text>Upload your avatar</Text>
                   {submitRegisterForm.photoUrls.length < 1 && (
                     // add image
                     <TouchableOpacity
-                      className="bg-red-50 p-2 mb-4"
+                      className="bg-gray-200 p-2 items-center justify-center w-24 h-24"
                       onPress={handleImagePick}
                     >
                       <Text style={{ color: "black" }}>Add Images</Text>
@@ -290,7 +291,7 @@ export default function SignUpScreen() {
                       ))}
                     </View>
                   )}
-                </>
+                </View>
               )}
 
               <TouchableOpacity

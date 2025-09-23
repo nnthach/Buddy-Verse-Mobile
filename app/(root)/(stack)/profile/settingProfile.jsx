@@ -6,13 +6,14 @@ import {
   Image,
   Switch,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Feather from "@expo/vector-icons/Feather";
 import Entypo from "@expo/vector-icons/Entypo";
 import { router } from "expo-router";
+import { AuthContext } from "../../../../context/AuthContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function SettingProfile() {
@@ -20,56 +21,58 @@ export default function SettingProfile() {
   const settingList = [
     {
       icon: <Feather name="user" size={24} color="black" />,
-      label: "Manage Account",
+      label: "Thông tin cá nhân",
       type: "nest",
       onPress: () => router.push("/profile/editProfileForm"),
     },
     {
       icon: <Feather name="bell-off" size={24} color="black" />,
-      label: "Notifications",
+      label: "Thông báo",
       type: "onoff",
     },
     {
       icon: <Feather name="message-square" size={24} color="black" />,
-      label: "Chat",
+      label: "Tin nhắn",
       type: "nest",
     },
     {
       icon: <Feather name="settings" size={24} color="black" />,
-      label: "General Settings",
+      label: "Cài đặt chung",
       type: "nest",
     },
     {
       icon: <Feather name="moon" size={24} color="black" />,
-      label: "Dark Mode",
+      label: "Tối",
       type: "onoff",
     },
     {
       icon: <Entypo name="language" size={24} color="black" />,
-      label: "Language",
+      label: "Ngôn ngữ",
       type: "nest",
     },
     {
       icon: <AntDesign name="contacts" size={24} color="black" />,
-      label: "My Contact",
+      label: "Liên hệ",
       type: "nest",
     },
     {
       icon: <AntDesign name="questioncircleo" size={24} color="black" />,
-      label: "FAQ",
+      label: "Câu hỏi thường gặp",
       type: "nest",
     },
     {
       icon: <MaterialIcons name="error-outline" size={24} color="black" />,
-      label: "Terms Of Service",
+      label: "Điều khoản dịch vụ",
       type: "nest",
     },
     {
       icon: <Feather name="shield" size={24} color="black" />,
-      label: "User Policy",
+      label: "Chính sách người dùng",
       type: "nest",
     },
   ];
+
+  const { userInfo } = useContext(AuthContext);
 
   const handleLogout = async () => {
     try {
@@ -92,7 +95,7 @@ export default function SettingProfile() {
             />
           </TouchableOpacity>
           <Text className="text-purple-primary font-semibold text-2xl">
-            Setting
+            Cài đặt
           </Text>
           <Text className="w-[34px]" />
         </View>
@@ -100,9 +103,7 @@ export default function SettingProfile() {
         {/*Avatar */}
         <View className="mt-6 justify-center items-center">
           <Image
-            source={{
-              uri: "https://m.media-amazon.com/images/S/pv-target-images/16627900db04b76fae3b64266ca161511422059cd24062fb5d900971003a0b70._SX1080_FMjpg_.jpg",
-            }}
+            source={{ uri: userInfo?.photos[0] }}
             className="w-32 h-32 rounded-full"
             resizeMode="cover"
           />
@@ -110,7 +111,7 @@ export default function SettingProfile() {
             onPress={() => router.push("/profile/characterCartoon")}
           >
             <Text className="text-xl text-purple-primary font-bold mt-3 mb-1">
-              Nguyen Ngoc Thach
+              {userInfo?.lastname} {userInfo?.firstname}
             </Text>
           </TouchableOpacity>
         </View>
