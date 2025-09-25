@@ -1,69 +1,63 @@
-import { View, Text, Image, ActivityIndicator } from "react-native";
-import React, { useContext, useEffect } from "react";
+import {
+  View,
+  Text,
+  Image,
+  ActivityIndicator,
+  TouchableOpacity,
+} from "react-native";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
 import { matchJoinAPI } from "@services/matchService";
 import { MatchContext } from "../../../../context/MatchContext";
 import { AuthContext } from "../../../../context/AuthContext";
-import { startSignalR, stopSignalR } from "../../../../config/signalr";
+import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 
 export default function MatchLoading() {
   const { label } = useLocalSearchParams();
   const { matchForm } = useContext(MatchContext);
   const { userId } = useContext(AuthContext);
 
+  const connectionRef = useRef(null);
+
+  const joinMatchQueue = async () => {
+    try {
+      // 1. Connect
+      const conn = new HubConnectionBuilder()
+        .withUrl("http://10.0.2.2:5116/matchHub")
+        .configureLogging(LogLevel.Information)
+        .build();
+
+      // lắng nghe tin nhắn từ server
+      conn.on("Matched", (roomId, members) => {
+        console.log("matched roomid", roomId);
+        console.log("matched members", members);
+      });
+
+      conn.on("JoinedQueue", () => {
+        console.log("joined queue alo alo");
+      });
+
+      await conn.start();
+      await conn.invoke(
+        "JoinMatchQueue",
+        userId,
+        matchForm.roomType,
+        matchForm.interestIds
+      );
+
+      connectionRef.current = conn;
+    } catch (error) {
+      console.log("match queue err", error);
+    }
+  };
+
   useEffect(() => {
-    const joinMatch = async () => {
-      try {
-        // Gọi API để đăng ký join match
-        const res = await matchJoinAPI({
-          accountId: userId,
-          roomType: matchForm.roomType,
-          interestIds: matchForm.interestIds,
-        });
-
-        console.log("match join res", res.data);
-
-        // Kết nối SignalR để chờ kết quả
-        await startSignalR(userId, (data) => {
-          if (data?.roomId) {
-            router.replace(`/chat/${data.roomId}`);
-          }
-        });
-      } catch (error) {
-        console.error("Join match error:", error);
-      }
-    };
-
-    joinMatch();
+    joinMatchQueue();
 
     return () => {
-      stopSignalR();
+      if (connectionRef.current) connectionRef.current.stop();
     };
-  }, []);
-
-  // const handleMatchJoinInProcess = async () => {
-  //   const joinMatchForm = {
-  //     accountId: userId,
-  //     roomType: matchForm.roomType,
-  //     interestIds: matchForm.interestIds,
-  //   };
-
-  //   console.log("join match form", joinMatchForm);
-  //   try {
-  //     const res = await matchJoinAPI(joinMatchForm);
-  //     console.log("match join res", res);
-  //     console.log("match join res data", res.data);
-  //     if (res.data.isMatched) {
-  //       router.replace(`/chat/${res.data.roomId}`);
-  //     }
-  //   } catch (error) {
-  //     console.log("join match err", error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   handleMatchJoinInProcess();
-  // }, []);
+  }, [userId]);
 
   return (
     <View className="flex-1 justify-center items-center bg-beige-primary">
@@ -87,6 +81,10 @@ export default function MatchLoading() {
             Pro tip: A clear profile photo gets 3x more connections!
           </Text>
         </View>
+
+        <TouchableOpacity onPress={() => router.replace("/(tabs)/buddy")}>
+          <Text>Ngừng kết nối</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

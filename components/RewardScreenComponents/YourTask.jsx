@@ -1,0 +1,64 @@
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { router } from "expo-router";
+import { memo } from "react";
+
+function YourTask({ yourTaskList }) {
+  const yourTaskItem = ({ item, index }) => {
+    return (
+      <View
+        className={`w-full bg-white rounded-2xl p-2 px-4 flex-row items-center justify-between`}
+      >
+        <View className=" gap-1">
+          <Text className="text-base font-semibold">Uong nuoc</Text>
+          <Text className="text-gray-500">di uong nuoc di anh em oi</Text>
+        </View>
+        <TouchableOpacity
+          onPress={() => router.push(`/(stack)/task/${item.questId}`)}
+          className="bg-yellow-300 rounded-full p-1"
+        >
+          <MaterialIcons name="keyboard-arrow-right" size={24} color="black" />
+        </TouchableOpacity>
+      </View>
+    );
+  };
+  return (
+    <View className="py-6">
+      {/*Heading */}
+      <View className="w-full flex-row items-center justify-between px-6">
+        <Text className="text-purple-primary text-2xl font-bold">
+          Your Tasks
+        </Text>
+        <TouchableOpacity
+          onPress={() =>
+            router.push({
+              pathname: "/(stack)/task/taskList",
+              params: { type: "your-task-list" },
+            })
+          }
+          className="flex-row items-center"
+        >
+          <Text className="text-purple-primary/50 text-lg">See more</Text>
+          <MaterialIcons
+            name="keyboard-arrow-right"
+            size={24}
+            color="rgba(87,41,141,0.5)"
+          />
+        </TouchableOpacity>
+      </View>
+
+      {/*Content */}
+      <View className="mt-4 px-6">
+        <FlatList
+          data={yourTaskList.slice(0, 5)} // chỉ lấy 5 phần tử
+          keyExtractor={(item) => item.questId.toString()}
+          renderItem={yourTaskItem}
+          scrollEnabled={false}
+          ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
+        />
+      </View>
+    </View>
+  );
+}
+
+export default memo(YourTask);

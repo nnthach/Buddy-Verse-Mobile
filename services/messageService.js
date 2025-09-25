@@ -5,3 +5,15 @@ export const sendMessageAPI = async (data) => {
 
   return res;
 };
+
+export const getRoomIdByUserIdAPI = async (id) => {
+  const res = await axiosClient.get(`/message/room/${id}`);
+
+  return res;
+};
+
+export const getAllRoomOfUserAPI = async (userId) => {
+  const res = await axiosClient.get(`/room/account/${userId}`);
+
+  return res;
+};

@@ -30,7 +30,6 @@ export default function BuddyScreen() {
   }, []);
 
   const handleAddInterestList = (item) => {
-    console.log("item", item);
 
     setMatchForm((prev) => {
       const isSelected = prev.interestIds.includes(item);

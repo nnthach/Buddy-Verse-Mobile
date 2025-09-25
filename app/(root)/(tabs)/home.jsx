@@ -30,10 +30,6 @@ export default function HomeScreen() {
 
   const { userInfo } = useContext(AuthContext);
 
-  useEffect(() => {
-    console.log("user info in home", userInfo);
-  }, []);
-
   return (
     <SafeAreaView edges={["top"]} className="flex-1 bg-beige-primary">
       <ScrollView
