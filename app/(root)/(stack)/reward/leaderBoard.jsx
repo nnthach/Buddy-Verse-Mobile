@@ -1,17 +1,11 @@
-import {
-  View,
-  Text,
-  SafeAreaView,
-  Image,
-  FlatList,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, Image, FlatList, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { LinearGradient } from "expo-linear-gradient";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { router } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { fakeDataRanking } from "data/fakeData";
 
 export default function LeaderBoard() {

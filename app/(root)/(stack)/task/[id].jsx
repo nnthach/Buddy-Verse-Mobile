@@ -43,16 +43,18 @@ export default function TaskDetail() {
   return (
     <SafeAreaView className="flex-1 bg-beige-primary">
       {/*Heading */}
-      <View className="h-16 flex-row justify-between items-center px-4 border-b border-yellow-50">
+      <View className="h-16 flex-row justify-between items-center px-4">
         <TouchableOpacity onPress={() => router.back()}>
           <MaterialIcons name="keyboard-arrow-left" size={34} color="#57298D" />
         </TouchableOpacity>
       </View>
 
       {/*Content */}
-      <View>
-        <Text>{questDetail?.type}</Text>
-        <Text>{questDetail?.title}</Text>
+      <View className="bg-white p-4 m-4 rounded-2xl">
+        <Text className="bg-green-400 self-start text-white items-center justify-center font-medium pt-1 px-2 rounded-full">
+          {questDetail?.type}
+        </Text>
+        <Text className=''>{questDetail?.title}</Text>
         <Text>{questDetail?.description}</Text>
         <Text>{questDetail?.rewardPoints}</Text>
         <Text>{questDetail?.expiredAt}</Text>

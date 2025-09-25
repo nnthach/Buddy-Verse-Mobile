@@ -3,7 +3,7 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { router } from "expo-router";
 import { memo } from "react";
 
-function ActiveTask({ questList }) {
+function ActiveTask({ questList, setTaskDetailId }) {
   const activeTaskItem = ({ item, index }) => {
     return (
       <View
@@ -28,7 +28,7 @@ function ActiveTask({ questList }) {
         </View>
 
         <TouchableOpacity
-          onPress={() => router.push(`/(stack)/task/${item.questId}`)}
+          onPress={() => setTaskDetailId(item?.questId)}
           className="bg-purple-primary/70 mt-auto rounded-full px-4 py-1 flex-row items-center justify-center gap-2 "
         >
           <Text className="text-white text-sm font-semibold">View Tasks</Text>

@@ -20,12 +20,19 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { AuthContext } from "../../../../context/AuthContext";
 import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
-import { getRoomIdByUserIdAPI, sendMessageAPI } from "@services/messageService";
+import {
+  getRoomDetailBetweenUserAPI,
+  getRoomIdByUserIdAPI,
+  sendMessageAPI,
+} from "@services/messageService";
+import LoadingCustom from "@components/LoadingCustom";
 
 export default function ChatRoom() {
-  const { roomId } = useLocalSearchParams();
+  const { roomId, accountId2 } = useLocalSearchParams();
+
   const { userId } = useContext(AuthContext);
   const [messages, setMessages] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const scrollViewRef = useRef(null);
 
@@ -72,12 +79,19 @@ export default function ChatRoom() {
   useFocusEffect(
     useCallback(() => {
       const handleGetMessageRoom = async () => {
+        setIsLoading(true);
         try {
-          const res = await getRoomIdByUserIdAPI(roomId, userId);
-          console.log("get mess room res", res.data);
+          const res = await getRoomDetailBetweenUserAPI(
+            roomId,
+            userId,
+            accountId2
+          );
+          console.log("get mess room between res", res.data);
           setMessages(res.data);
         } catch (error) {
-          console.log("get mess room err", error);
+          console.log("get mess room between err", error);
+        } finally {
+          setIsLoading(false);
         }
       };
       handleGetMessageRoom();
@@ -109,6 +123,10 @@ export default function ChatRoom() {
     }
   }, [messages]);
 
+  if (isLoading) {
+    return <LoadingCustom label="Loading messages..." />;
+  }
+
   return (
     <SafeAreaView className="flex-1 bg-beige-primary">
       {/*Heading */}
@@ -125,7 +143,7 @@ export default function ChatRoom() {
           <View className="flex-row gap-2 items-center">
             <Image
               source={{
-                uri: "https://m.media-amazon.com/images/S/pv-target-images/16627900db04b76fae3b64266ca161511422059cd24062fb5d900971003a0b70._SX1080_FMjpg_.jpg",
+                uri: "gẻg",
               }}
               className="w-12 h-12 rounded-full"
               resizeMode="cover"
@@ -147,44 +165,45 @@ export default function ChatRoom() {
         className="pt-4 px-4"
         contentContainerStyle={{ paddingBottom: 20 }}
       >
-        {messages.map((item) => (
-          <View
-            key={item?.messageId}
-            className={`flex-row gap-2 items-start mb-3`}
-          >
-            {item?.senderId !== userId && (
-              <View className="w-11 h-11 rounded-full overflow-hidden items-center justify-center">
-                <Image
-                  source={{
-                    uri: "https://m.media-amazon.com/images/S/pv-target-images/16627900db04b76fae3b64266ca161511422059cd24062fb5d900971003a0b70._SX1080_FMjpg_.jpg",
-                  }}
-                  className="w-full h-full rounded-full"
-                  resizeMode="cover"
-                />
-              </View>
-            )}
-
+        {messages.length > 0 &&
+          messages.map((item) => (
             <View
-              className={`${item?.senderId === userId ? "items-end" : "items-start"} gap-1 w-full`}
+              key={item?.messageId}
+              className={`flex-row gap-2 items-start mb-3`}
             >
+              {item?.senderId !== userId && (
+                <View className="w-11 h-11 bg-gray-400 rounded-full overflow-hidden items-center justify-center">
+                  <Image
+                    source={{
+                      uri: item?.senderPhotos[0],
+                    }}
+                    className="w-full h-full rounded-full"
+                    resizeMode="cover"
+                  />
+                </View>
+              )}
+
               <View
-                className={`${item?.senderId === userId ? "bg-purple-500" : "bg-gray-300"} rounded-full p-3 px-4 max-w-[70%]`}
+                className={`${item?.senderId === userId ? "items-end" : "items-start"} gap-1 w-full`}
               >
-                <Text
-                  className={`${item?.senderId === userId ? "text-white" : "text-black"}`}
+                <View
+                  className={`${item?.senderId === userId ? "bg-purple-500" : "bg-gray-300"} rounded-full p-3 px-4 max-w-[70%]`}
                 >
-                  {item?.content}
+                  <Text
+                    className={`${item?.senderId === userId ? "text-white" : "text-black"}`}
+                  >
+                    {item?.content}
+                  </Text>
+                </View>
+                <Text className="text-gray-400 text-xs">
+                  {new Date(item?.createdAt).toLocaleTimeString("en-US", {
+                    hour: "numeric",
+                    minute: "2-digit",
+                  })}
                 </Text>
               </View>
-              <Text className="text-gray-400 text-xs">
-                {new Date(item?.createdAt).toLocaleTimeString("en-US", {
-                  hour: "numeric",
-                  minute: "2-digit",
-                })}
-              </Text>
             </View>
-          </View>
-        ))}
+          ))}
       </ScrollView>
 
       {/*Input */}

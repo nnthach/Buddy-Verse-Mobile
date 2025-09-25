@@ -23,6 +23,8 @@ import {
 import { AuthContext } from "../../../context/AuthContext";
 import YourTask from "@components/RewardScreenComponents/YourTask";
 import ActiveTask from "@components/RewardScreenComponents/ActiveTask";
+import TaskDetailModal from "@components/RewardScreenComponents/TaskDetailModal";
+import LoadingCustom from "@components/LoadingCustom";
 
 export default function RewardScreen() {
   const [questList, setQuestList] = useState([]);
@@ -30,24 +32,33 @@ export default function RewardScreen() {
   const [points, setPoints] = useState(8868);
   const [openModalRewardHistory, setOpenModalRewardHistory] = useState(false);
   const { userId } = useContext(AuthContext);
+  const [taskDetailId, setTaskDetailId] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleGetQuestList = async () => {
+    setIsLoading(true);
     try {
       const res = await getQuestListAPI();
       console.log("Get quest list res: ", res.data);
       setQuestList(res.data);
     } catch (error) {
       console.log("Get quest list error: ", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleGetAccountQuestList = async () => {
+    setIsLoading(true);
+
     try {
       const res = await getAccountQuestListAPI(userId);
       console.log("Get account task list res: ", res.data);
       setYourTaskList(res.data);
     } catch (error) {
       console.log("Get account task list error: ", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -58,17 +69,9 @@ export default function RewardScreen() {
     }, [])
   );
 
-  const handleStartQuest = async (questId) => {
-    try {
-      const startQuestData = {
-        accountId: userId,
-        questId,
-      };
-      const res = await startQuestAPI(startQuestData);
-    } catch (error) {
-      console.log("Start quest error: ", error);
-    }
-  };
+  if (isLoading) {
+    return <LoadingCustom label="Loading..." />;
+  }
 
   return (
     <>
@@ -122,12 +125,10 @@ export default function RewardScreen() {
           </View>
 
           {/*Reward Progress & Leader board */}
-          <TouchableOpacity
-            onPress={() => setOpenModalRewardHistory(true)}
-            className="flex-row justify-between items-center gap-4 px-6 py-6 border-y border-purple-primary"
-          >
+          <View className="flex-row justify-between items-center gap-4 px-6 py-6 border-y border-purple-primary">
             {/*Reward Progress */}
-            <View
+            <TouchableOpacity
+              onPress={() => setOpenModalRewardHistory(true)}
               className="h-24 rounded-2xl flex-1 p-2"
               style={{ backgroundColor: "#EDF0F7" }}
             >
@@ -147,7 +148,7 @@ export default function RewardScreen() {
               <View className="bg-purple-primary/30 w-full h-6 my-auto rounded-full overflow-hidden">
                 <View className="h-full bg-purple-four w-[calc(8686/10000*100%)] rounded-full" />
               </View>
-            </View>
+            </TouchableOpacity>
             {/*Leader board */}
             <TouchableOpacity
               onPress={() => router.push(`/(root)/(stack)/reward/leaderBoard`)}
@@ -161,7 +162,7 @@ export default function RewardScreen() {
                 resizeMode="cover"
               />
             </TouchableOpacity>
-          </TouchableOpacity>
+          </View>
 
           {/*Daily check in */}
           <View className="px-6 py-6 border-b border-purple-primary">
@@ -198,10 +199,13 @@ export default function RewardScreen() {
           </View>
 
           {/*Your task */}
-          <YourTask yourTaskList={yourTaskList} />
+          <YourTask
+            yourTaskList={yourTaskList}
+            setTaskDetailId={setTaskDetailId}
+          />
 
           {/*Active tasks */}
-          <ActiveTask questList={questList} />
+          <ActiveTask questList={questList} setTaskDetailId={setTaskDetailId} />
         </ScrollView>
       </SafeAreaView>
 
@@ -209,6 +213,13 @@ export default function RewardScreen() {
         openModalRewardHistory={openModalRewardHistory}
         setOpenModalRewardHistory={setOpenModalRewardHistory}
       />
+
+      {taskDetailId && (
+        <TaskDetailModal
+          taskId={taskDetailId}
+          setTaskDetailId={setTaskDetailId}
+        />
+      )}
     </>
   );
 }

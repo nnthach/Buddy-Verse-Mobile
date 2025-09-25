@@ -68,6 +68,7 @@ export default function BuddyScreen() {
       },
     });
   };
+  
   return (
     <SafeAreaView edges={["top"]} className="flex-1 bg-beige-primary">
       <ScrollView

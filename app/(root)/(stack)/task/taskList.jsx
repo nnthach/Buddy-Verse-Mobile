@@ -14,27 +14,35 @@ import {
   getQuestListAPI,
 } from "@services/questService";
 import { SafeAreaView } from "react-native-safe-area-context";
+import LoadingCustom from "@components/LoadingCustom";
 
 export default function TaskList() {
   const { type } = useLocalSearchParams();
   const [taskListData, setTaskListData] = useState(null);
   const { userId } = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleGetQuestList = async () => {
+    setIsLoading(true);
     try {
       const res = await getQuestListAPI();
       setTaskListData(res.data);
     } catch (error) {
       console.log("Get quest list error: ", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleGetAccountQuestList = async () => {
+    setIsLoading(true);
     try {
       const res = await getAccountQuestListAPI(userId);
       setTaskListData(res.data);
     } catch (error) {
       console.log("Get account task list error: ", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -62,6 +70,10 @@ export default function TaskList() {
       </TouchableOpacity>
     </View>
   );
+
+  if (isLoading) {
+    return <LoadingCustom label="Loading..." />;
+  }
 
   return (
     <SafeAreaView className="flex-1 bg-beige-primary">

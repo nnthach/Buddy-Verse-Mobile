@@ -37,13 +37,18 @@ export default function MatchLoading() {
         console.log("joined queue alo alo");
       });
 
+      // start connect
       await conn.start();
+      console.log("🔗 Connection started!");
+
+      // join
       await conn.invoke(
         "JoinMatchQueue",
         userId,
         matchForm.roomType,
         matchForm.interestIds
       );
+      console.log("📩 Đã gửi yêu cầu join match queue");
 
       connectionRef.current = conn;
     } catch (error) {
