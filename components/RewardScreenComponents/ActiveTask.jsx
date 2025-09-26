@@ -15,7 +15,9 @@ function ActiveTask({ questList, setTaskDetailId }) {
               : "mr-4"
         }`}
       >
-        <Text className="bg-green-400 self-start text-white text-sm font-medium p-1 px-2 rounded-full">
+        <Text
+          className={`${item.type == "Daily" ? "bg-green-400" : item.type == "Weekly" ? "bg-yellow-400" : "bg-blue-400"} self-start text-white text-sm font-medium p-1 px-2 rounded-full`}
+        >
           {item.type}
         </Text>
         <Text className="font-medium mt-2">{item.title}</Text>
@@ -31,7 +33,7 @@ function ActiveTask({ questList, setTaskDetailId }) {
           onPress={() => setTaskDetailId(item?.questId)}
           className="bg-purple-primary/70 mt-auto rounded-full px-4 py-1 flex-row items-center justify-center gap-2 "
         >
-          <Text className="text-white text-sm font-semibold">View Tasks</Text>
+          <Text className="text-white text-sm font-semibold">Chi tiết</Text>
         </TouchableOpacity>
       </View>
     );
@@ -40,9 +42,7 @@ function ActiveTask({ questList, setTaskDetailId }) {
     <View className="py-6">
       {/*Heading */}
       <View className="w-full flex-row items-center justify-between px-6">
-        <Text className="text-purple-primary text-2xl font-bold">
-          Active Tasks
-        </Text>
+        <Text className="text-purple-primary text-2xl font-bold">Nhiệm vụ</Text>
         <TouchableOpacity
           onPress={() =>
             router.push({
@@ -52,7 +52,7 @@ function ActiveTask({ questList, setTaskDetailId }) {
           }
           className="flex-row items-center"
         >
-          <Text className="text-purple-primary/50 text-lg">See more</Text>
+          <Text className="text-purple-primary/50 text-lg">Xem thêm</Text>
           <MaterialIcons
             name="keyboard-arrow-right"
             size={24}

@@ -29,8 +29,15 @@ export default function MatchLoading() {
 
       // lắng nghe tin nhắn từ server
       conn.on("Matched", (roomId, members) => {
-        console.log("matched roomid", roomId);
-        console.log("matched members", members);
+        if (roomId && members) {
+          router.replace({
+            pathname: `/(stack)/chatTemp/${roomId}`,
+            params: {
+              accountId1: members[0],
+              accountId2: members[1],
+            },
+          });
+        }
       });
 
       conn.on("JoinedQueue", () => {
@@ -39,7 +46,6 @@ export default function MatchLoading() {
 
       // start connect
       await conn.start();
-      console.log("🔗 Connection started!");
 
       // join
       await conn.invoke(
@@ -48,7 +54,6 @@ export default function MatchLoading() {
         matchForm.roomType,
         matchForm.interestIds
       );
-      console.log("📩 Đã gửi yêu cầu join match queue");
 
       connectionRef.current = conn;
     } catch (error) {

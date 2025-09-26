@@ -23,11 +23,11 @@ function YourTask({ yourTaskList, setTaskDetailId }) {
     );
   };
   return (
-    <View className="py-6">
+    <View className="pt-6">
       {/*Heading */}
       <View className="w-full flex-row items-center justify-between px-6">
         <Text className="text-purple-primary text-2xl font-bold">
-          Your Tasks
+          Nhiệm vụ đang làm
         </Text>
         <TouchableOpacity
           onPress={() =>
@@ -38,7 +38,7 @@ function YourTask({ yourTaskList, setTaskDetailId }) {
           }
           className="flex-row items-center"
         >
-          <Text className="text-purple-primary/50 text-lg">See more</Text>
+          <Text className="text-purple-primary/50 text-lg">Xem thêm</Text>
           <MaterialIcons
             name="keyboard-arrow-right"
             size={24}

@@ -1,17 +1,23 @@
-import { memo } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Modal, Pressable, Text, TouchableOpacity, View } from "react-native";
+import { useFocusEffect } from "expo-router";
+import { getQuestByIdAPI } from "@services/questService";
 
 function TaskDetailModal({ taskId, setTaskDetailId }) {
   const [questDetail, setQuestDetail] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleGetTaskDetail = async () => {
+    setIsLoading(true);
     try {
       const res = await getQuestByIdAPI(taskId);
       console.log("Get task detail res: ", res.data);
       setQuestDetail(res.data);
     } catch (error) {
       console.log("Get task detail error: ", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -29,34 +35,40 @@ function TaskDetailModal({ taskId, setTaskDetailId }) {
     }
   };
 
-  useFocusEffect(
-    useCallback(() => {
+  useEffect(() => {
+    if (taskId) {
       handleGetTaskDetail();
-    }, [])
-  );
+    }
+  }, [taskId]);
+
+  const visible = !!taskId;
+
+  const handleClose = () => {
+    setTaskDetailId(null);
+  };
+
   return (
-    <View className="bg-white p-4 m-4 rounded-2xl">
-      <View>
-        <Text className="bg-green-400 self-start text-white items-center justify-center font-medium pt-1 px-2 rounded-full">
-          {questDetail?.type}
-        </Text>
+    <Modal
+      visible={visible}
+      transparent
+      animationType="fade"
+      onRequestClose={handleClose}
+    >
+      {/* Overlay */}
+      <Pressable
+        className="flex-1 bg-black opacity-50"
+        onPress={handleClose} // click ra ngoài để tắt
+      />
 
-        <TouchableOpacity onPress={() => setTaskDetailId(null)}>
-          <AntDesign name="close" size={20} color="black" />
-        </TouchableOpacity>
+      {/* Content */}
+      <View className="absolute inset-0 items-center justify-center">
+        <View className="bg-white p-4 rounded-2xl w-[90%]">
+          <Text className="bg-green-400 self-start text-white font-medium pt-1 px-2 rounded-full">
+            {questDetail?.type}
+          </Text>
+        </View>
       </View>
-      <Text className="">{questDetail?.title}</Text>
-      <Text>{questDetail?.description}</Text>
-      <Text>{questDetail?.rewardPoints}</Text>
-      <Text>{questDetail?.expiredAt}</Text>
-
-      <TouchableOpacity
-        onPress={() => handleStartQuest(questDetail?.questId)}
-        className="bg-purple-primary/70 mt-auto rounded-full px-4 py-2 flex-row items-center justify-center gap-2 "
-      >
-        <Text className="text-white font-semibold">Do Task</Text>
-      </TouchableOpacity>
-    </View>
+    </Modal>
   );
 }
 

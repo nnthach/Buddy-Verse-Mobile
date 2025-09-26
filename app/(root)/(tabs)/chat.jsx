@@ -57,7 +57,6 @@ export default function ChatScreen() {
             router.push({
               pathname: `/(root)/(stack)/chat/${item.roomId}`,
               params: {
-                roomId: item.roomId,
                 accountId2: otherMember.accountId, // truyền thêm ở đây
               },
             })

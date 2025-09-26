@@ -188,13 +188,38 @@ export default function RewardScreen() {
             </View>
 
             {/*Daily */}
-            <View className="flex-row flex-wrap mt-6 gap-4 justify-between">
-              {[...Array(35)].map((_, index) => (
-                <View
-                  key={index}
-                  className="w-10 h-10 bg-purple-primary/50 border border-purple-primary rounded-lg"
-                ></View>
-              ))}
+            <View className=" bg-purple-primary/40 p-4 rounded-xl justify-center items-center gap-2 mt-6">
+              <Text className="text-white text-xl font-semibold">
+                Đăng nhập mỗi ngày
+              </Text>
+              <View className="flex-row flex-wrap gap-[13px] justify-between">
+                {[...Array(4)].map((_, index) => (
+                  <View
+                    key={index}
+                    className=" bg-beige-primary rounded-lg items-center p-2"
+                  >
+                    <View className="w-[56px] h-[56px]  bg-white items-center justify-center rounded-full">
+                      <Text className="text-purple-primary font-medium text-sm">
+                        1500
+                      </Text>
+                      <Text className="text-purple-primary font-medium text-sm">
+                        Điểm
+                      </Text>
+                    </View>
+                    <Text className="text-black font-medium text-sm">
+                      Hôm nay
+                    </Text>
+                  </View>
+                ))}
+              </View>
+              <TouchableOpacity
+                activeOpacity={0.8}
+                className="bg-purple-primary w-full justify-center items-center py-1 rounded-lg mt-2"
+              >
+                <Text className="text-white text-base font-semibold">
+                  Nhận ngay 1500 điểm
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
 
