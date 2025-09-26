@@ -28,6 +28,10 @@ import {
 import LoadingCustom from "@components/LoadingCustom";
 import { matchEndAPI } from "@services/matchService";
 import ModalChatTemp from "@components/StackChatTempComponent/ModalChatTemp";
+import {
+  getChatConnection,
+  getMatchConnection,
+} from "@services/signalRService";
 
 export default function ChatTempRoom() {
   const { roomId, accountId2, accountId1 } = useLocalSearchParams();
@@ -56,32 +60,54 @@ export default function ChatTempRoom() {
     return () => clearTimeout(timer);
   }, []);
 
+  // useEffect(() => {
+  //   const setupMatchHub = async () => {
+  //     const conn = await getMatchConnection();
+
+  //     if (!conn._hasChatEndedListener) {
+  //       conn.on("ChatEnded", async (endedRoomId) => {
+  //         console.log("✅ Nhận ChatEnded:", endedRoomId);
+  //         setMessages([]);
+  //         router.replace("/(tabs)/home");
+
+  //         try {
+  //           await conn.invoke("LeaveMatch", userId, endedRoomId);
+  //         } catch (err) {
+  //           console.log("LeaveMatch error:", err);
+  //         }
+  //       });
+  //       conn._hasChatEndedListener = true;
+  //     }
+  //   };
+
+  //   setupMatchHub();
+  // }, []);
+
   // signalr out room chat temp
   const leaveRoom = async () => {
     try {
-      const conn = new HubConnectionBuilder()
-        .withUrl("http://10.0.2.2:5116/matchHub")
-        .configureLogging(LogLevel.Information)
-        .build();
+      const conn = await getMatchConnection();
 
-      // lắng nghe sự kiện kết thúc chat
-      conn.on("ChatEnded", (endedRoomId) => {
-        console.log("✅ Nhận sự kiện ChatEnded:", endedRoomId);
+      if (conn.state === "Disconnected") {
+        await conn.start();
+      }
+
+      // lắng nghe sự kiện kết thúc chat từ server
+      // conn.on("ChatEnded", async (roomId) => {
+      //   console.log("Nhận sự kiện ChatEnded:", roomId);
+
+      //   setMessages([]);
+      //   router.replace("/(tabs)/home");
+      // });
+
+      conn.on("LeftMatch", async (roomId) => {
+        console.log(" Nhận sự kiện LeftMatch:", roomId);
+
         setMessages([]);
         router.replace("/(tabs)/home");
       });
 
-      conn.on("JoinedQueue", () => {
-        console.log("joined queue alo alo");
-      });
-
-      await conn.start();
-      await conn.invoke(
-        "JoinMatchQueue",
-        userId,
-        matchForm.roomType,
-        matchForm.interestIds
-      );
+      await conn.invoke("LeaveMatch", userId, roomId);
 
       connectRoomRef.current = conn;
     } catch (error) {
@@ -93,10 +119,11 @@ export default function ChatTempRoom() {
   const joinRoom = async () => {
     try {
       // 1. Connect
-      const conn = new HubConnectionBuilder()
-        .withUrl("http://10.0.2.2:5116/chatHub")
-        .configureLogging(LogLevel.Information)
-        .build();
+      const conn = await getChatConnection();
+
+      if (conn.state === "Disconnected") {
+        await conn.start();
+      }
 
       // lắng nghe tin nhắn từ server
       conn.on("ReceiveMessage", (msg) => {
@@ -108,7 +135,6 @@ export default function ChatTempRoom() {
         );
       });
 
-      await conn.start();
       await conn.invoke("JoinRoom", userId, roomId);
 
       connectionRef.current = conn;
@@ -119,7 +145,6 @@ export default function ChatTempRoom() {
 
   useEffect(() => {
     joinRoom();
-    leaveRoom();
 
     return () => {
       if (connectionRef.current) connectionRef.current.stop();
@@ -159,7 +184,7 @@ export default function ChatTempRoom() {
 
   const handleSendMessage = async () => {
     try {
-      const res = await sendMessageAPI(sendMessageForm);
+      await sendMessageAPI(sendMessageForm);
       setSendMessageForm({ ...sendMessageForm, content: "" });
     } catch (error) {
       console.log("send mess err", error);

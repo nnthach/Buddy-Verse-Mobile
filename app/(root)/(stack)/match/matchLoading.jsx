@@ -12,6 +12,8 @@ import { MatchContext } from "../../../../context/MatchContext";
 import { AuthContext } from "../../../../context/AuthContext";
 import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 
+import { getMatchConnection } from "@services/signalRService";
+
 export default function MatchLoading() {
   const { label } = useLocalSearchParams();
   const { matchForm } = useContext(MatchContext);
@@ -21,13 +23,12 @@ export default function MatchLoading() {
 
   const joinMatchQueue = async () => {
     try {
-      // 1. Connect
-      const conn = new HubConnectionBuilder()
-        .withUrl("http://10.0.2.2:5116/matchHub")
-        .configureLogging(LogLevel.Information)
-        .build();
+      const conn = await getMatchConnection();
 
-      // lắng nghe tin nhắn từ server
+      if (conn.state === "Disconnected") {
+        await conn.start();
+      }
+
       conn.on("Matched", (roomId, members) => {
         if (roomId && members) {
           router.replace({
@@ -44,10 +45,6 @@ export default function MatchLoading() {
         console.log("joined queue alo alo");
       });
 
-      // start connect
-      await conn.start();
-
-      // join
       await conn.invoke(
         "JoinMatchQueue",
         userId,
