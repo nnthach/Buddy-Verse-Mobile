@@ -21,6 +21,7 @@ import { AuthContext } from "../../context/AuthContext";
 import { registerAPI } from "services/authService";
 import { pickImage, removeImage } from "../../utils/imagePickerUtils";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import uploadImage from "../../utils/uploadImage";
 
 export default function SignUpScreen() {
   const screenWidth = Dimensions.get("window").width;
@@ -34,24 +35,29 @@ export default function SignUpScreen() {
   const [openSelect, setOpenSelect] = useState(false);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
+  const [imageUpload, setImageUpload] = useState([]);
+
   const handleImagePick = async () => {
     const selectedAssets = await pickImage();
     if (selectedAssets.length > 0) {
-      setSubmitRegisterForm((prev) => ({
-        ...prev,
-        photoUrls: [
-          ...prev.photoUrls,
-          ...selectedAssets.map((asset) => asset.uri),
-        ],
+      const formattedAssets = selectedAssets.map((asset) => ({
+        uri: asset.uri,
+        type: "image",
       }));
+      console.log("formatt asset", formattedAssets);
+      setImageUpload((prev) => [...prev, ...formattedAssets]);
+      // setSubmitRegisterForm((prev) => ({
+      //   ...prev,
+      //   photoUrls: [
+      //     ...prev.photoUrls,
+      //     ...selectedAssets.map((asset) => asset.uri),
+      //   ],
+      // }));
     }
   };
 
   const handleRemoveImage = (index) => {
-    setSubmitRegisterForm((prev) => ({
-      ...prev,
-      photoUrls: removeImage(prev.photoUrls, index),
-    }));
+    setImageUpload((prev) => removeImage(prev, index));
   };
 
   const handleChange = (name, value) => {
@@ -75,7 +81,27 @@ export default function SignUpScreen() {
     }
 
     try {
-      const res = await registerAPI(submitRegisterForm);
+      const imageUrlList = [];
+
+      for (const img of imageUpload) {
+        const url = await uploadImage(img);
+        console.log("url in try", url);
+        imageUrlList.push(url);
+      }
+
+      console.log("imageUrlList", imageUrlList);
+
+      console.log("final form", {
+        ...submitRegisterForm,
+        photoUrls: imageUrlList,
+      });
+      // call api
+
+      const res = await registerAPI({
+        ...submitRegisterForm,
+        photoUrls: imageUrlList,
+      });
+
       console.log("register res", res);
       setSubmitRegisterForm(initialRegisterForm);
       router.replace("/sign-in");
@@ -261,7 +287,7 @@ export default function SignUpScreen() {
               ) : (
                 <View>
                   <Text>Upload your avatar</Text>
-                  {submitRegisterForm.photoUrls.length < 1 && (
+                  {imageUpload.length < 1 && (
                     // add image
                     <TouchableOpacity
                       className="bg-gray-200 p-2 items-center justify-center w-24 h-24"
@@ -271,24 +297,22 @@ export default function SignUpScreen() {
                     </TouchableOpacity>
                   )}
 
-                  {submitRegisterForm?.photoUrls.length > 0 && (
+                  {imageUpload.length > 0 && (
                     <View>
-                      {submitRegisterForm?.photoUrls.map((media, index) => (
-                        <View key={index} className="w-24 h-24 overflow-hidden">
-                          <Image
-                            source={{ uri: media }}
-                            className="w-full h-full"
-                          />
+                      <View className="w-24 h-24 overflow-hidden">
+                        <Image
+                          source={{ uri: imageUpload[0].uri }}
+                          className="w-full h-full"
+                        />
 
-                          <Ionicons
-                            name="close"
-                            size={20}
-                            color="black"
-                            className="absolute right-0"
-                            onPress={() => handleRemoveImage(index)}
-                          />
-                        </View>
-                      ))}
+                        <Ionicons
+                          name="close"
+                          size={20}
+                          color="black"
+                          className="absolute right-0"
+                          onPress={() => handleRemoveImage(0)}
+                        />
+                      </View>
                     </View>
                   )}
                 </View>
