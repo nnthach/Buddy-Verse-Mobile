@@ -89,7 +89,10 @@ export default function MatchLoading() {
           </Text>
         </View>
 
-        <TouchableOpacity onPress={() => router.replace("/(tabs)/buddy")}>
+        <TouchableOpacity
+          onPress={() => router.replace("/(tabs)/buddy")}
+          className="mt-4"
+        >
           <Text>Ngừng kết nối</Text>
         </TouchableOpacity>
       </View>

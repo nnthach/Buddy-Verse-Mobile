@@ -10,13 +10,8 @@ const uriToBlob = async (uri) => {
 };
 
 const uploadImage = async (asset) => {
-  console.log("asset in uploadImage", asset);
   const blob = await uriToBlob(asset.uri); // call convert
-  console.log("blob", blob);
-  const storageRef = ref(
-    storage,
-    asset.fileName || `${Date.now()}.jpg`
-  );
+  const storageRef = ref(storage, asset.fileName || `${Date.now()}.jpg`);
   console.log("storageRef", storageRef);
   await uploadBytes(storageRef, blob);
   const downloadURL = await getDownloadURL(storageRef);

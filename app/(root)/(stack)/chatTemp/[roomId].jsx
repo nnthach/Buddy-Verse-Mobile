@@ -26,7 +26,7 @@ import {
   sendMessageAPI,
 } from "@services/messageService";
 import LoadingCustom from "@components/LoadingCustom";
-import { matchEndAPI } from "@services/matchService";
+import { matchDeleteAPI, matchEndAPI } from "@services/matchService";
 import ModalChatTemp from "@components/StackChatTempComponent/ModalChatTemp";
 import {
   getChatConnection,
@@ -60,60 +60,50 @@ export default function ChatTempRoom() {
     return () => clearTimeout(timer);
   }, []);
 
-  // useEffect(() => {
-  //   const setupMatchHub = async () => {
-  //     const conn = await getMatchConnection();
-
-  //     if (!conn._hasChatEndedListener) {
-  //       conn.on("ChatEnded", async (endedRoomId) => {
-  //         console.log("✅ Nhận ChatEnded:", endedRoomId);
-  //         setMessages([]);
-  //         router.replace("/(tabs)/home");
-
-  //         try {
-  //           await conn.invoke("LeaveMatch", userId, endedRoomId);
-  //         } catch (err) {
-  //           console.log("LeaveMatch error:", err);
-  //         }
-  //       });
-  //       conn._hasChatEndedListener = true;
-  //     }
-  //   };
-
-  //   setupMatchHub();
-  // }, []);
-
-  // signalr out room chat temp
   const leaveRoom = async () => {
     try {
       const conn = await getMatchConnection();
-
       if (conn.state === "Disconnected") {
         await conn.start();
       }
 
-      // lắng nghe sự kiện kết thúc chat từ server
-      // conn.on("ChatEnded", async (roomId) => {
-      //   console.log("Nhận sự kiện ChatEnded:", roomId);
+      conn.on("ContinueConfirmed", async (roomId) => {
+        console.log("Nhận sự kiện ContinueConfirmed:", roomId);
+      });
 
-      //   setMessages([]);
-      //   router.replace("/(tabs)/home");
-      // });
-
-      conn.on("LeftMatch", async (roomId) => {
-        console.log(" Nhận sự kiện LeftMatch:", roomId);
-
+      conn.on("ChatEnded", async (roomId) => {
+        console.log("Nhận sự kiện ChatEnded:", roomId);
         setMessages([]);
         router.replace("/(tabs)/home");
       });
-
-      await conn.invoke("LeaveMatch", userId, roomId);
-
       connectRoomRef.current = conn;
     } catch (error) {
       console.log("end chat room err", error);
     }
   };
+
+  // signalr out room chat temp
+  // const leaveRoom = async () => {
+  //   try {
+  //     const conn = await getMatchConnection();
+
+  //     if (conn.state === "Disconnected") {
+  //       await conn.start();
+  //     }
+
+  //     // lắng nghe sự kiện kết thúc chat từ server
+  //     conn.on("ChatEnded", async (roomId) => {
+  //       console.log("Nhận sự kiện ChatEnded:", roomId);
+
+  //       setMessages([]);
+  //       router.replace("/(tabs)/home");
+  //     });
+
+  //     connectRoomRef.current = conn;
+  //   } catch (error) {
+  //     console.log("end chat room err", error);
+  //   }
+  // };
 
   // signalr connect room
   const joinRoom = async () => {
@@ -144,6 +134,7 @@ export default function ChatTempRoom() {
   };
 
   useEffect(() => {
+    leaveRoom();
     joinRoom();
 
     return () => {
@@ -193,10 +184,10 @@ export default function ChatTempRoom() {
 
   const handleEndChat = async () => {
     try {
-      const res = await matchEndAPI({ roomId });
-      console.log("End chat res", res.data);
+      const res = await matchDeleteAPI(roomId);
+      console.log("Delete match chat res", res);
     } catch (err) {
-      console.log("End chat API error:", err);
+      console.log("Delete match chat API error:", err);
     }
   };
 

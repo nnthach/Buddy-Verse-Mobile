@@ -44,15 +44,7 @@ export default function SignUpScreen() {
         uri: asset.uri,
         type: "image",
       }));
-      console.log("formatt asset", formattedAssets);
       setImageUpload((prev) => [...prev, ...formattedAssets]);
-      // setSubmitRegisterForm((prev) => ({
-      //   ...prev,
-      //   photoUrls: [
-      //     ...prev.photoUrls,
-      //     ...selectedAssets.map((asset) => asset.uri),
-      //   ],
-      // }));
     }
   };
 
@@ -68,8 +60,6 @@ export default function SignUpScreen() {
   };
 
   const handleSignUp = async () => {
-    console.log("sign up form", submitRegisterForm);
-
     if (signupStep === 1) {
       setSignupStep(2);
       return;
@@ -85,24 +75,15 @@ export default function SignUpScreen() {
 
       for (const img of imageUpload) {
         const url = await uploadImage(img);
-        console.log("url in try", url);
         imageUrlList.push(url);
       }
 
-      console.log("imageUrlList", imageUrlList);
-
-      console.log("final form", {
-        ...submitRegisterForm,
-        photoUrls: imageUrlList,
-      });
       // call api
-
       const res = await registerAPI({
         ...submitRegisterForm,
         photoUrls: imageUrlList,
       });
 
-      console.log("register res", res);
       setSubmitRegisterForm(initialRegisterForm);
       router.replace("/sign-in");
     } catch (error) {
@@ -285,12 +266,14 @@ export default function SignUpScreen() {
                   />
                 </>
               ) : (
-                <View>
-                  <Text>Upload your avatar</Text>
+                <View className="items-center gap-4">
+                  <Text className="text-purple-primary font-medium text-2xl">
+                    Upload your avatar
+                  </Text>
                   {imageUpload.length < 1 && (
                     // add image
                     <TouchableOpacity
-                      className="bg-gray-200 p-2 items-center justify-center w-24 h-24"
+                      className="bg-gray-200 p-2 items-center justify-center w-26 h-26"
                       onPress={handleImagePick}
                     >
                       <Text style={{ color: "black" }}>Add Images</Text>

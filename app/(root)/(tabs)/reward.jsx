@@ -31,7 +31,7 @@ export default function RewardScreen() {
   const [yourTaskList, setYourTaskList] = useState([]);
   const [points, setPoints] = useState(8868);
   const [openModalRewardHistory, setOpenModalRewardHistory] = useState(false);
-  const { userId } = useContext(AuthContext);
+  const { userId, userInfo } = useContext(AuthContext);
   const [taskDetailId, setTaskDetailId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -86,7 +86,7 @@ export default function RewardScreen() {
             <View className="flex-row items-center gap-3">
               <Image
                 source={{
-                  uri: "https://m.media-amazon.com/images/S/pv-target-images/16627900db04b76fae3b64266ca161511422059cd24062fb5d900971003a0b70._SX1080_FMjpg_.jpg",
+                  uri: userInfo?.photos?.[0],
                 }}
                 className="w-11 h-11 rounded-full"
                 resizeMode="cover"

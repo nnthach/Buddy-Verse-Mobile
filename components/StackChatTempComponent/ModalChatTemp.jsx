@@ -1,4 +1,8 @@
-import { matchContinueAPI, matchEndAPI } from "@services/matchService";
+import {
+  matchContinueAPI,
+  matchDeleteAPI,
+  matchEndAPI,
+} from "@services/matchService";
 import { memo, useContext } from "react";
 import { Modal, Pressable, Text, TouchableOpacity, View } from "react-native";
 import { AuthContext } from "../../context/AuthContext";
@@ -8,7 +12,7 @@ function ModalChatTemp({ roomId, setOpenModal, openModal }) {
 
   const handleEndChat = async () => {
     try {
-      const res = await matchEndAPI({ roomId });
+      const res = await matchDeleteAPI(roomId);
       console.log("End chat res", res);
     } catch (err) {
       console.log("End chat API error:", err);

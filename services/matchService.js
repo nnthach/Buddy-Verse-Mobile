@@ -11,8 +11,8 @@ export const matchContinueAPI = async (data) => {
   return res;
 };
 
-export const matchEndAPI = async (data) => {
-  const res = await axiosClient.post("/match/end", data);
+export const matchDeleteAPI = async (id) => {
+  const res = await axiosClient.delete(`/match/${id}`);
 
   return res;
 };
