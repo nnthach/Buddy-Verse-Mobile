@@ -10,7 +10,6 @@ import { router, useLocalSearchParams } from "expo-router";
 import { matchJoinAPI } from "@services/matchService";
 import { MatchContext } from "../../../../context/MatchContext";
 import { AuthContext } from "../../../../context/AuthContext";
-import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 
 import { getMatchConnection } from "@services/signalRService";
 

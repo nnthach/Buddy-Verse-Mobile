@@ -26,9 +26,12 @@ import {
   sendMessageAPI,
 } from "@services/messageService";
 import LoadingCustom from "@components/LoadingCustom";
+import { getUserByIdAPI } from "@services/userService";
 
 export default function ChatRoom() {
   const { roomId, accountId2 } = useLocalSearchParams();
+
+  const [userInfoTwo, setUserTwoInfo] = useState();
 
   const { userId } = useContext(AuthContext);
   const [messages, setMessages] = useState([]);
@@ -75,6 +78,16 @@ export default function ChatRoom() {
   }, [roomId, userId]);
   // end signalr connect
 
+  const handleGetUserById = async (id) => {
+    try {
+      const res = await getUserByIdAPI(id);
+      setUserTwoInfo(res.data);
+      console.log(res.data);
+    } catch (error) {
+      console.log("get user by id err", error);
+    }
+  };
+
   // get all message
   useFocusEffect(
     useCallback(() => {
@@ -86,7 +99,7 @@ export default function ChatRoom() {
             userId,
             accountId2
           );
-          console.log("get mess room between res", res.data);
+          console.log("get mess room between res", res);
           setMessages(res.data);
         } catch (error) {
           console.log("get mess room between err", error);
@@ -94,6 +107,7 @@ export default function ChatRoom() {
           setIsLoading(false);
         }
       };
+      handleGetUserById(accountId2);
       handleGetMessageRoom();
     }, [])
   );
@@ -143,14 +157,16 @@ export default function ChatRoom() {
           <View className="flex-row gap-2 items-center">
             <Image
               source={{
-                uri: "gẻg",
+                uri: userInfoTwo?.photos[0],
               }}
               className="w-12 h-12 rounded-full"
               resizeMode="cover"
             />
             {/*Name & active */}
             <View className="flex-1">
-              <Text className="font-semibold text-xl">Hai Anh</Text>
+              <Text className="font-semibold text-xl">
+                {userInfoTwo?.lastname} {userInfoTwo?.firstname}
+              </Text>
               <Text className="text-gray-500">Online</Text>
             </View>
           </View>
@@ -175,9 +191,9 @@ export default function ChatRoom() {
                 <View className="w-11 h-11 bg-gray-400 rounded-full overflow-hidden items-center justify-center">
                   <Image
                     source={{
-                      uri: item?.senderPhotos[0],
+                      uri: userInfoTwo?.photos[0],
                     }}
-                    className="w-full h-full rounded-full"
+                    className="w-11 h-11 rounded-full"
                     resizeMode="cover"
                   />
                 </View>

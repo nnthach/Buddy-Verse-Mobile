@@ -29,7 +29,6 @@ export default function ChatScreen() {
     try {
       const res = await getAllRoomOfUserAPI(userId);
       console.log("get all room of user res: ", res.data);
-      console.log("get all room with member: ", res.data.roomMembers);
       setRoomList(res.data);
     } catch (error) {
       console.log("get all room of user error: ", error);
@@ -79,14 +78,14 @@ export default function ChatScreen() {
             <Text className="text-gray-500">{otherMember?.message}</Text>
           </View>
           {/*Time & number */}
-          <View className="items-end h-full justify-between py-1">
+          {/* <View className="items-end h-full justify-between py-1">
             <Text className="text-gray-400 text-xs">{otherMember?.time}</Text>
             {otherMember?.numberOfMessage != 0 && (
               <Text className="bg-red-500 rounded-full w-5 h-5 text-center text-white text-xs leading-5">
                 {otherMember?.numberOfMessage}
               </Text>
             )}
-          </View>
+          </View> */}
         </TouchableOpacity>
       </View>
     );

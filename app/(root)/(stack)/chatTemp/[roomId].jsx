@@ -18,15 +18,12 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { AuthContext } from "../../../../context/AuthContext";
-import { MatchContext } from "../../../../context/MatchContext";
-import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import {
   getRoomDetailBetweenUserAPI,
-  getRoomIdByUserIdAPI,
   sendMessageAPI,
 } from "@services/messageService";
 import LoadingCustom from "@components/LoadingCustom";
-import { matchDeleteAPI, matchEndAPI } from "@services/matchService";
+import { matchDeleteAPI } from "@services/matchService";
 import ModalChatTemp from "@components/StackChatTempComponent/ModalChatTemp";
 import {
   getChatConnection,
@@ -37,27 +34,32 @@ export default function ChatTempRoom() {
   const { roomId, accountId2, accountId1 } = useLocalSearchParams();
 
   const { userId } = useContext(AuthContext);
-  const { matchForm } = useContext(MatchContext);
 
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const [openModal, setOpenModal] = useState(false);
 
+  const [countdown, setCountdown] = useState(30);
+
   const scrollViewRef = useRef(null);
   const connectRoomRef = useRef(null);
   const connectionRef = useRef(null);
 
   useEffect(() => {
-    // sau 2p hien modal cho user chon
-    const timer = setTimeout(
-      () => {
-        setOpenModal(true);
-      },
-      1 * 60 * 1000
-    );
+    // bắt đầu đếm ngược
+    const interval = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          setOpenModal(true); // hết giờ thì mở modal
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
 
-    return () => clearTimeout(timer);
+    return () => clearInterval(interval);
   }, []);
 
   const leaveRoom = async () => {
@@ -67,13 +69,13 @@ export default function ChatTempRoom() {
         await conn.start();
       }
 
-      conn.on("UserWantsContinue", async (accountId, roomId) => {
-        console.log("Nhận sự kiện UserWantsContinue:", accountId, roomId);
-      });
+      // conn.on("UserWantsContinue", async (accountId, roomId) => {
+      //   console.log("Nhận sự kiện UserWantsContinue:", accountId, roomId);
+      // });
 
-      conn.on("RoomPermanent", async (roomId) => {
-        console.log("Nhận sự kiện RoomPermanent:", roomId);
-      });
+      // conn.on("RoomPermanent", async (roomId) => {
+      //   console.log("Nhận sự kiện RoomPermanent:", roomId);
+      // });
 
       conn.on("ChatEnded", async (roomId) => {
         console.log("Nhận sự kiện ChatEnded:", roomId);
@@ -217,7 +219,7 @@ export default function ChatTempRoom() {
               {/*Name & active */}
               <View className="flex-1">
                 <Text className="font-medium text-lg">
-                  Hãy tìm hiểu nhau trong 2 phút
+                  Còn lại {countdown} giây để tìm hiểu nhau
                 </Text>
               </View>
             </View>
@@ -243,18 +245,6 @@ export default function ChatTempRoom() {
                 key={item?.messageId}
                 className={`flex-row gap-2 items-start mb-3`}
               >
-                {item?.senderId !== userId && (
-                  <View className="w-11 h-11 bg-gray-400 rounded-full overflow-hidden items-center justify-center">
-                    <Image
-                      source={{
-                        uri: item?.senderPhotos[0],
-                      }}
-                      className="w-full h-full rounded-full"
-                      resizeMode="cover"
-                    />
-                  </View>
-                )}
-
                 <View
                   className={`${item?.senderId === userId ? "items-end" : "items-start"} gap-1 w-full`}
                 >

@@ -51,14 +51,6 @@ export default function HomeScreen() {
 
           {/*User info */}
           <View className=" justify-center items-center">
-            {/*Name */}
-            <View className="border border-purple-primary p-3 px-5 rounded-2xl flex-row gap-3 items-center">
-              <Text className="text-purple-primary text-2xl">
-                {userInfo?.firstname}
-              </Text>
-              <FontAwesome5 name="award" size={20} color="#57298D" />
-            </View>
-            {/*Avatar */}
             <View className="mt-6 justify-center items-center">
               <View className="bg-gray-300 w-32 h-32 rounded-full p-2 justify-center items-center">
                 <Image
@@ -81,7 +73,7 @@ export default function HomeScreen() {
           </View>
 
           {/*Stats Card */}
-          <View className="border border-purple-primary w-full rounded-2xl  flex-row justify-around items-center py-2">
+          <View className="bg-white/80 w-full rounded-full flex-row justify-around items-center py-2 overflow-hidden">
             {stats.map((item, index) => (
               <View key={index} className="items-center">
                 <Text className="font-bold text-lg text-purple-primary">
@@ -102,7 +94,7 @@ export default function HomeScreen() {
           </View>
 
           {/*Someone waiting */}
-          <View className="border border-purple-primary w-full rounded-2xl  justify-around items-center py-6">
+          {/* <View className="border border-purple-primary w-full rounded-2xl  justify-around items-center py-6">
             <Image
               source={{
                 uri: "https://m.media-amazon.com/images/S/pv-target-images/16627900db04b76fae3b64266ca161511422059cd24062fb5d900971003a0b70._SX1080_FMjpg_.jpg",
@@ -121,7 +113,7 @@ export default function HomeScreen() {
                 Find Buddy
               </Text>
             </View>
-          </View>
+          </View> */}
 
           {/*Discover */}
           <View className="">

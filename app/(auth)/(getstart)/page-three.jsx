@@ -116,7 +116,7 @@ export default function GetStartThreeScreen() {
             {/*img */}
             <View className="w-full bg-red-500 h-[300px] my-6 rounded-xl overflow-hidden">
               <Image
-                source={require("@assets/images/applogo.png")}
+                source={require("@assets/images/getstartthree.png")}
                 className="w-full h-full"
               />
             </View>

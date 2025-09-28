@@ -155,9 +155,7 @@ export default function RewardScreen() {
               className="h-24 w-24 overflow-hidden rounded-2xl"
             >
               <Image
-                source={{
-                  uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzz7di0LYIulQDtDANj-jYuZhNS8btD9KEOg&s.png",
-                }}
+                source={require("@assets/images/leaderBoard.png")}
                 className="w-full h-full"
                 resizeMode="cover"
               />

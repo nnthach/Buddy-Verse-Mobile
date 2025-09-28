@@ -96,9 +96,12 @@ export default function BuddyScreen() {
                   roomType: "Private",
                 }))
               }
-              className={`${matchForm.roomType == "Private" ? "bg-purple-primary" : "bg-purple-primary/50"} h-28 flex-1 rounded-xl`}
+              className={`${matchForm?.roomType == "Private" ? "scale-110" : "scale-100"} h-[122px] flex-1 rounded-xl`}
             >
-              <Text>individual</Text>
+              <Image
+                source={require("@assets/images/matchInvidual.png")}
+                style={{ width: "auto", height: "100%", resizeMode: "contain" }}
+              />
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() =>
@@ -107,9 +110,12 @@ export default function BuddyScreen() {
                   roomType: "group",
                 }))
               }
-              className={`${matchForm.roomType == "group" ? "bg-purple-primary" : "bg-purple-primary/50"} h-28 flex-1 rounded-xl`}
+              className={`${matchForm?.roomType == "group" ? "scale-110" : "scale-100"} h-[122px] flex-1 rounded-xl`}
             >
-              <Text>group</Text>
+              <Image
+                source={require("@assets/images/matchGroup.png")}
+                style={{ width: "auto", height: "100%", resizeMode: "contain" }}
+              />
             </TouchableOpacity>
           </View>
 
