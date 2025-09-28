@@ -1,8 +1,10 @@
-import { memo, useCallback, useEffect, useState } from "react";
-import AntDesign from "@expo/vector-icons/AntDesign";
+import { memo, useEffect, useState } from "react";
 import { Modal, Pressable, Text, TouchableOpacity, View } from "react-native";
-import { useFocusEffect } from "expo-router";
-import { getQuestByIdAPI } from "@services/questService";
+import {
+  claimQuestAPI,
+  completeQuestAPI,
+  getAccountQuestByIdAPI,
+} from "@services/questService";
 
 function TaskDetailModal({ taskId, setTaskDetailId }) {
   const [questDetail, setQuestDetail] = useState(null);
@@ -11,8 +13,8 @@ function TaskDetailModal({ taskId, setTaskDetailId }) {
   const handleGetTaskDetail = async () => {
     setIsLoading(true);
     try {
-      const res = await getQuestByIdAPI(taskId);
-      console.log("Get task detail res: ", res.data);
+      const res = await getAccountQuestByIdAPI(taskId);
+      console.log("Get account quest detail res: ", res.data);
       setQuestDetail(res.data);
     } catch (error) {
       console.log("Get task detail error: ", error);
@@ -32,6 +34,27 @@ function TaskDetailModal({ taskId, setTaskDetailId }) {
       console.log("Start quest res: ", res.data);
     } catch (error) {
       console.log("Start quest error: ", error);
+    }
+  };
+
+  const handleClaimQuest = async (accountQuestId) => {
+    try {
+      const res = await claimQuestAPI(accountQuestId);
+      console.log("claim quest res: ", res.data);
+      handleGetTaskDetail();
+    } catch (error) {
+      console.log("claim quest error: ", error);
+    }
+  };
+
+  const handleCompleteQuest = async (accountQuestId) => {
+    console.log("accountQuestId", accountQuestId);
+    try {
+      const res = await completeQuestAPI(accountQuestId);
+      console.log("complete quest res: ", res.data);
+      handleGetTaskDetail();
+    } catch (error) {
+      console.log("complete quest error: ", error);
     }
   };
 
@@ -56,16 +79,53 @@ function TaskDetailModal({ taskId, setTaskDetailId }) {
     >
       {/* Overlay */}
       <Pressable
-        className="flex-1 bg-black opacity-50"
+        className="flex-1 bg-beige-primary opacity-50"
         onPress={handleClose} // click ra ngoài để tắt
       />
 
       {/* Content */}
       <View className="absolute inset-0 items-center justify-center">
         <View className="bg-white p-4 rounded-2xl w-[90%]">
-          <Text className="bg-green-400 self-start text-white font-medium pt-1 px-2 rounded-full">
-            {questDetail?.type}
-          </Text>
+          <View className="absolute top-[-10px] bg-purple-primary p-4 py-1 self-center rounded-full">
+            <Text className="text-beige-primary font-medium text-lg">
+              Chi tiét nhiệm vụ
+            </Text>
+          </View>
+
+          <View className="my-4 mt-6">
+            <Text className="font-medium">Tên: {questDetail?.title}</Text>
+            <Text className="">Mô tả: {questDetail?.description}</Text>
+            <Text className="">
+              Trạng thái:{" "}
+              {questDetail?.status == "InProgress"
+                ? "Đang thực hiện"
+                : questDetail?.status == "Completed"
+                  ? "Hoàn thành"
+                  : "Đã nhận thưởng"}
+            </Text>
+          </View>
+
+          {questDetail?.status == "Completed" ? (
+            <TouchableOpacity
+              className="bg-yellow-400 self-center px-4 py-1 pb-0 rounded-full"
+              onPress={() => handleClaimQuest(questDetail?.accountQuestId)}
+            >
+              <Text className="text-white font-medium">Nhận tiền</Text>
+            </TouchableOpacity>
+          ) : questDetail?.status == "InProgress" ? (
+            <TouchableOpacity
+              className="bg-yellow-400 self-center px-4 py-1 pb-0 rounded-full"
+              onPress={() => handleCompleteQuest(questDetail?.accountQuestId)}
+            >
+              <Text className="text-white font-medium">
+                Xác nhận hoàn thành
+              </Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity className="bg-yellow-400 self-center px-4 py-1 pb-0 rounded-full">
+              <Text className="text-white font-medium">Hoàn thành</Text>
+            </TouchableOpacity>
+          )}
         </View>
       </View>
     </Modal>

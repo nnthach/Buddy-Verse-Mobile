@@ -10,11 +10,27 @@ function YourTask({ yourTaskList, setTaskDetailId }) {
         className={`w-full bg-white rounded-2xl p-2 px-4 flex-row items-center justify-between`}
       >
         <View className="gap-1">
+          <Text
+            className={`font-medium text-white self-start rounded-xl px-2 pt-1 ${
+              item?.status === "InProgress"
+                ? "bg-yellow-400"
+                : item?.status === "Completed"
+                  ? "bg-blue-400"
+                  : "bg-green-400"
+            }`}
+          >
+            {item?.status === "InProgress"
+              ? "Đang thực hiện"
+              : item?.status === "Completed"
+                ? "Hoàn thành"
+                : "Đã nhận thưởng"}
+          </Text>
+
           <Text className="text-base font-semibold">{item?.title}</Text>
           <Text className="text-gray-500">{item?.description}</Text>
         </View>
         <TouchableOpacity
-          onPress={() => setTaskDetailId(item?.questId)}
+          onPress={() => setTaskDetailId(item?.accountQuestId)}
           className="bg-yellow-300 rounded-full p-1"
         >
           <MaterialIcons name="keyboard-arrow-right" size={24} color="black" />

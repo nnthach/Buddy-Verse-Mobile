@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, Image } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
@@ -30,7 +30,6 @@ export default function BuddyScreen() {
   }, []);
 
   const handleAddInterestList = (item) => {
-
     setMatchForm((prev) => {
       const isSelected = prev.interestIds.includes(item);
 
@@ -68,7 +67,7 @@ export default function BuddyScreen() {
       },
     });
   };
-  
+
   return (
     <SafeAreaView edges={["top"]} className="flex-1 bg-beige-primary">
       <ScrollView
@@ -77,10 +76,13 @@ export default function BuddyScreen() {
       >
         <View className="gap-6">
           {/*Header */}
-          <View className="bg-white h-16 flex-row justify-between items-center">
+          <View className=" h-16 flex-row justify-between items-center">
             {/*Logo */}
-            <View>
-              <Text>logo</Text>
+            <View className="w-[150px] overflow-hidden">
+              <Image
+                source={require("@assets/images/logoTextPurple.png")}
+                style={{ width: "100%", height: 84, resizeMode: "contain" }}
+              />
             </View>
             <FontAwesome5 name="bell" size={24} color="#57298D" />
           </View>
@@ -91,16 +93,16 @@ export default function BuddyScreen() {
               onPress={() =>
                 setMatchForm((prev) => ({
                   ...prev,
-                  roomType: "individual",
+                  roomType: "Private",
                 }))
               }
-              className={`${matchForm.roomType == "individual" ? "bg-purple-primary" : "bg-purple-primary/50"} h-28 flex-1 rounded-xl`}
+              className={`${matchForm.roomType == "Private" ? "bg-purple-primary" : "bg-purple-primary/50"} h-28 flex-1 rounded-xl`}
             >
               <Text>individual</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() =>
-                setMatchJoinDataForm((prev) => ({
+                setMatchForm((prev) => ({
                   ...prev,
                   roomType: "group",
                 }))

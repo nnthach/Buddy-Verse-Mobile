@@ -12,8 +12,28 @@ export const getQuestByIdAPI = async (id) => {
   return res;
 };
 
+export const getAccountQuestByIdAPI = async (id) => {
+  const res = await axiosClient.get(`/accountquest/${id}`);
+
+  return res;
+};
+
 export const startQuestAPI = async (data) => {
   const res = await axiosClient.post("/accountquest/start", data);
+
+  return res;
+};
+
+export const claimQuestAPI = async (accountQuestId) => {
+  const res = await axiosClient.post(`/accountquest/${accountQuestId}/claim`);
+
+  return res;
+};
+
+export const completeQuestAPI = async (accountQuestId) => {
+  const res = await axiosClient.post(
+    `/accountquest/${accountQuestId}/complete`
+  );
 
   return res;
 };

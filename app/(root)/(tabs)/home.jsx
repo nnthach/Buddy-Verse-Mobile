@@ -38,10 +38,13 @@ export default function HomeScreen() {
       >
         <View className="gap-6">
           {/*Header */}
-          <View className="bg-white h-16 flex-row justify-between items-center">
+          <View className="h-16 flex-row justify-between items-center overflow-hidden">
             {/*Logo */}
-            <View>
-              <Text>logo</Text>
+            <View className="w-[150px] overflow-hidden">
+              <Image
+                source={require("@assets/images/logoTextPurple.png")}
+                style={{ width: "100%", height: 84, resizeMode: "contain" }}
+              />
             </View>
             <FontAwesome5 name="bell" size={24} color="#57298D" />
           </View>
@@ -57,14 +60,14 @@ export default function HomeScreen() {
             </View>
             {/*Avatar */}
             <View className="mt-6 justify-center items-center">
-              <View className="bg-gray-300 w-32 h-32 rounded-full p-2">
+              <View className="bg-gray-300 w-32 h-32 rounded-full p-2 justify-center items-center">
                 <Image
                   source={
                     userInfo?.photos?.[0]
                       ? { uri: userInfo.photos[0] }
                       : require("@assets/images/avatar.png")
                   }
-                  className="w-full h-full rounded-full"
+                  className="w-32 h-32 rounded-full"
                   resizeMode="cover"
                 />
               </View>

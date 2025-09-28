@@ -47,7 +47,7 @@ export default function GetStartTwoScreen() {
     <SafeAreaView className="flex-1 bg-beige-primary">
       <View className="flex-1 bg-beige-primary px-8">
         {/*Heading */}
-        <View className="mt-4">
+        <View className="mt-8">
           <Text className="text-[38px] text-purple-secondary font-bold">
             Select your interests
           </Text>

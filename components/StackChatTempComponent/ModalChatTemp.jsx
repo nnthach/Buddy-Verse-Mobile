@@ -4,7 +4,7 @@ import {
   matchEndAPI,
 } from "@services/matchService";
 import { memo, useContext } from "react";
-import { Modal, Pressable, Text, TouchableOpacity, View } from "react-native";
+import { Modal, Text, TouchableOpacity, View } from "react-native";
 import { AuthContext } from "../../context/AuthContext";
 
 function ModalChatTemp({ roomId, setOpenModal, openModal }) {

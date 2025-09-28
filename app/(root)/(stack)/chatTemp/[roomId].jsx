@@ -67,8 +67,12 @@ export default function ChatTempRoom() {
         await conn.start();
       }
 
-      conn.on("ContinueConfirmed", async (roomId) => {
-        console.log("Nhận sự kiện ContinueConfirmed:", roomId);
+      conn.on("UserWantsContinue", async (accountId, roomId) => {
+        console.log("Nhận sự kiện UserWantsContinue:", accountId, roomId);
+      });
+
+      conn.on("RoomPermanent", async (roomId) => {
+        console.log("Nhận sự kiện RoomPermanent:", roomId);
       });
 
       conn.on("ChatEnded", async (roomId) => {

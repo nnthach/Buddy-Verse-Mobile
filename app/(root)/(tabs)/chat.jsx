@@ -99,10 +99,13 @@ export default function ChatScreen() {
   return (
     <SafeAreaView edges={["top"]} className="flex-1 bg-beige-primary">
       {/*Heading */}
-      <View className="bg-white h-16 flex-row justify-between items-center px-6">
+      <View className="h-16 flex-row justify-between items-center px-6">
         {/*Logo */}
-        <View>
-          <Text>logo</Text>
+        <View className="w-[150px] overflow-hidden">
+          <Image
+            source={require("@assets/images/logoTextPurple.png")}
+            style={{ width: "100%", height: 84, resizeMode: "contain" }}
+          />
         </View>
         <FontAwesome5 name="bell" size={24} color="#57298D" />
       </View>
@@ -113,7 +116,7 @@ export default function ChatScreen() {
           <View className=" border border-purple-primary rounded-xl h-14 w-full items-center flex-row px-3 ">
             <Ionicons name="search-sharp" size={24} color="#57298D" />
             <TextInput
-              className="flex-1 h-full px-3 pb-1 text-xl text-purple-primary "
+              className="flex-1 h-full px-3 pb-2f text-xl text-purple-primary "
               onChangeText={(text) => setSearchAccount(text)}
               textAlignVertical="center"
               placeholder="Search"

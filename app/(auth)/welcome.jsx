@@ -19,7 +19,7 @@ export default function WelcomeScreen() {
         />
         <View>
           <Text className="text-5xl font-black text-purple-primary mt-4">
-            buddy verse.
+            buddyverse.
           </Text>
           <Text className="text-base text-purple-primary/70">
             feel deeper live truer

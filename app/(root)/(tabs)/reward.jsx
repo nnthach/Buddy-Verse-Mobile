@@ -53,7 +53,7 @@ export default function RewardScreen() {
 
     try {
       const res = await getAccountQuestListAPI(userId);
-      console.log("Get account task list res: ", res.data);
+      console.log("Get your task list res: ", res.data);
       setYourTaskList(res.data);
     } catch (error) {
       console.log("Get account task list error: ", error);
