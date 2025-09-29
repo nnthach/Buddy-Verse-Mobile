@@ -2,15 +2,18 @@ import { useState } from "react";
 import { Text, TextInput, View } from "react-native";
 
 function TextInputAuth({
+  focusedField,
+  setFocusedField,
   label,
   value,
   onChangeText,
   error,
   customLeftCSSOnblur = "left-4",
   customLeftCSSOnfocus = "left-4",
+  name,
   ...props
 }) {
-  const [isFocused, setIsFocused] = useState(false);
+  const isFocused = focusedField === name;
   return (
     <>
       <View
@@ -20,8 +23,8 @@ function TextInputAuth({
           className={`h-full w-full px-4 pb-1 text-xl text-purple-primary`}
           value={value}
           onChangeText={onChangeText}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
+          onFocus={() => setFocusedField(name)}
+          onBlur={() => setFocusedField(null)}
           textAlignVertical="center"
           {...props}
         />

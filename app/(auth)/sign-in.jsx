@@ -24,6 +24,8 @@ export default function SignInScreen() {
   const screenWidth = Dimensions.get("window").width;
   const { setUserId, handleGetUserById } = useContext(AuthContext);
 
+  const [focusedField, setFocusedField] = useState(null);
+
   const [signinForm, setSignInForm] = useState({
     email: "",
     password: "",
@@ -76,12 +78,8 @@ export default function SignInScreen() {
   const handleSignIn = async () => {
     if (handleValidation()) return;
 
-    console.log("sign in form", signinForm);
-
     try {
       const res = await loginAPI(signinForm);
-      console.log("login res", res);
-      console.log("login res data", res.data);
       const { accessToken, refreshToken, accountId } = res.data;
 
       AsyncStorage.setItem("accessToken", accessToken);
@@ -99,6 +97,7 @@ export default function SignInScreen() {
       });
 
       setSignInForm({ email: "", password: "" });
+      setFocusedField(null);
 
       setTimeout(() => {
         router.replace("/(root)/(tabs)/home");
@@ -145,17 +144,23 @@ export default function SignInScreen() {
             {/*Form */}
             <View className="my-6 px-4 gap-4">
               <TextInputAuth
+                name="email"
                 label={"Email"}
                 value={signinForm.email}
                 onChangeText={(text) => handleChange("email", text)}
                 error={errors.email}
+                focusedField={focusedField}
+                setFocusedField={setFocusedField}
               />
               <TextInputAuth
+                name="password"
                 label={"Mật khẩu"}
                 value={signinForm.password}
                 onChangeText={(text) => handleChange("password", text)}
                 error={errors.password}
                 secureTextEntry={true}
+                focusedField={focusedField}
+                setFocusedField={setFocusedField}
               />
 
               <TouchableOpacity

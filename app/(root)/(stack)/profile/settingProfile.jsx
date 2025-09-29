@@ -103,7 +103,11 @@ export default function SettingProfile() {
         {/*Avatar */}
         <View className="mt-6 justify-center items-center">
           <Image
-            source={{ uri: userInfo?.photos[0] }}
+            source={
+              userInfo?.photos?.[0]
+                ? { uri: userInfo.photos[0] }
+                : require("@assets/images/avatar.png")
+            }
             className="w-32 h-32 rounded-full"
             resizeMode="cover"
           />
@@ -216,7 +220,7 @@ export default function SettingProfile() {
               className="bg-purple-third py-4 px-6 rounded-full w-full"
             >
               <Text className="text-white text-xl font-medium text-center">
-                Sign Out
+                Đăng xuất
               </Text>
             </TouchableOpacity>
           </View>

@@ -20,6 +20,8 @@ import LoadingCustom from "@components/LoadingCustom";
 import { AuthContext } from "../../../../context/AuthContext";
 import { updateUserProfileAPI } from "@services/userService";
 import Toast from "react-native-toast-message";
+import { pickImage } from "utils/imagePickerUtils";
+import uploadImage from "utils/uploadImage";
 
 export default function EditProfileForm() {
   const ADDRESS_BASE_URL = "https://countriesnow.space/api/v0.1";
@@ -62,6 +64,25 @@ export default function EditProfileForm() {
   ];
 
   const [isLoading, setIsLoading] = useState(false);
+
+  const [imageUpload, setImageUpload] = useState([]);
+
+  const handleImagePick = async () => {
+    const selectedAssets = await pickImage();
+    if (selectedAssets.length > 0) {
+      const formattedAssets = selectedAssets.map((asset) => ({
+        uri: asset.uri,
+        type: "image",
+      }));
+      console.log("format assets", formattedAssets);
+      setImageUpload((prev) => [...prev, ...formattedAssets]);
+      const newFormatToRender = selectedAssets.map((asset) => asset.uri);
+      setUserProfile((prev) => ({
+        ...prev,
+        photoUrls: [newFormatToRender[0], ...(prev.photoUrls.slice(1) || [])],
+      }));
+    }
+  };
 
   const [openSelect, setOpenSelect] = useState({
     dob: false,
@@ -149,6 +170,23 @@ export default function EditProfileForm() {
     console.log("edit form data", userProfile);
     setIsLoading(true);
     try {
+      const imageUrlList = [];
+
+      for (const img of imageUpload) {
+        const url = await uploadImage(img);
+        imageUrlList.push(url);
+      }
+
+      const newUserProfileEditData = {
+        ...userProfile,
+        photoUrls: [
+          imageUrlList[0],
+          ...(userProfile.photoUrls?.slice(1) || []),
+        ],
+      };
+
+      console.log("edit newUserProfileEditData data", newUserProfileEditData);
+
       const res = await updateUserProfileAPI(userId, userProfile);
 
       await handleGetUserById(userId);
@@ -204,13 +242,19 @@ export default function EditProfileForm() {
               {/*Avatar */}
               <View className="mt-6 justify-center items-center">
                 <Image
-                  source={{ uri: userInfo?.photos[0] }}
+                  source={
+                    userProfile?.photoUrls?.[0]
+                      ? { uri: userProfile.photoUrls[0] }
+                      : require("@assets/images/avatar.png")
+                  }
                   className="w-32 h-32 rounded-full"
                   resizeMode="cover"
                 />
-                <Text className="text-lg text-purple-primary mt-1 mb-1">
-                  Thay đổi hình ảnh
-                </Text>
+                <TouchableOpacity onPress={handleImagePick}>
+                  <Text className="text-lg text-purple-primary mt-1 mb-1">
+                    Thay đổi hình ảnh
+                  </Text>
+                </TouchableOpacity>
               </View>
 
               {/*Form */}

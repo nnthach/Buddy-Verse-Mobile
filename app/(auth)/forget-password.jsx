@@ -21,6 +21,7 @@ import {
   verifyOTPAPI,
 } from "../../services/authService";
 import { router } from "expo-router";
+import Toast from "react-native-toast-message";
 
 export default function ForgetPasswordScreen() {
   const screenWidth = Dimensions.get("window").width;
@@ -31,6 +32,8 @@ export default function ForgetPasswordScreen() {
     otpCode: "",
     accountId: "",
   });
+
+  const [focusedField, setFocusedField] = useState(null);
 
   const [stepForgetPassword, setStepForgetPassword] = useState(1);
 
@@ -93,7 +96,11 @@ export default function ForgetPasswordScreen() {
         console.log("form data pw 3", formData);
         const res = await resetPasswordAPI(formData);
 
-        console.log("fgpw pw 3 res", res);
+        Toast.show({
+          type: "success",
+          text1: "Đổi mật khẩu thành công!",
+          text2: "Chào mừng bạn",
+        });
         router.replace("/sign-in");
       } catch (error) {
         console.log("pw fgpw 3 err", error);
@@ -134,21 +141,30 @@ export default function ForgetPasswordScreen() {
             <View className="my-6 px-4 gap-4">
               {stepForgetPassword == 1 ? (
                 <TextInputAuth
+                  name="email"
                   label={"Email"}
                   value={forgetPasswordForm.email}
                   onChangeText={(text) => handleChange("email", text)}
+                  focusedField={focusedField}
+                  setFocusedField={setFocusedField}
                 />
               ) : stepForgetPassword == 2 ? (
                 <TextInputAuth
+                  name="otpCode"
                   label={"OTP Code"}
                   value={forgetPasswordForm.otpCode}
                   onChangeText={(text) => handleChange("otpCode", text)}
+                  focusedField={focusedField}
+                  setFocusedField={setFocusedField}
                 />
               ) : (
                 <TextInputAuth
+                  name="newPassword"
                   label={"New Password"}
                   value={forgetPasswordForm.newPassword}
                   onChangeText={(text) => handleChange("newPassword", text)}
+                  focusedField={focusedField}
+                  setFocusedField={setFocusedField}
                 />
               )}
 

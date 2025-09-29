@@ -22,6 +22,7 @@ import { registerAPI } from "services/authService";
 import { pickImage, removeImage } from "../../utils/imagePickerUtils";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import uploadImage from "../../utils/uploadImage";
+import Toast from "react-native-toast-message";
 
 export default function SignUpScreen() {
   const screenWidth = Dimensions.get("window").width;
@@ -36,6 +37,8 @@ export default function SignUpScreen() {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
   const [imageUpload, setImageUpload] = useState([]);
+
+  const [focusedField, setFocusedField] = useState(null);
 
   const handleImagePick = async () => {
     const selectedAssets = await pickImage();
@@ -85,6 +88,11 @@ export default function SignUpScreen() {
       });
 
       setSubmitRegisterForm(initialRegisterForm);
+      Toast.show({
+        type: "success",
+        text1: "Đăng ký thành công!",
+        text2: "Chào mừng bạn",
+      });
       router.replace("/sign-in");
     } catch (error) {
       console.log("register err", error);
@@ -126,16 +134,22 @@ export default function SignUpScreen() {
               {signupStep == 1 ? (
                 <>
                   <TextInputAuth
+                    name="firstname"
                     label={"Tên đầu"}
                     value={submitRegisterForm.firstname}
                     onChangeText={(text) => handleChange("firstname", text)}
                     error={errors?.firstname}
+                    focusedField={focusedField}
+                    setFocusedField={setFocusedField}
                   />
                   <TextInputAuth
+                    name="lastname"
                     label={"Tên cuối"}
                     value={submitRegisterForm.lastname}
                     onChangeText={(text) => handleChange("lastname", text)}
                     error={errors?.lastname}
+                    focusedField={focusedField}
+                    setFocusedField={setFocusedField}
                   />
 
                   {/*Select gender */}
@@ -235,26 +249,36 @@ export default function SignUpScreen() {
               ) : signupStep == 2 ? (
                 <>
                   <TextInputAuth
+                    name="username"
                     label={"Tên đăng nhập"}
                     value={submitRegisterForm.username}
                     onChangeText={(text) => handleChange("username", text)}
                     error={errors?.username}
+                    focusedField={focusedField}
+                    setFocusedField={setFocusedField}
                   />
 
                   <TextInputAuth
+                    name="email"
                     label={"Email"}
                     value={submitRegisterForm.email}
                     onChangeText={(text) => handleChange("email", text)}
                     error={errors?.email}
+                    focusedField={focusedField}
+                    setFocusedField={setFocusedField}
                   />
                   <TextInputAuth
+                    name="password"
                     label={"Mật khẩu"}
                     value={submitRegisterForm.password}
                     onChangeText={(text) => handleChange("password", text)}
                     error={errors?.password}
                     secureTextEntry={true}
+                    focusedField={focusedField}
+                    setFocusedField={setFocusedField}
                   />
                   <TextInputAuth
+                    name="confirmPassword"
                     label={"Nhập lại mật khẩu"}
                     value={submitRegisterForm.confirmPassword}
                     onChangeText={(text) =>
@@ -263,6 +287,8 @@ export default function SignUpScreen() {
                     error={errors?.confirmPassword}
                     secureTextEntry={true}
                     customLeftCSSOnblur="left-6"
+                    focusedField={focusedField}
+                    setFocusedField={setFocusedField}
                   />
                 </>
               ) : (

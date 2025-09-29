@@ -93,10 +93,13 @@ function TaskDetailModal({ taskId, setTaskDetailId }) {
           </View>
 
           <View className="my-4 mt-6">
-            <Text className="font-medium">Tên: {questDetail?.title}</Text>
-            <Text className="">Mô tả: {questDetail?.description}</Text>
+            <Text className="font-semibold">Tên: {questDetail?.title}</Text>
             <Text className="">
-              Trạng thái:{" "}
+              <Text className="font-semibold">Mô tả:</Text>{" "}
+              {questDetail?.description}
+            </Text>
+            <Text className="">
+              <Text className="font-semibold">Trạng thái:</Text>{" "}
               {questDetail?.status == "InProgress"
                 ? "Đang thực hiện"
                 : questDetail?.status == "Completed"
@@ -107,14 +110,14 @@ function TaskDetailModal({ taskId, setTaskDetailId }) {
 
           {questDetail?.status == "Completed" ? (
             <TouchableOpacity
-              className="bg-yellow-400 self-center px-4 py-1 pb-0 rounded-full"
+              className="bg-purple-primary/70 self-center px-4 py-1 pb-0 rounded-full"
               onPress={() => handleClaimQuest(questDetail?.accountQuestId)}
             >
               <Text className="text-white font-medium">Nhận tiền</Text>
             </TouchableOpacity>
           ) : questDetail?.status == "InProgress" ? (
             <TouchableOpacity
-              className="bg-yellow-400 self-center px-4 py-1 pb-0 rounded-full"
+              className="bg-purple-primary/70 self-center px-4 py-1 pb-0 rounded-full"
               onPress={() => handleCompleteQuest(questDetail?.accountQuestId)}
             >
               <Text className="text-white font-medium">
@@ -122,7 +125,7 @@ function TaskDetailModal({ taskId, setTaskDetailId }) {
               </Text>
             </TouchableOpacity>
           ) : (
-            <TouchableOpacity className="bg-yellow-400 self-center px-4 py-1 pb-0 rounded-full">
+            <TouchableOpacity className="bg-purple-primary/70 self-center px-4 py-1 pb-0 rounded-full">
               <Text className="text-white font-medium">Hoàn thành</Text>
             </TouchableOpacity>
           )}

@@ -40,7 +40,7 @@ export default function ChatTempRoom() {
 
   const [openModal, setOpenModal] = useState(false);
 
-  const [countdown, setCountdown] = useState(30);
+  const [countdown, setCountdown] = useState(90);
 
   const scrollViewRef = useRef(null);
   const connectRoomRef = useRef(null);
@@ -69,13 +69,13 @@ export default function ChatTempRoom() {
         await conn.start();
       }
 
-      // conn.on("UserWantsContinue", async (accountId, roomId) => {
-      //   console.log("Nhận sự kiện UserWantsContinue:", accountId, roomId);
-      // });
+      conn.on("UserWantsContinue", async (accountId, roomId) => {
+        console.log("Nhận sự kiện UserWantsContinue:", accountId, roomId);
+      });
 
-      // conn.on("RoomPermanent", async (roomId) => {
-      //   console.log("Nhận sự kiện RoomPermanent:", roomId);
-      // });
+      conn.on("RoomPermanent", async (roomId) => {
+        console.log("Nhận sự kiện RoomPermanent:", roomId);
+      });
 
       conn.on("ChatEnded", async (roomId) => {
         console.log("Nhận sự kiện ChatEnded:", roomId);
@@ -87,29 +87,6 @@ export default function ChatTempRoom() {
       console.log("end chat room err", error);
     }
   };
-
-  // signalr out room chat temp
-  // const leaveRoom = async () => {
-  //   try {
-  //     const conn = await getMatchConnection();
-
-  //     if (conn.state === "Disconnected") {
-  //       await conn.start();
-  //     }
-
-  //     // lắng nghe sự kiện kết thúc chat từ server
-  //     conn.on("ChatEnded", async (roomId) => {
-  //       console.log("Nhận sự kiện ChatEnded:", roomId);
-
-  //       setMessages([]);
-  //       router.replace("/(tabs)/home");
-  //     });
-
-  //     connectRoomRef.current = conn;
-  //   } catch (error) {
-  //     console.log("end chat room err", error);
-  //   }
-  // };
 
   // signalr connect room
   const joinRoom = async () => {

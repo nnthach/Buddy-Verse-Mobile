@@ -47,6 +47,7 @@ export const AuthProvider = ({ children }) => {
   const handleGetUserById = async (id) => {
     try {
       const res = await getUserByIdAPI(id);
+      console.log('get user detail', res.data)
       setUserInfo(res.data);
     } catch (error) {
       console.log("get user by id err", error);
