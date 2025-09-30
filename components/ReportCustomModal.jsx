@@ -1,28 +1,31 @@
-import { View, Text, Image, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  ActivityIndicator,
+  TouchableOpacity,
+} from "react-native";
 import React, { useEffect } from "react";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function ReportCustomModal() {
+export default function ReportCustomModal({ setIsOpenReport }) {
   return (
-    <View className="absolute top-0 left-0 right-0 bottom-0  flex-1 justify-center items-center bg-beige-primary z-10">
-      <View className="justify-center items-center">
-        <View className="w-36 h-36 rounded-full border-4 border-purple-primary mb-4 items-center justify-center">
-          <ActivityIndicator
-            size={"large"}
-            color={"#57298D"}
-            className="scale-150"
-          />
-        </View>
-        <Text className="font-bold text-purple-primary text-2xl">{label}</Text>
-        <View className="flex-row items-center gap-2">
-          <Image
-            source={require("@assets/icons/light_bulb.png")}
-            className="w-3 h-3 mt-1"
-          />
-          <Text className="text-purple-primary/50 text-sm mt-2">
-            Pro tip: A clear profile photo gets 3x more connections!
+    <SafeAreaView className="absolute top-0 left-0 right-0 bottom-0 flex-1 bg-beige-primary z-10">
+      <View className="flex-1 bg-beige-primary">
+        {/*Heading */}
+        <View className="w-full h-[50px] bg-red-400 flex-row items-center justify-center">
+          <Text className="text-purple-primary text-2xl font-semibold">
+            Tố cáo
           </Text>
+          <TouchableOpacity
+            onPress={() => setIsOpenReport(false)}
+            className="absolute right-3"
+          >
+            <AntDesign name="close" size={20} color="purple" />
+          </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
