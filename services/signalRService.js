@@ -14,6 +14,7 @@ export const getMatchConnection = async () => {
     await matchConnection.start();
     console.log("Connected to matchHub");
   }
+  console.log("matchConnection check chekc check", matchConnection);
   return matchConnection;
 };
 

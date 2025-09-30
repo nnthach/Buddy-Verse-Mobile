@@ -12,6 +12,7 @@ function ModalChatTemp({ roomId, setOpenModal, openModal }) {
 
   const handleEndChat = async () => {
     try {
+      console.log("modal room end chat", roomId);
       const res = await matchDeleteAPI(roomId);
       console.log("End chat res", res);
     } catch (err) {

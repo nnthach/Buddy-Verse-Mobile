@@ -69,6 +69,13 @@ export default function RewardScreen() {
     }, [])
   );
 
+  const formatDate = (date) => {
+    return date.toLocaleDateString("vi-VN", {
+      day: "2-digit",
+      month: "2-digit",
+    });
+  };
+
   if (isLoading) {
     return <LoadingCustom label="Loading..." />;
   }
@@ -191,24 +198,29 @@ export default function RewardScreen() {
                 Đăng nhập mỗi ngày
               </Text>
               <View className="flex-row flex-wrap gap-[13px] justify-between">
-                {[...Array(4)].map((_, index) => (
-                  <View
-                    key={index}
-                    className=" bg-beige-primary rounded-lg items-center p-2"
-                  >
-                    <View className="w-[56px] h-[56px]  bg-white items-center justify-center rounded-full">
-                      <Text className="text-purple-primary font-medium text-sm">
-                        1500
-                      </Text>
-                      <Text className="text-purple-primary font-medium text-sm">
-                        Điểm
+                {[...Array(4)].map((_, index) => {
+                  const date = new Date();
+                  date.setDate(date.getDate() + index);
+                  
+                  return (
+                    <View
+                      key={index}
+                      className=" bg-beige-primary rounded-lg items-center p-2"
+                    >
+                      <View className="w-[56px] h-[56px]  bg-white items-center justify-center rounded-full">
+                        <Text className="text-purple-primary font-medium text-sm">
+                          1500
+                        </Text>
+                        <Text className="text-purple-primary font-medium text-sm">
+                          Điểm
+                        </Text>
+                      </View>
+                      <Text className="text-black font-medium text-sm">
+                        {index === 0 ? "Hôm nay" : formatDate(date)}
                       </Text>
                     </View>
-                    <Text className="text-black font-medium text-sm">
-                      Hôm nay
-                    </Text>
-                  </View>
-                ))}
+                  );
+                })}
               </View>
               <TouchableOpacity
                 activeOpacity={0.8}

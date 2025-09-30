@@ -7,7 +7,6 @@ import {
 } from "react-native";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
-import { matchJoinAPI } from "@services/matchService";
 import { MatchContext } from "../../../../context/MatchContext";
 import { AuthContext } from "../../../../context/AuthContext";
 
@@ -26,6 +25,7 @@ export default function MatchLoading() {
 
       if (conn.state === "Disconnected") {
         await conn.start();
+        console.log("[MatchHub] Connection started matchloading:", conn.connectionId);
       }
 
       conn.on("Matched", (roomId, members) => {
@@ -61,7 +61,12 @@ export default function MatchLoading() {
     joinMatchQueue();
 
     return () => {
-      if (connectionRef.current) connectionRef.current.stop();
+      // if (connectionRef.current) connectionRef.current.stop();
+
+      if (connectionRef.current) {
+        connectionRef.current.off("Matched");
+        connectionRef.current.off("JoinedQueue");
+      }
     };
   }, [userId]);
 

@@ -29,6 +29,7 @@ import {
   getChatConnection,
   getMatchConnection,
 } from "@services/signalRService";
+import Toast from "react-native-toast-message";
 
 export default function ChatTempRoom() {
   const { roomId, accountId2, accountId1 } = useLocalSearchParams();
@@ -40,7 +41,7 @@ export default function ChatTempRoom() {
 
   const [openModal, setOpenModal] = useState(false);
 
-  const [countdown, setCountdown] = useState(90);
+  const [countdown, setCountdown] = useState(120);
 
   const scrollViewRef = useRef(null);
   const connectRoomRef = useRef(null);
@@ -67,28 +68,80 @@ export default function ChatTempRoom() {
       const conn = await getMatchConnection();
       if (conn.state === "Disconnected") {
         await conn.start();
+        console.log(
+          "[MatchHub] Connection started chat temp:",
+          conn.connectionId
+        );
       }
 
+      // gỡ hết handler cũ tránh attach trùng khi re-render
+      conn.off("UserWantsContinue");
+      conn.off("RoomPermanent");
+      conn.off("ChatEnded");
+
+      // UserWantsContinue --------------------------------------------------------------------------
       conn.on("UserWantsContinue", async (accountId, roomId) => {
-        console.log("Nhận sự kiện UserWantsContinue:", accountId, roomId);
+        try {
+          console.log(
+            "Nhận UserWantsContinue:",
+            accountId,
+            roomId,
+            "ConnId:",
+            conn.connectionId
+          );
+
+          if (accountId != userId) {
+            Toast.show({
+              type: "success",
+              text1: "Bạn kia muốn tiếp tục trò chuyện!",
+              text2: "Bạn thì sao?",
+            });
+          }
+        } catch (err) {
+          console.error("Error in UserWantsContinue handler:", err);
+        }
       });
 
+      //  RoomPermanent -------------------------------------------------------------------------------------
       conn.on("RoomPermanent", async (roomId) => {
-        console.log("Nhận sự kiện RoomPermanent:", roomId);
+        try {
+          console.log(
+            "Nhận RoomPermanent:",
+            roomId,
+            "ConnId:",
+            conn.connectionId
+          );
+          if (roomId) {
+            setOpenModal(false);
+            router.replace("/(tabs)/chat");
+          }
+        } catch (err) {
+          console.error("Error in RoomPermanent handler:", err);
+        }
       });
 
+      // ChatEnded ---------------------------------------------------------------------------------------------
       conn.on("ChatEnded", async (roomId) => {
-        console.log("Nhận sự kiện ChatEnded:", roomId);
-        setMessages([]);
-        router.replace("/(tabs)/home");
+        try {
+          console.log("Nhận ChatEnded:", roomId, "ConnId:", conn.connectionId);
+          setMessages([]);
+          Toast.show({
+            type: "success",
+            text1: "Một trong hai bạn đã rời phòng!",
+            text2: "Hãy tiếp tục tìm kiếm nhé",
+          });
+          router.replace("/(tabs)/home");
+        } catch (err) {
+          console.error("Error in ChatEnded handler:", err);
+        }
       });
+
       connectRoomRef.current = conn;
     } catch (error) {
       console.log("end chat room err", error);
     }
   };
 
-  // signalr connect room
   const joinRoom = async () => {
     try {
       // 1. Connect

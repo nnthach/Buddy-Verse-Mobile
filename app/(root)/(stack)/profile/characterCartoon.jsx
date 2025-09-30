@@ -13,6 +13,31 @@ import { router } from "expo-router";
 
 export default function CharacterCartoon() {
   const [selectType, setSelectType] = useState("tee");
+  const [chooseClothes, setChooseClothes] = useState({
+    suit: null,
+    tee: null,
+    pant: null,
+    hat: null,
+  });
+
+  const handleChooseClothes = (img) => {
+    console.log("img", img);
+    switch (selectType) {
+      case "tee":
+        setChooseClothes((prev) => ({ ...prev, tee: img }));
+        break;
+      case "pant":
+        setChooseClothes((prev) => ({ ...prev, pant: img }));
+        break;
+      case "suit":
+        setChooseClothes({ suit: img, tee: null, pant: null, hat: null });
+        break;
+      case "hat":
+        setChooseClothes((prev) => ({ ...prev, hat: img }));
+        break;
+    }
+  };
+
   const selectTypeList = [
     {
       label: "tee",
@@ -55,27 +80,19 @@ export default function CharacterCartoon() {
         image: require("@assets/images/character/yellow_suit_male.png"),
       },
       {
-        name: "sp5",
+        name: "sp6",
         image: require("@assets/images/character/yellow_suit_male.png"),
       },
       {
-        name: "sp5",
+        name: "sp7",
         image: require("@assets/images/character/yellow_suit_male.png"),
       },
       {
-        name: "sp5",
+        name: "sp8",
         image: require("@assets/images/character/yellow_suit_male.png"),
       },
       {
-        name: "sp5",
-        image: require("@assets/images/character/yellow_suit_male.png"),
-      },
-      {
-        name: "sp5",
-        image: require("@assets/images/character/yellow_suit_male.png"),
-      },
-      {
-        name: "sp5",
+        name: "sp9",
         image: require("@assets/images/character/yellow_suit_male.png"),
       },
     ],
@@ -123,11 +140,23 @@ export default function CharacterCartoon() {
         </View>
 
         {/*Character */}
-        <View className="bg-red-200 w-full h-[300px] mt-4">
-          <Image
-            source={require("@assets/images/character/white_body.png")}
-            className="w-full h-full bg-blue-200"
-          />
+        <View className="bg-red-200 w-full h-[300px] mt-4 ">
+          {/*Base */}
+          <View className="relative w-full h-full">
+            {/* Lớp dưới */}
+            <Image
+              source={require("@assets/images/character/black_body.png")}
+              className="w-full h-full"
+              resizeMode="contain"
+            />
+
+            {/* Lớp suit */}
+            <Image
+              source={chooseClothes.tee}
+              className="absolute w-full h-[135px] bottom-10"
+              resizeMode="contain"
+            />
+          </View>
         </View>
       </View>
 
@@ -148,6 +177,7 @@ export default function CharacterCartoon() {
             {productList[selectType].map((item, index) => (
               <TouchableOpacity
                 key={index}
+                onPress={() => handleChooseClothes(item.image)}
                 className="bg-white w-32 h-32 rounded-xl p-2 border border-gray-300"
               >
                 <Image source={item.image} className="w-full h-full" />
