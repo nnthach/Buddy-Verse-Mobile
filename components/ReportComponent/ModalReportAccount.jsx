@@ -1,8 +1,3 @@
-import {
-  matchContinueAPI,
-  matchDeleteAPI,
-  matchEndAPI,
-} from "@services/matchService";
 import { memo, useContext, useState } from "react";
 import {
   Modal,
@@ -12,21 +7,21 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
 
-function ModalReportMessage({
-  messageReportId,
-  setMessageReportId,
-  reportMessageForm,
-  setReportMessageForm,
+function ModalReportAccount({
+  openReportAccount,
+  setOpenReportAccount,
+  reportAccountForm,
+  setReportAccountForm,
   handleSubmitReport,
 }) {
   const { userId } = useContext(AuthContext);
 
-  const visible = !!messageReportId;
+  const visible = !!openReportAccount;
 
   const handleClose = () => {
-    setMessageReportId(null);
+    setOpenReportAccount(null);
   };
 
   return (
@@ -38,11 +33,11 @@ function ModalReportMessage({
     >
       <TouchableWithoutFeedback onPress={handleClose}>
         {/* Overlay */}
-        <View className="flex-1 justify-center items-center">
+        <View className="flex-1 justify-center items-center bg-beige-primary/30">
           {/* Content */}
           <View className="bg-white w-[300px] rounded-2xl p-6">
-            <Text className="text-lg font-medium text-center mb-4">
-              Hãy ghi lý do
+            <Text className="text-lg font-medium text-center mb-4 text-purple-primary">
+              Tố cáo người dùng
             </Text>
 
             <TextInput
@@ -52,9 +47,9 @@ function ModalReportMessage({
               keyboardType="default"
               multiline
               textAlignVertical="top"
-              value={reportMessageForm.reason}
+              value={reportAccountForm.reason}
               onChangeText={(text) =>
-                setReportMessageForm((prev) => ({
+                setReportAccountForm((prev) => ({
                   ...prev,
                   reason: text,
                 }))
@@ -76,4 +71,4 @@ function ModalReportMessage({
   );
 }
 
-export default memo(ModalReportMessage);
+export default memo(ModalReportAccount);

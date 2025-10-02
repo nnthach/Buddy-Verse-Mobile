@@ -15,7 +15,6 @@ import React, {
 } from "react";
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { AuthContext } from "../../../../context/AuthContext";
@@ -27,7 +26,7 @@ import {
 import LoadingCustom from "@components/LoadingCustom";
 import { getUserByIdAPI } from "@services/userService";
 import ReportCustomModal from "@components/ReportCustomModal";
-import ModalReportMessage from "@components/ModalReportMessage";
+import ModalReportMessage from "@components/ReportComponent/ModalReportMessage";
 import { createReportMessageAPI } from "@services/reportService";
 
 export default function ChatRoom() {
@@ -114,7 +113,7 @@ export default function ChatRoom() {
             userId,
             accountId2
           );
-          console.log("get mess room between res", res);
+          console.log("get mess room between res", res.data);
           setMessages(res.data);
         } catch (error) {
           console.log("get mess room between err", error);
@@ -210,12 +209,17 @@ export default function ChatRoom() {
                 resizeMode="cover"
               />
               {/*Name & active */}
-              <View className="flex-1">
+              <TouchableOpacity
+                onPress={() => {
+                  router.push(`/profile/${accountId2}`);
+                }}
+                className="flex-1"
+              >
                 <Text className="font-semibold text-xl">
                   {userInfoTwo?.lastname} {userInfoTwo?.firstname}
                 </Text>
                 <Text className="text-gray-500">Online</Text>
-              </View>
+              </TouchableOpacity>
             </View>
           </View>
           {/*Right */}
