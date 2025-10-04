@@ -1,9 +1,15 @@
-import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { router } from "expo-router";
 import { memo } from "react";
 
-function YourTask({ yourTaskList, setTaskDetailId }) {
+function YourTask({ yourTaskList, setTaskDetailId, loading }) {
   const yourTaskItem = ({ item, index }) => {
     return (
       <View
@@ -65,13 +71,17 @@ function YourTask({ yourTaskList, setTaskDetailId }) {
 
       {/*Content */}
       <View className="mt-4 px-6">
-        <FlatList
-          data={yourTaskList.slice(0, 5)} // chỉ lấy 5 phần tử
-          keyExtractor={(item) => item.questId.toString()}
-          renderItem={yourTaskItem}
-          scrollEnabled={false}
-          ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
-        />
+        {loading ? (
+          <ActivityIndicator />
+        ) : (
+          <FlatList
+            data={yourTaskList.slice(0, 5)} // chỉ lấy 5 phần tử
+            keyExtractor={(item) => item.questId.toString()}
+            renderItem={yourTaskItem}
+            scrollEnabled={false}
+            ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
+          />
+        )}
       </View>
     </View>
   );

@@ -25,49 +25,24 @@ import YourTask from "@components/RewardScreenComponents/YourTask";
 import ActiveTask from "@components/RewardScreenComponents/ActiveTask";
 import TaskDetailModal from "@components/RewardScreenComponents/TaskDetailModal";
 import LoadingCustom from "@components/LoadingCustom";
+import useFetchList from "hooks/useFetchList";
 
 export default function RewardScreen() {
-  const [questList, setQuestList] = useState([]);
-  const [yourTaskList, setYourTaskList] = useState([]);
   const [points, setPoints] = useState(8868);
   const [openModalRewardHistory, setOpenModalRewardHistory] = useState(false);
   const { userId, userInfo } = useContext(AuthContext);
   const [taskDetailId, setTaskDetailId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleGetQuestList = async () => {
-    setIsLoading(true);
-    try {
-      const res = await getQuestListAPI();
-      console.log("Get quest list res: ", res.data);
-      setQuestList(res.data);
-    } catch (error) {
-      console.log("Get quest list error: ", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const { data: questList, loading: loadingAllTask } =
+    useFetchList(getQuestListAPI);
 
-  const handleGetAccountQuestList = async () => {
-    setIsLoading(true);
-
-    try {
-      const res = await getAccountQuestListAPI(userId);
-      console.log("Get your task list res: ", res.data);
-      setYourTaskList(res.data);
-    } catch (error) {
-      console.log("Get account task list error: ", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useFocusEffect(
-    useCallback(() => {
-      handleGetAccountQuestList();
-      handleGetQuestList();
-    }, [])
+  const fetchYourTask = useCallback(
+    () => getAccountQuestListAPI(userId),
+    [userId]
   );
+  const { data: yourTaskList, loading: loadingYourTask } =
+    useFetchList(fetchYourTask);
 
   const formatDate = (date) => {
     return date.toLocaleDateString("vi-VN", {
@@ -201,7 +176,7 @@ export default function RewardScreen() {
                 {[...Array(4)].map((_, index) => {
                   const date = new Date();
                   date.setDate(date.getDate() + index);
-                  
+
                   return (
                     <View
                       key={index}
@@ -237,10 +212,15 @@ export default function RewardScreen() {
           <YourTask
             yourTaskList={yourTaskList}
             setTaskDetailId={setTaskDetailId}
+            loading={loadingYourTask}
           />
 
           {/*Active tasks */}
-          <ActiveTask questList={questList} setTaskDetailId={setTaskDetailId} />
+          <ActiveTask
+            questList={questList}
+            setTaskDetailId={setTaskDetailId}
+            loading={loadingAllTask}
+          />
         </ScrollView>
       </SafeAreaView>
 

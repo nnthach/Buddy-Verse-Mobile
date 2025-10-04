@@ -1,9 +1,16 @@
-import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { router } from "expo-router";
 import { memo } from "react";
 
-function ActiveTask({ questList, setTaskDetailId }) {
+function ActiveTask({ questList, setTaskDetailId, loading }) {
   const activeTaskItem = ({ item, index }) => {
     return (
       <View
@@ -63,13 +70,17 @@ function ActiveTask({ questList, setTaskDetailId }) {
 
       {/*Content */}
       <View className="mt-4">
-        <FlatList
-          data={questList}
-          horizontal
-          keyExtractor={(item) => item.questId.toString()}
-          renderItem={activeTaskItem}
-          showsHorizontalScrollIndicator={false}
-        />
+        {loading ? (
+          <ActivityIndicator />
+        ) : (
+          <FlatList
+            data={questList}
+            horizontal
+            keyExtractor={(item) => item.questId.toString()}
+            renderItem={activeTaskItem}
+            showsHorizontalScrollIndicator={false}
+          />
+        )}
       </View>
     </View>
   );

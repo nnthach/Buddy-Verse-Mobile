@@ -1,4 +1,11 @@
-import { View, Text, ScrollView, TouchableOpacity, Image } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Image,
+  ActivityIndicator,
+} from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
@@ -8,26 +15,12 @@ import { MatchContext } from "../../../context/MatchContext";
 import { getInterestListAPI } from "services/interestService";
 import Toast from "react-native-toast-message";
 import { router } from "expo-router";
+import useFetchList from "hooks/useFetchList";
 
 export default function BuddyScreen() {
-  const { userId } = useContext(AuthContext);
-  const { matchForm, setMatchForm, initialMatchForm } =
-    useContext(MatchContext);
+  const { matchForm, setMatchForm } = useContext(MatchContext);
 
-  const [interestList, setInterestList] = useState([]);
-
-  useEffect(() => {
-    const handleGetInterestList = async () => {
-      try {
-        const res = await getInterestListAPI();
-        setInterestList(res.data);
-      } catch (error) {
-        console.log("get interest list err", error);
-      }
-    };
-
-    handleGetInterestList();
-  }, []);
+  const { data: interestList, loading } = useFetchList(getInterestListAPI);
 
   const handleAddInterestList = (item) => {
     setMatchForm((prev) => {
@@ -130,16 +123,20 @@ export default function BuddyScreen() {
                 What is your interest?
               </Text>
               <View className="flex-row flex-wrap gap-4 my-auto">
-                {interestList.map((item) => (
-                  <TouchableOpacity
-                    key={item.interestId}
-                    activeOpacity={0.8}
-                    onPress={() => handleAddInterestList(item.interestId)}
-                    className={`rounded-2xl h-9 items-center justify-center ${matchForm.interestIds.includes(item.interestId) ? "bg-purple-third" : "bg-purple-third/50"}`}
-                  >
-                    <Text className="text-white px-5">{item.name}</Text>
-                  </TouchableOpacity>
-                ))}
+                {loading ? (
+                  <ActivityIndicator />
+                ) : (
+                  interestList.map((item) => (
+                    <TouchableOpacity
+                      key={item.interestId}
+                      activeOpacity={0.8}
+                      onPress={() => handleAddInterestList(item.interestId)}
+                      className={`rounded-2xl h-9 items-center justify-center ${matchForm.interestIds.includes(item.interestId) ? "bg-purple-third" : "bg-purple-third/50"}`}
+                    >
+                      <Text className="text-white px-5">{item.name}</Text>
+                    </TouchableOpacity>
+                  ))
+                )}
               </View>
             </View>
 

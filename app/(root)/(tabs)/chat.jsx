@@ -6,6 +6,7 @@ import {
   TextInput,
   Image,
   FlatList,
+  ActivityIndicator,
 } from "react-native";
 import React, { useCallback, useContext, useState } from "react";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
@@ -16,32 +17,19 @@ import { router, useFocusEffect } from "expo-router";
 import { AuthContext } from "../../../context/AuthContext";
 import { getAllRoomOfUserAPI } from "@services/messageService";
 import LoadingCustom from "@components/LoadingCustom";
+import useFetchList from "hooks/useFetchList";
 
 export default function ChatScreen() {
   const [searchAccount, setSearchAccount] = useState("");
   const [filterState, setFilterState] = useState("all");
-  const [roomList, setRoomList] = useState([]);
   const { userId } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
 
-  const getAllRoomOfUser = async () => {
-    setIsLoading(true);
-    try {
-      const res = await getAllRoomOfUserAPI(userId);
-      console.log("get all room of user res: ", res.data);
-      setRoomList(res.data);
-    } catch (error) {
-      console.log("get all room of user error: ", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useFocusEffect(
-    useCallback(() => {
-      getAllRoomOfUser();
-    }, [])
+  const fetchYourTask = useCallback(
+    () => getAllRoomOfUserAPI(userId),
+    [userId]
   );
+  const { data: roomList, loading } = useFetchList(fetchYourTask);
 
   const userMessageItem = (item) => {
     const otherMember = item.roomMembers.find(
@@ -51,7 +39,6 @@ export default function ChatScreen() {
     return (
       <View className="h-20 py-3">
         <TouchableOpacity
-          // onPress={() => router.push(`/(root)/(stack)/chat/${item.roomId}`)}
           onPress={() =>
             router.push({
               pathname: `/(root)/(stack)/chat/${item.roomId}`,
@@ -109,7 +96,9 @@ export default function ChatScreen() {
         <FontAwesome5 name="bell" size={24} color="#57298D" />
       </View>
 
-      {roomList.length == 0 ? (
+      {loading ? (
+        <ActivityIndicator />
+      ) : roomList.length == 0 ? (
         <View className="gap-3 mt-3 px-6">
           {/*Search */}
           <View className=" border border-purple-primary rounded-xl h-14 w-full items-center flex-row px-3 ">

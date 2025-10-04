@@ -2,33 +2,19 @@ import {
   View,
   Text,
   SafeAreaView,
-  Image,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
-import React, { useContext, useEffect, useState } from "react";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { router } from "expo-router";
-import { fakePageTwoGetStart } from "../../../data/fakeData";
+import React, { useContext } from "react";
 import FooterGetStart from "../../../components/FooterGetStart";
 import { AuthContext } from "../../../context/AuthContext";
 import { getInterestListAPI } from "../../../services/interestService";
+import useFetchList from "hooks/useFetchList";
 
 export default function GetStartTwoScreen() {
-  const [interestList, setInterestList] = useState([]);
   const { submitRegisterForm, setSubmitRegisterForm } = useContext(AuthContext);
 
-  useEffect(() => {
-    const handleGetInterestList = async () => {
-      try {
-        const res = await getInterestListAPI();
-        setInterestList(res.data);
-      } catch (error) {
-        console.log("get interest list err", error);
-      }
-    };
-
-    handleGetInterestList();
-  }, []);
+  const { data: interestList, loading } = useFetchList(getInterestListAPI);
 
   const handleAddInterestList = (item) => {
     setSubmitRegisterForm((prev) => {
@@ -58,16 +44,20 @@ export default function GetStartTwoScreen() {
 
         {/*Content */}
         <View className="flex-row flex-wrap gap-4 my-auto">
-          {interestList.map((item) => (
-            <TouchableOpacity
-              key={item.interestId}
-              activeOpacity={0.8}
-              onPress={() => handleAddInterestList(item.interestId)}
-              className={`rounded-2xl h-9 items-center justify-center ${submitRegisterForm.interestIds.includes(item.interestId) ? "bg-purple-third" : "bg-purple-third/50"}`}
-            >
-              <Text className="text-white px-5">{item.name}</Text>
-            </TouchableOpacity>
-          ))}
+          {loading ? (
+            <ActivityIndicator />
+          ) : (
+            interestList.map((item) => (
+              <TouchableOpacity
+                key={item.interestId}
+                activeOpacity={0.8}
+                onPress={() => handleAddInterestList(item.interestId)}
+                className={`rounded-2xl h-9 items-center justify-center ${submitRegisterForm.interestIds.includes(item.interestId) ? "bg-purple-third" : "bg-purple-third/50"}`}
+              >
+                <Text className="text-white px-5">{item.name}</Text>
+              </TouchableOpacity>
+            ))
+          )}
         </View>
 
         {/*Footer */}
