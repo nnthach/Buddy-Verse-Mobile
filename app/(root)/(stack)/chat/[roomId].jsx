@@ -188,26 +188,36 @@ export default function ChatRoom() {
 
   return (
     <>
-      <SafeAreaView className="flex-1 bg-beige-primary">
+      <SafeAreaView className="flex-1 bg-white-primary">
         {/*Heading */}
-        <View className="h-16 flex-row justify-between items-center px-4 border-b border-yellow-50">
+        <View className="h-16 flex-row justify-between items-center px-4 border-b border-gray-50">
           {/*Left */}
           <View className="flex-row items-center gap-4 w-[80%]">
-            <TouchableOpacity onPress={() => router.back()}>
+            <TouchableOpacity
+              onPress={() => {
+                if (router.canGoBack()) {
+                  router.back();
+                } else {
+                  router.replace("/(tabs)/chat");
+                }
+              }}
+            >
               <MaterialIcons
                 name="keyboard-arrow-left"
                 size={34}
-                color="#57298D"
+                color="#FBD157"
               />
             </TouchableOpacity>
             <View className="flex-row gap-2 items-center">
-              <Image
-                source={{
-                  uri: userInfoTwo?.photos[0],
-                }}
-                className="w-12 h-12 rounded-full"
-                resizeMode="cover"
-              />
+              <View className="w-12 h-12 rounded-full bg-gray-400">
+                <Image
+                  source={{
+                    uri: userInfoTwo?.photos[0],
+                  }}
+                  className="w-12 h-12 rounded-full"
+                  resizeMode="cover"
+                />
+              </View>
               {/*Name & active */}
               <TouchableOpacity
                 onPress={() => {
@@ -263,7 +273,7 @@ export default function ChatRoom() {
                     <TouchableOpacity
                       onLongPress={() => handleLongPress(item?.messageId)}
                       activeOpacity={0.7}
-                      className={`${item?.senderId === userId ? "bg-purple-500" : "bg-gray-300"} rounded-3xl p-3 px-4 max-w-[70%]`}
+                      className={`${item?.senderId === userId ? "bg-yellow-primary/60" : "bg-purple-200/70"} rounded-3xl p-3 px-4 max-w-[70%]`}
                     >
                       <Text
                         className={`${item?.senderId === userId ? "text-white" : "text-black"}`}
@@ -302,11 +312,11 @@ export default function ChatRoom() {
         {/*Input */}
         <View className="flex-row px-4 items-center gap-4 ">
           <View className="rounded-full h-14 flex-1 items-center flex-row px-3 bg-black/5">
-            <View className="w-11 h-11 bg-purple-primary rounded-full overflow-hidden items-center justify-center">
+            <View className="w-11 h-11 bg-yellow-primary rounded-full overflow-hidden items-center justify-center">
               <Ionicons name="image" size={24} color="white" />
             </View>
             <TextInput
-              className="flex-1 h-full px-3 pb-1 text-xl text-purple-primary"
+              className="flex-1 h-full px-3 pb-1 text-xl text-yellow-primary"
               onChangeText={(text) =>
                 setSendMessageForm((prev) => ({
                   ...prev,
@@ -321,7 +331,7 @@ export default function ChatRoom() {
           </View>
 
           <TouchableOpacity onPress={handleSendMessage}>
-            <Ionicons name="send" size={24} color="#57298D" />
+            <Ionicons name="send" size={24} color="#FBD157" />
           </TouchableOpacity>
         </View>
       </SafeAreaView>

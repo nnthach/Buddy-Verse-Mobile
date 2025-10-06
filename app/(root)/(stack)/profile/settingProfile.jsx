@@ -83,7 +83,7 @@ export default function SettingProfile() {
     }
   };
   return (
-    <SafeAreaView className="flex-1 bg-beige-primary">
+    <SafeAreaView className="flex-1 bg-white-primary">
       <ScrollView className="flex-1 px-6">
         {/*Heading */}
         <View className="h-16 flex-row justify-between items-center ">
@@ -91,10 +91,10 @@ export default function SettingProfile() {
             <MaterialIcons
               name="keyboard-arrow-left"
               size={34}
-              color="#57298D"
+              color="#FBD157"
             />
           </TouchableOpacity>
-          <Text className="text-purple-primary font-semibold text-2xl">
+          <Text className="text-yellow-primary font-semibold text-2xl">
             Cài đặt
           </Text>
           <Text className="w-[34px]" />
@@ -114,7 +114,7 @@ export default function SettingProfile() {
           <TouchableOpacity
             onPress={() => router.push("/profile/characterCartoon")}
           >
-            <Text className="text-xl text-purple-primary font-bold mt-3 mb-1">
+            <Text className="text-xl text-yellow-primary font-bold mt-3 mb-1">
               {userInfo?.lastname} {userInfo?.firstname}
             </Text>
           </TouchableOpacity>
@@ -122,7 +122,7 @@ export default function SettingProfile() {
 
         {/*Content */}
         <View className="mt-6 gap-4">
-          <View className="bg-white rounded-xl">
+          <View className="bg-white-primary rounded-xl">
             {settingList.slice(0, 4).map((item, index) => (
               <View key={index} className="p-4">
                 <TouchableOpacity
@@ -217,7 +217,7 @@ export default function SettingProfile() {
           <View className="mt-4">
             <TouchableOpacity
               onPress={handleLogout}
-              className="bg-purple-third py-4 px-6 rounded-full w-full"
+              className="bg-yellow-primary py-4 px-6 rounded-full w-full"
             >
               <Text className="text-white text-xl font-medium text-center">
                 Đăng xuất

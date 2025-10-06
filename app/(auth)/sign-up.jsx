@@ -3,7 +3,6 @@ import {
   Text,
   SafeAreaView,
   Image,
-  Dimensions,
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
@@ -25,7 +24,6 @@ import uploadImage from "../../utils/uploadImage";
 import Toast from "react-native-toast-message";
 
 export default function SignUpScreen() {
-  const screenWidth = Dimensions.get("window").width;
   const { submitRegisterForm, setSubmitRegisterForm, initialRegisterForm } =
     useContext(AuthContext);
 
@@ -102,35 +100,47 @@ export default function SignUpScreen() {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <SafeAreaView className="flex-1 bg-beige-primary">
+      <SafeAreaView className="flex-1 bg-white-primary">
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           keyboardVerticalOffset={0}
           className="flex-1"
         >
           <ScrollView
-            contentContainerStyle={{ flexGrow: 1 }}
+            contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }}
             keyboardShouldPersistTaps="handled"
             bounces={false}
+            className="px-6"
           >
-            {/*Banner */}
-            <View className="relative bg-red-200 h-[300px] w-full overflow-hidden">
-              <Image
-                source={require("../../assets/images/signinbanner.jpg")}
-                style={{
-                  width: screenWidth,
-                  height: 300,
-                  position: "absolute",
-                }}
-                resizeMode="cover"
-              />
-              <Text className="absolute bottom-[12px] left-4 text-beige-primary font-bold text-4xl">
-                Đăng ký
+            {/*Title */}
+            <View className="mb-8">
+              <Text className="text-3xl font-bold text-black text-center">
+                Đăng ký tài khoản buddyverse.
               </Text>
             </View>
 
+            {/*Google Sign Up Button */}
+            <TouchableOpacity
+              activeOpacity={0.8}
+              className="h-14 bg-white-primary border border-gray-four rounded-xl items-center justify-center flex-row gap-3 mb-6"
+            >
+              <AntDesign name="google" size={20} color={"#4285F4"} />
+              <Text className="text-black text-lg font-medium">
+                Đăng ký với Google
+              </Text>
+            </TouchableOpacity>
+
+            {/*Divider */}
+            <View className="flex-row items-center mb-6">
+              <View className="flex-1 h-px bg-gray-four" />
+              <Text className="mx-4 text-gray-primary text-sm">
+                hoặc tiếp tục với tài khoản
+              </Text>
+              <View className="flex-1 h-px bg-gray-four" />
+            </View>
+
             {/*Form */}
-            <View className="my-6 px-4 gap-4">
+            <View className="my-6 gap-4">
               {signupStep == 1 ? (
                 <>
                   <TextInputAuth
@@ -157,9 +167,9 @@ export default function SignUpScreen() {
                     <TouchableOpacity
                       onPress={() => setOpenSelect(true)}
                       activeOpacity={0.5}
-                      className="relative border-purple-primary"
+                      className="relative border-yellow-primary"
                     >
-                      <View className="z-0 bg-beige-primary h-14 px-2 rounded-xl border border-purple-primary flex-row w-full justify-between items-center">
+                      <View className="z-0 bg-white-primary h-14 px-2 rounded-xl border border-yellow-primary flex-row w-full justify-between items-center">
                         <Text>
                           {submitRegisterForm?.gender
                             ? submitRegisterForm?.gender
@@ -171,7 +181,7 @@ export default function SignUpScreen() {
                         <MaterialIcons
                           name="keyboard-arrow-down"
                           size={26}
-                          color="#57298D"
+                          color="#6C757D"
                         />
                       </View>
                     </TouchableOpacity>
@@ -218,7 +228,7 @@ export default function SignUpScreen() {
                       activeOpacity={0.5}
                       onPress={() => setDatePickerVisibility(true)}
                     >
-                      <View className="bg-beige-primary h-14 px-4 rounded-xl border border-purple-primary flex-row w-full justify-between items-center">
+                      <View className="bg-white-primary h-14 px-4 rounded-xl border border-yellow-primary flex-row w-full justify-between items-center">
                         <Text>
                           {submitRegisterForm?.dob
                             ? submitRegisterForm?.dob
@@ -227,7 +237,7 @@ export default function SignUpScreen() {
                         <MaterialIcons
                           name="calendar-today"
                           size={22}
-                          color="#57298D"
+                          color="#6C757D"
                         />
                       </View>
                     </TouchableOpacity>
@@ -293,7 +303,7 @@ export default function SignUpScreen() {
                 </>
               ) : (
                 <View className="items-center gap-4">
-                  <Text className="text-purple-primary font-medium text-2xl">
+                  <Text className="text-gray-primary font-medium text-2xl">
                     Upload your avatar
                   </Text>
                   {imageUpload.length < 1 && (
@@ -330,26 +340,20 @@ export default function SignUpScreen() {
               <TouchableOpacity
                 activeOpacity={0.8}
                 onPress={handleSignUp}
-                className="h-14 bg-purple-primary rounded-[50px] items-center justify-center mt-3"
+                className="h-14 bg-yellow-primary rounded-xl items-center justify-center mt-3"
               >
-                <Text className="text-beige-primary text-xl font-medium">
+                <Text className="text-white-primary text-lg font-bold">
                   {signupStep == 1 || 2 ? "Tiếp tục" : "Tạo tài khoản"}
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => router.replace("/sign-in")}>
-                <Text className="text-center text-purple-primary text-xl font-medium">
-                  Đã có tài khoản?
+                <Text className="text-center text-gray-primary text-base">
+                  Đã có tài khoản?{" "}
+                  <Text className="text-black font-bold">Đăng nhập</Text>
                 </Text>
               </TouchableOpacity>
             </View>
             {/*End form */}
-
-            {/*Other way to login */}
-            <View className="items-center justify-center flex-row gap-3 mt-auto mb-10">
-              <AntDesign name="twitter" size={32} color={"#361F5C"} />
-              <AntDesign name="google" size={32} color={"#361F5C"} />
-              <AntDesign name="facebook-square" size={32} color={"#361F5C"} />
-            </View>
           </ScrollView>
         </KeyboardAvoidingView>
       </SafeAreaView>

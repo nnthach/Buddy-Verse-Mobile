@@ -1,7 +1,6 @@
 import {
   View,
   Text,
-  Image,
   ScrollView,
   TextInput,
   TouchableOpacity,
@@ -23,8 +22,7 @@ import {
   sendMessageAPI,
 } from "@services/messageService";
 import LoadingCustom from "@components/LoadingCustom";
-import { matchDeleteAPI } from "@services/matchService";
-import ModalChatTemp from "@components/StackChatTempComponent/ModalChatTemp";
+import { matchContinueAPI, matchDeleteAPI } from "@services/matchService";
 import {
   getChatConnection,
   getMatchConnection,
@@ -33,13 +31,12 @@ import Toast from "react-native-toast-message";
 
 export default function ChatTempRoom() {
   const { roomId, accountId2, accountId1 } = useLocalSearchParams();
+  const [userWantContinue, setUserWantContinue] = useState("");
 
   const { userId } = useContext(AuthContext);
 
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-
-  const [openModal, setOpenModal] = useState(false);
 
   const [countdown, setCountdown] = useState(120);
 
@@ -53,7 +50,6 @@ export default function ChatTempRoom() {
       setCountdown((prev) => {
         if (prev <= 1) {
           clearInterval(interval);
-          setOpenModal(true); // hết giờ thì mở modal
           return 0;
         }
         return prev - 1;
@@ -94,8 +90,10 @@ export default function ChatTempRoom() {
             Toast.show({
               type: "success",
               text1: "Bạn kia muốn tiếp tục trò chuyện!",
-              text2: "Bạn thì sao?",
+              text2: "Hãy bấm vào trái tim để tiếp tục nhé?",
             });
+
+            setUserWantContinue("Đối phương muốn tiếp tục");
           }
         } catch (err) {
           console.error("Error in UserWantsContinue handler:", err);
@@ -112,8 +110,7 @@ export default function ChatTempRoom() {
             conn.connectionId
           );
           if (roomId) {
-            setOpenModal(false);
-            router.replace("/(tabs)/chat");
+            router.replace(`/(stack)/chat/${roomId}`);
           }
         } catch (err) {
           console.error("Error in RoomPermanent handler:", err);
@@ -221,9 +218,17 @@ export default function ChatTempRoom() {
   const handleEndChat = async () => {
     try {
       const res = await matchDeleteAPI(roomId);
-      console.log("Delete match chat res", res);
     } catch (err) {
       console.log("Delete match chat API error:", err);
+    }
+  };
+
+  const handleContinueChat = async () => {
+    try {
+      const res = await matchContinueAPI({ accountId: userId, roomId });
+      console.log("continue chat res", res);
+    } catch (err) {
+      console.log("continue chat API error:", err);
     }
   };
 
@@ -239,99 +244,105 @@ export default function ChatTempRoom() {
   }
 
   return (
-    <>
-      <SafeAreaView className="flex-1 bg-beige-primary">
-        {/*Heading */}
-        <View className="h-16 flex-row justify-between items-center px-4 border-b border-yellow-50">
-          {/*Left */}
-          <View className="flex-row items-center gap-4 w-[80%]">
-            <View className="flex-row gap-2 items-center">
-              {/*Name & active */}
-              <View className="flex-1">
-                <Text className="font-medium text-lg">
-                  Còn lại {countdown} giây để tìm hiểu nhau
+    <SafeAreaView className="flex-1 bg-white-primary">
+      {/*Heading */}
+      <View className="h-16 flex-row items-center justify-between px-4 border-b border-gray-200 bg-white">
+        {/* Left */}
+        <View className="flex-row items-center gap-3">
+          {/* Countdown */}
+          <View className="bg-yellow-400 px-4 py-2 rounded-md">
+            <Text className="font-bold text-black text-base">
+              {String(Math.floor(countdown / 60)).padStart(2, "0")}:
+              {String(countdown % 60).padStart(2, "0")}
+            </Text>
+          </View>
+
+          {/* userWantContinue */}
+          {userWantContinue !== "" && (
+            <Text className="text-gray-700 font-medium" numberOfLines={1}>
+              {userWantContinue}
+            </Text>
+          )}
+        </View>
+
+        {/* Right */}
+        <View className="flex-row items-center gap-4">
+          <MaterialIcons name="error-outline" size={24} color="red" />
+          <TouchableOpacity onPress={() => handleEndChat(roomId)}>
+            <MaterialIcons name="logout" size={24} color="black" />
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      {/*Content */}
+      <ScrollView
+        ref={scrollViewRef}
+        className="pt-4 px-4"
+        contentContainerStyle={{ paddingBottom: 20 }}
+      >
+        {messages.length > 0 &&
+          messages.map((item) => (
+            <View
+              key={item?.messageId}
+              className={`flex-row gap-2 items-start mb-3`}
+            >
+              <View
+                className={`${item?.senderId === userId ? "items-end" : "items-start"} gap-1 w-full`}
+              >
+                <View
+                  className={`${item?.senderId === userId ? "bg-yellow-primary/60" : "bg-purple-200/70"} rounded-full p-3 px-4 max-w-[70%]`}
+                >
+                  <Text
+                    className={`${item?.senderId === userId ? "text-white" : "text-black"}`}
+                  >
+                    {item?.content}
+                  </Text>
+                </View>
+                <Text className="text-gray-400 text-xs">
+                  {new Date(item?.createdAt).toLocaleTimeString("en-US", {
+                    hour: "numeric",
+                    minute: "2-digit",
+                  })}
                 </Text>
               </View>
             </View>
+          ))}
+      </ScrollView>
+
+      {/*Input */}
+      <View className="flex-row px-4 items-center gap-4 ">
+        <View className="rounded-full h-14 flex-1 items-center flex-row px-3 bg-black/5">
+          <View className="w-11 h-11 bg-yellow-primary rounded-full overflow-hidden items-center justify-center">
+            <Ionicons name="image" size={24} color="white" />
           </View>
-          {/*Right */}
-          <View className="flex-row gap-4">
-            <MaterialIcons name="error-outline" size={24} color="red" />
-            <TouchableOpacity onPress={() => handleEndChat(roomId)}>
-              <MaterialIcons name="logout" size={24} color="purple" />
-            </TouchableOpacity>
-          </View>
+          <TextInput
+            className="flex-1 h-full px-3 pb-1 text-xl text-yellow-primary"
+            onChangeText={(text) =>
+              setSendMessageForm((prev) => ({
+                ...prev,
+                content: text,
+              }))
+            }
+            value={sendMessageForm.content}
+            textAlignVertical="center"
+            placeholder="Nhập tin nhắn..."
+            placeholderTextColor="#00000050"
+          />
         </View>
 
-        {/*Content */}
-        <ScrollView
-          ref={scrollViewRef}
-          className="pt-4 px-4"
-          contentContainerStyle={{ paddingBottom: 20 }}
-        >
-          {messages.length > 0 &&
-            messages.map((item) => (
-              <View
-                key={item?.messageId}
-                className={`flex-row gap-2 items-start mb-3`}
-              >
-                <View
-                  className={`${item?.senderId === userId ? "items-end" : "items-start"} gap-1 w-full`}
-                >
-                  <View
-                    className={`${item?.senderId === userId ? "bg-purple-500" : "bg-gray-300"} rounded-full p-3 px-4 max-w-[70%]`}
-                  >
-                    <Text
-                      className={`${item?.senderId === userId ? "text-white" : "text-black"}`}
-                    >
-                      {item?.content}
-                    </Text>
-                  </View>
-                  <Text className="text-gray-400 text-xs">
-                    {new Date(item?.createdAt).toLocaleTimeString("en-US", {
-                      hour: "numeric",
-                      minute: "2-digit",
-                    })}
-                  </Text>
-                </View>
-              </View>
-            ))}
-        </ScrollView>
+        <TouchableOpacity onPress={handleSendMessage}>
+          <Ionicons name="send" size={24} color="#FBD157" />
+        </TouchableOpacity>
+      </View>
 
-        {/*Input */}
-        <View className="flex-row px-4 items-center gap-4 ">
-          <View className="rounded-full h-14 flex-1 items-center flex-row px-3 bg-black/5">
-            <View className="w-11 h-11 bg-purple-primary rounded-full overflow-hidden items-center justify-center">
-              <Ionicons name="image" size={24} color="white" />
-            </View>
-            <TextInput
-              className="flex-1 h-full px-3 pb-1 text-xl text-purple-primary"
-              onChangeText={(text) =>
-                setSendMessageForm((prev) => ({
-                  ...prev,
-                  content: text,
-                }))
-              }
-              value={sendMessageForm.content}
-              textAlignVertical="center"
-              placeholder="Nhập tin nhắn..."
-              placeholderTextColor="#00000050"
-            />
-          </View>
-
-          <TouchableOpacity onPress={handleSendMessage}>
-            <Ionicons name="send" size={24} color="#57298D" />
-          </TouchableOpacity>
-        </View>
-      </SafeAreaView>
-
-      {openModal && (
-        <ModalChatTemp
-          roomId={roomId}
-          setOpenModal={setOpenModal}
-          openModal={openModal}
-        />
-      )}
-    </>
+      {/* Floating continue button */}
+      <TouchableOpacity
+        activeOpacity={0.85}
+        onPress={handleContinueChat}
+        className="absolute right-4 bottom-20 bg-yellow-400 w-12 h-12 rounded-full items-center justify-center shadow-md"
+      >
+        <MaterialIcons name="favorite" size={22} color="black" />
+      </TouchableOpacity>
+    </SafeAreaView>
   );
 }

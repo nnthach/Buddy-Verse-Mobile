@@ -36,43 +36,46 @@ export default function ChatScreen() {
       (member) => member.accountId !== userId
     );
 
+    const timeText = otherMember?.time || item?.lastMessage?.time || "";
+
     return (
-      <View className="h-20 py-3">
+      <View className="py-3">
         <TouchableOpacity
           onPress={() =>
             router.push({
               pathname: `/(root)/(stack)/chat/${item.roomId}`,
               params: {
-                accountId2: otherMember.accountId, // truyền thêm ở đây
+                accountId2: otherMember.accountId,
               },
             })
           }
-          className="flex-row gap-2 items-center"
+          className="flex-row items-start gap-3"
         >
-          {/*Avatar */}
-          <Image
-            source={{
-              uri: otherMember?.photos[0],
-            }}
-            className="w-14 h-14 rounded-full"
-            resizeMode="cover"
-          />
-          {/*Name & message */}
-          <View className="flex-1">
-            <Text className="font-semibold text-xl">
-              {otherMember?.username}
-            </Text>
-            <Text className="text-gray-500">{otherMember?.message}</Text>
+          {/* avatar */}
+          <View className="w-10 h-10 bg-gray-500 rounded-full">
+            <Image
+              source={{ uri: otherMember?.photos[0] }}
+              className="w-10 h-10 rounded-full"
+              resizeMode="cover"
+            />
           </View>
-          {/*Time & number */}
-          {/* <View className="items-end h-full justify-between py-1">
-            <Text className="text-gray-400 text-xs">{otherMember?.time}</Text>
-            {otherMember?.numberOfMessage != 0 && (
-              <Text className="bg-red-500 rounded-full w-5 h-5 text-center text-white text-xs leading-5">
-                {otherMember?.numberOfMessage}
+
+          {/* name, preview, time */}
+          <View className="flex-1">
+            <View className="flex-row items-center justify-between">
+              <Text
+                numberOfLines={1}
+                className="text-gray-700 font-semibold text-[14px]"
+              >
+                {otherMember?.username}
               </Text>
-            )}
-          </View> */}
+              {/*Time */}
+              <Text className="text-[11px] text-gray-400 ml-2">23:11</Text>
+            </View>
+            <Text numberOfLines={1} className="text-[13px] text-gray-600 mt-1">
+              an com chua bro
+            </Text>
+          </View>
         </TouchableOpacity>
       </View>
     );
@@ -83,54 +86,23 @@ export default function ChatScreen() {
   }
 
   return (
-    <SafeAreaView edges={["top"]} className="flex-1 bg-beige-primary">
+    <SafeAreaView edges={["top"]} className="flex-1 bg-white-primary">
       {/*Heading */}
       <View className="h-16 flex-row justify-between items-center px-6">
         {/*Logo */}
         <View className="w-[150px] overflow-hidden">
           <Image
-            source={require("@assets/images/logoTextPurple.png")}
+            source={require("@assets/images/logoTextBlack.png")}
             style={{ width: "100%", height: 84, resizeMode: "contain" }}
           />
         </View>
-        <FontAwesome5 name="bell" size={24} color="#57298D" />
+        <FontAwesome5 name="bell" size={24} color="black" />
       </View>
 
       {loading ? (
         <ActivityIndicator />
       ) : roomList.length == 0 ? (
         <View className="gap-3 mt-3 px-6">
-          {/*Search */}
-          <View className=" border border-purple-primary rounded-xl h-14 w-full items-center flex-row px-3 ">
-            <Ionicons name="search-sharp" size={24} color="#57298D" />
-            <TextInput
-              className="flex-1 h-full px-3 pb-2f text-xl text-purple-primary "
-              onChangeText={(text) => setSearchAccount(text)}
-              textAlignVertical="center"
-              placeholder="Search"
-              placeholderTextColor="#57298D80"
-            />
-          </View>
-
-          {/*filter */}
-          <View className="h-12 items-center">
-            <View className="flex-row justify-between w-full">
-              {["all", "unread", "groups"].map((item, index) => (
-                <TouchableOpacity
-                  key={index}
-                  onPress={() => setFilterState(item)}
-                  className={`border rounded-xl w-[32%] py-2 ${filterState == item ? "bg-purple-third border-purple-third" : "border-gray-300"}`}
-                >
-                  <Text
-                    className={`${filterState == item ? " text-beige-primary" : "text-purple-primary "} text-center`}
-                  >
-                    {item.charAt(0).toUpperCase() + item.slice(1)}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
-
           <Text>No chat found</Text>
         </View>
       ) : (
@@ -144,40 +116,6 @@ export default function ChatScreen() {
           maxToRenderPerBatch={5}
           windowSize={5}
           removeClippedSubviews={true}
-          ListHeaderComponent={
-            <View className="gap-3 mt-3">
-              {/*Search */}
-              <View className=" border border-purple-primary rounded-xl h-14 w-full items-center flex-row px-3 ">
-                <Ionicons name="search-sharp" size={24} color="#57298D" />
-                <TextInput
-                  className="flex-1 h-full px-3 pb-1 text-xl text-purple-primary "
-                  onChangeText={(text) => setSearchAccount(text)}
-                  textAlignVertical="center"
-                  placeholder="Search"
-                  placeholderTextColor="#57298D80"
-                />
-              </View>
-
-              {/*filter */}
-              <View className="h-12 items-center">
-                <View className="flex-row justify-between w-full">
-                  {["all", "unread", "groups"].map((item, index) => (
-                    <TouchableOpacity
-                      key={index}
-                      onPress={() => setFilterState(item)}
-                      className={`border rounded-xl w-[32%] py-2 ${filterState == item ? "bg-purple-third border-purple-third" : "border-gray-300"}`}
-                    >
-                      <Text
-                        className={`${filterState == item ? " text-beige-primary" : "text-purple-primary "} text-center`}
-                      >
-                        {item.charAt(0).toUpperCase() + item.slice(1)}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              </View>
-            </View>
-          }
         />
       )}
     </SafeAreaView>

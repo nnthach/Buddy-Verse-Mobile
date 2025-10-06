@@ -8,8 +8,8 @@ export default function GetStartOneScreen() {
   const screenWidth = Dimensions.get("window").width;
   const screenHeight = Dimensions.get("window").height;
   return (
-    <SafeAreaView className="flex-1 bg-beige-primary">
-      <View className="flex-1 bg-beige-primary">
+    <SafeAreaView className="flex-1 bg-gray-200">
+      <View className="flex-1 bg-gray-200">
         {/*wrap */}
         <View className="relative items-center flex-1">
           <Image
@@ -24,10 +24,10 @@ export default function GetStartOneScreen() {
 
           {/*Content */}
           <View
-            className="absolute bg-white rounded-xl p-10 w-[350px] h-[320px] justify-center items-center border border-purple-third"
+            className="absolute bg-white-primary rounded-xl p-10 w-[350px] h-[320px] justify-center items-center border border-yellow-secondary"
             style={{ bottom: screenHeight * 0.15 }}
           >
-            <Text className="text-purple-third text-[38px] font-bold">
+            <Text className="text-yellow-secondary text-[38px] font-bold">
               Buddy Verse
             </Text>
             <Text className="text-center text-gray-500 text-lg mb-10 mt-8">
@@ -37,9 +37,9 @@ export default function GetStartOneScreen() {
 
             <TouchableOpacity
               onPress={() => router.push("/page-two")}
-              className="bg-purple-third w-full rounded-full p-3 items-center"
+              className="bg-yellow-primary w-full rounded-full p-3 items-center"
             >
-              <Text className="text-beige-primary text-lg font-semibold">
+              <Text className="text-white-primary text-lg font-semibold">
                 Next
               </Text>
             </TouchableOpacity>

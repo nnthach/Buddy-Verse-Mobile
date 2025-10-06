@@ -10,7 +10,7 @@ import { router } from "expo-router";
 
 export default function WelcomeScreen() {
   return (
-    <SafeAreaView className="flex-1 bg-beige-primary">
+    <SafeAreaView className="flex-1 bg-white-primary">
       <View className="flex-1 items-center justify-center pb-10">
         <Image
           source={require("../../assets/images/robotmascot.png")}
@@ -18,10 +18,10 @@ export default function WelcomeScreen() {
           resizeMode="cover"
         />
         <View>
-          <Text className="text-5xl font-black text-purple-primary mt-4">
+          <Text className="text-5xl font-black text-yellow-primary mt-4">
             buddyverse.
           </Text>
-          <Text className="text-base text-purple-primary/70">
+          <Text className="text-base text-yellow-primary/70">
             feel deeper live truer
           </Text>
         </View>
@@ -33,20 +33,20 @@ export default function WelcomeScreen() {
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={() => router.push("/(getstart)")}
-          className="h-14 bg-purple-third w-[80%] rounded-[50px] items-center justify-center"
+          className="h-14 bg-yellow-primary w-[80%] rounded-[50px] items-center justify-center"
         >
-          <Text className="text-beige-primary text-xl font-medium">
-            Get start
+          <Text className="text-white-primary text-xl font-medium">
+            Bắt đầu
           </Text>
         </TouchableOpacity>
         {/*Button 2 */}
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={() => router.push("/sign-in")}
-          className="h-14 bg-purple-primary w-[80%] rounded-[50px] items-center justify-center"
+          className="h-14 bg-gray-200 w-[80%] rounded-[50px] items-center justify-center"
         >
-          <Text className="text-beige-primary text-xl font-medium">
-            I already have an account
+          <Text className="text-black text-xl font-medium">
+            Tôi đã có tài khoản
           </Text>
         </TouchableOpacity>
       </View>

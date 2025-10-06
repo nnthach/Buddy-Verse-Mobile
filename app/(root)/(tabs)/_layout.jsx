@@ -7,12 +7,12 @@ export default function Layout() {
   const TabIcon = ({ focused, iconName }) => {
     return (
       <View
-        className={` ${focused && "bg-beige-primary"} h-12 w-12 rounded-full justify-center items-center`}
+        className={` ${focused && "bg-yellow-primary"} h-12 w-12 rounded-full justify-center items-center`}
       >
         <Ionicons
           name={iconName}
           size={24}
-          color={focused ? "#57298D" : "gray"}
+          color={focused ? "black" : "gray"}
         />
       </View>
     );
@@ -22,12 +22,8 @@ export default function Layout() {
       initialRouteName="home"
       screenOptions={{
         tabBarStyle: {
-          backgroundColor: "#CCB3F2",
-          borderRadius: 50,
+          backgroundColor: "white",
           overflow: "hidden",
-          marginHorizontal: 20,
-          marginBottom: 20,
-          height: 64,
           position: "absolute",
           borderTopWidth: 0,
         },

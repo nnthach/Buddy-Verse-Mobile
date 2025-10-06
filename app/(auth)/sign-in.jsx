@@ -2,29 +2,25 @@ import {
   View,
   Text,
   SafeAreaView,
-  Image,
-  Dimensions,
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  TextInput,
 } from "react-native";
 import React, { useContext, useState } from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import TextInputAuth from "../../components/TextInputAuth";
 import { loginAPI } from "../../services/authService";
 import { AuthContext } from "../../context/AuthContext";
 import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Toast from "react-native-toast-message";
+import TextInputAuth from "@components/TextInputAuth";
 
 export default function SignInScreen() {
-  const screenWidth = Dimensions.get("window").width;
   const { setUserId, handleGetUserById } = useContext(AuthContext);
-
-  const [focusedField, setFocusedField] = useState(null);
 
   const [signinForm, setSignInForm] = useState({
     email: "",
@@ -32,6 +28,7 @@ export default function SignInScreen() {
   });
 
   const [errors, setErrors] = useState({});
+  const [focusedField, setFocusedField] = useState(null);
 
   const handleChange = (name, value) => {
     setSignInForm((prev) => ({
@@ -114,35 +111,47 @@ export default function SignInScreen() {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <SafeAreaView className="flex-1 bg-beige-primary">
+      <SafeAreaView className="flex-1 bg-white-primary">
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           keyboardVerticalOffset={0}
           className="flex-1"
         >
           <ScrollView
-            contentContainerStyle={{ flexGrow: 1 }}
+            contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }}
             keyboardShouldPersistTaps="handled"
             bounces={false}
+            className="px-6"
           >
-            {/*Banner */}
-            <View className="relative bg-gray-200 h-[300px] w-full overflow-hidden">
-              <Image
-                source={require("../../assets/images/signinbanner.jpg")}
-                style={{
-                  width: screenWidth,
-                  height: 300,
-                  position: "absolute",
-                }}
-                resizeMode="cover"
-              />
-              <Text className="absolute bottom-[12px] left-4 text-beige-primary font-bold text-4xl">
-                Đăng nhập
+            {/*Title */}
+            <View className="mb-8">
+              <Text className="text-3xl font-bold text-black text-center">
+                Đăng nhập vào buddy verse.
               </Text>
             </View>
 
+            {/*Google Sign In Button */}
+            <TouchableOpacity
+              activeOpacity={0.8}
+              className="h-14 bg-white-primary border border-gray-four rounded-xl items-center justify-center flex-row gap-3 mb-6"
+            >
+              <AntDesign name="google" size={20} color={"#4285F4"} />
+              <Text className="text-black text-lg font-medium">
+                Đăng nhập với Google
+              </Text>
+            </TouchableOpacity>
+
+            {/*Divider */}
+            <View className="flex-row items-center mb-6">
+              <View className="flex-1 h-px bg-gray-four" />
+              <Text className="mx-4 text-gray-primary text-sm">
+                hoặc tiếp tục với tài khoản
+              </Text>
+              <View className="flex-1 h-px bg-gray-four" />
+            </View>
+
             {/*Form */}
-            <View className="my-6 px-4 gap-4">
+            <View className="my-6 gap-4">
               <TextInputAuth
                 name="email"
                 label={"Email"}
@@ -157,52 +166,39 @@ export default function SignInScreen() {
                 label={"Mật khẩu"}
                 value={signinForm.password}
                 onChangeText={(text) => handleChange("password", text)}
-                error={errors.password}
-                secureTextEntry={true}
                 focusedField={focusedField}
                 setFocusedField={setFocusedField}
+                secureTextEntry={true}
               />
-
-              <TouchableOpacity
-                activeOpacity={0.8}
-                onPress={handleSignIn}
-                className="h-14 bg-purple-primary rounded-[50px] items-center justify-center mt-3"
-              >
-                <Text className="text-beige-primary text-xl font-medium">
-                  Đăng nhập
+              {errors.password && (
+                <Text className="text-red-500 text-sm mt-1">
+                  {errors.password}
                 </Text>
-              </TouchableOpacity>
-
-              <View className=" gap-4 ">
-                <TouchableOpacity
-                  activeOpacity={0.8}
-                  onPress={() => {
-                    console.log("fotget pw");
-                    router.push("/forget-password");
-                  }}
-                >
-                  <Text className="text-center text-purple-primary text-xl font-medium">
-                    Quên mật khẩu
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  activeOpacity={0.8}
-                  onPress={() => {
-                    router.push("/(getstart)");
-                  }}
-                >
-                  <Text className="text-center text-purple-primary text-xl font-medium">
-                    Bắt đầu
-                  </Text>
-                </TouchableOpacity>
-              </View>
+              )}
             </View>
 
-            {/*Other way to login */}
-            <View className="items-center justify-center flex-row gap-3 mt-auto mb-10">
-              <AntDesign name="twitter" size={32} color={"#361F5C"} />
-              <AntDesign name="google" size={32} color={"#361F5C"} />
-              <AntDesign name="facebook-square" size={32} color={"#361F5C"} />
+            {/*Sign In Button */}
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={handleSignIn}
+              className="h-14 bg-yellow-primary rounded-xl items-center justify-center mb-8"
+            >
+              <Text className="text-white-primary text-lg font-bold">
+                Đăng nhập
+              </Text>
+            </TouchableOpacity>
+
+            {/*Sign Up Link */}
+            <View className="items-center">
+              <Text className="text-gray-primary text-base">
+                Don't have an account?{" "}
+                <Text
+                  className="text-black font-bold"
+                  onPress={() => router.push("/sign-up")}
+                >
+                  Đăng ký
+                </Text>
+              </Text>
             </View>
           </ScrollView>
         </KeyboardAvoidingView>

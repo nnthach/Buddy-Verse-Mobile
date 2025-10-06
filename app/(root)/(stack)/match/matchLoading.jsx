@@ -14,7 +14,8 @@ import { getMatchConnection } from "@services/signalRService";
 
 export default function MatchLoading() {
   const { label } = useLocalSearchParams();
-  const { matchForm } = useContext(MatchContext);
+  const { matchForm, setMatchForm, initialMatchForm } =
+    useContext(MatchContext);
   const { userId } = useContext(AuthContext);
 
   const connectionRef = useRef(null);
@@ -25,7 +26,10 @@ export default function MatchLoading() {
 
       if (conn.state === "Disconnected") {
         await conn.start();
-        console.log("[MatchHub] Connection started matchloading:", conn.connectionId);
+        console.log(
+          "[MatchHub] Connection started matchloading:",
+          conn.connectionId
+        );
       }
 
       conn.on("Matched", (roomId, members) => {
@@ -57,6 +61,21 @@ export default function MatchLoading() {
     }
   };
 
+  const handleDisconnect = async () => {
+    try {
+      if (connectionRef.current) {
+        await connectionRef.current.stop(); // Ngắt kết nối
+        console.log("[MatchHub] Connection stopped manually");
+        connectionRef.current = null;
+      }
+
+      setMatchForm(initialMatchForm);
+      router.replace("/(tabs)/buddy"); // Điều hướng về màn hình Buddy
+    } catch (error) {
+      console.log("Error disconnecting MatchHub:", error);
+    }
+  };
+
   useEffect(() => {
     joinMatchQueue();
 
@@ -67,20 +86,22 @@ export default function MatchLoading() {
         connectionRef.current.off("Matched");
         connectionRef.current.off("JoinedQueue");
       }
+
+      setMatchForm(initialMatchForm);
     };
   }, [userId]);
 
   return (
-    <View className="flex-1 justify-center items-center bg-beige-primary">
+    <View className="flex-1 justify-center items-center bg-white-primary">
       <View className="justify-center items-center">
-        <View className="w-36 h-36 rounded-full border-4 border-purple-primary mb-4 items-center justify-center">
+        <View className="w-36 h-36 rounded-full border-4 border-yellow-primary mb-4 items-center justify-center">
           <ActivityIndicator
             size={"large"}
-            color={"#57298D"}
+            color={"#FBD157"}
             className="scale-150"
           />
         </View>
-        <Text className="font-bold text-purple-primary text-2xl">
+        <Text className="font-bold text-yellow-primary text-2xl">
           {label || "Loading..."}
         </Text>
         <View className="flex-row items-center gap-2">
@@ -88,15 +109,12 @@ export default function MatchLoading() {
             source={require("@assets/icons/light_bulb.png")}
             className="w-3 h-3 mt-1"
           />
-          <Text className="text-purple-primary/50 text-sm mt-2">
+          <Text className="text-yellow-primary/50 text-sm mt-2">
             Pro tip: A clear profile photo gets 3x more connections!
           </Text>
         </View>
 
-        <TouchableOpacity
-          onPress={() => router.replace("/(tabs)/buddy")}
-          className="mt-4"
-        >
+        <TouchableOpacity onPress={handleDisconnect} className="mt-4">
           <Text>Ngừng kết nối</Text>
         </TouchableOpacity>
       </View>

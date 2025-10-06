@@ -12,12 +12,12 @@ import { router } from "expo-router";
 export default function GetStartFourScreen() {
   const [isChecked, setIsChecked] = useState(false);
   return (
-    <SafeAreaView className="flex-1 bg-beige-primary">
-      <View className="flex-1 bg-beige-primary px-8">
+    <SafeAreaView className="flex-1 bg-white-primary">
+      <View className="flex-1 bg-white-primary px-8">
         {/*Heading */}
         <View className="mt-8">
-          <Text className="text-[38px] text-purple-secondary font-bold text-center">
-            Terms &{"\n"}Conditions
+          <Text className="text-[38px] text-yellow-primary font-bold text-center">
+            Điều khoản &{"\n"}Dịch vụ
           </Text>
         </View>
 
@@ -54,10 +54,10 @@ export default function GetStartFourScreen() {
               resizeMode="cover"
             />
             <View className="gap-1">
-              <Text className="text-purple-primary font-bold">
+              <Text className="text-gray-primary font-bold">
                 Buddy Verse Policy
               </Text>
-              <Text className="text-purple-primary ">20/10/2025</Text>
+              <Text className="text-gray-primary ">20/10/2025</Text>
             </View>
           </View>
         </View>
@@ -67,9 +67,9 @@ export default function GetStartFourScreen() {
           <Checkbox
             value={isChecked}
             onValueChange={setIsChecked}
-            color={"#57298D"}
+            color={"#FBD157"}
           />
-          <Text className="text-purple-primary ml-2">
+          <Text className="text-gray-primary ml-2">
             I accept all the terms and conditions
           </Text>
         </View>
@@ -78,11 +78,11 @@ export default function GetStartFourScreen() {
         <TouchableOpacity
           disabled={!isChecked}
           onPress={() => router.replace("/sign-up")}
-          className={`bg-purple-primary py-3 rounded-xl items-center mt-8 ${
+          className={`bg-yellow-primary py-3 rounded-xl items-center mt-8 ${
             isChecked ? "" : "opacity-50"
           }`}
         >
-          <Text className="text-white text-lg">Accept</Text>
+          <Text className="text-white-primary text-lg font-medium">Accept</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

@@ -28,9 +28,9 @@ const InputField = ({
 
   return (
     <View className="gap-1">
-      <Text className="text-purple-primary text-xl">{label}</Text>
+      <Text className="text-gray-primary text-xl">{label}</Text>
       {type == "text" && (
-        <View className="bg-white h-14 rounded-xl border border-blue-50">
+        <View className="bg-white-secondary h-14 rounded-xl border border-gray-four">
           <TextInput
             className="h-full w-full px-4 pb-1 text-xl text-black "
             placeholderTextColor="#718EBF50"
@@ -56,12 +56,12 @@ const InputField = ({
             className="relative"
             disabled={isLoading}
           >
-            <View className="z-0 bg-white h-14 px-2 rounded-xl border border-blue-50 flex-row w-full justify-between items-center">
+            <View className="z-0 bg-white-secondary h-14 px-2 rounded-xl border border-gray-four flex-row w-full justify-between items-center">
               <Text>{value ? value : `Select ${label}`}</Text>
               <MaterialIcons
                 name="keyboard-arrow-down"
                 size={26}
-                color="#57298D"
+                color="#6C757D"
               />
             </View>
           </TouchableOpacity>
@@ -99,9 +99,9 @@ const InputField = ({
             activeOpacity={0.5}
             onPress={() => setDatePickerVisibility(true)}
           >
-            <View className="bg-white h-14 px-4 rounded-xl border border-blue-50 flex-row w-full justify-between items-center">
+            <View className="bg-white-secondary h-14 px-4 rounded-xl border border-gray-four flex-row w-full justify-between items-center">
               <Text>{value ? value : `Select ${label}`}</Text>
-              <MaterialIcons name="calendar-today" size={22} color="#57298D" />
+              <MaterialIcons name="calendar-today" size={22} color="#6C757D" />
             </View>
           </TouchableOpacity>
 
