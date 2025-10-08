@@ -4,14 +4,14 @@ import { Tabs } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 export default function Layout() {
-  const TabIcon = ({ focused, iconName }) => {
+  const TabIcon = ({ focused, iconName, size = 24 }) => {
     return (
       <View
         className={` ${focused && "bg-yellow-primary"} h-12 w-12 rounded-full justify-center items-center`}
       >
         <Ionicons
           name={iconName}
-          size={24}
+          size={size}
           color={focused ? "black" : "gray"}
         />
       </View>
@@ -51,12 +51,22 @@ export default function Layout() {
         }}
       />
       <Tabs.Screen
+        name="search"
+        options={{
+          title: "Search",
+          headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            <TabIcon focused={focused} iconName="search-outline" />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="buddy"
         options={{
           title: "Buddy",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} iconName="people-outline" />
+            <TabIcon focused={focused} iconName="compass-outline" size={30} />
           ),
         }}
       />
@@ -67,16 +77,6 @@ export default function Layout() {
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <TabIcon focused={focused} iconName="chatbubble-outline" />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="reward"
-        options={{
-          title: "Rewards",
-          headerShown: false,
-          tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} iconName="gift-outline" />
           ),
         }}
       />

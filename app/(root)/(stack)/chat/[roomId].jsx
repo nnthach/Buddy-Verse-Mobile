@@ -18,7 +18,6 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { AuthContext } from "../../../../context/AuthContext";
-import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import {
   getRoomDetailBetweenUserAPI,
   sendMessageAPI,
@@ -28,15 +27,16 @@ import { getUserByIdAPI } from "@services/userService";
 import ReportCustomModal from "@components/ReportCustomModal";
 import ModalReportMessage from "@components/ReportComponent/ModalReportMessage";
 import { createReportMessageAPI } from "@services/reportService";
+import Feather from "@expo/vector-icons/Feather";
+import { getChatConnection } from "@services/signalRService";
 
 export default function ChatRoom() {
   const { roomId, accountId2 } = useLocalSearchParams();
 
   const [userInfoTwo, setUserTwoInfo] = useState();
-
-  const { userId } = useContext(AuthContext);
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const { userId } = useContext(AuthContext);
 
   const [isOpenReport, setIsOpenReport] = useState(false);
 
@@ -51,6 +51,7 @@ export default function ChatRoom() {
     reportedRoomId: roomId,
     reason: "",
   });
+
   const scrollViewRef = useRef(null);
 
   // signalr connect
@@ -59,14 +60,14 @@ export default function ChatRoom() {
   const joinRoom = async () => {
     try {
       // 1. Connect
-      const conn = new HubConnectionBuilder()
-        .withUrl("http://10.0.2.2:5116/chatHub")
-        .configureLogging(LogLevel.Information)
-        .build();
+      const conn = await getChatConnection();
+
+      if (conn.state === "Disconnected") {
+        await conn.start();
+      }
 
       // lắng nghe tin nhắn từ server
       conn.on("ReceiveMessage", (msg) => {
-        console.log("receive mess", msg);
         setMessages((prev) =>
           prev.some((m) => m.messageId === msg.messageId)
             ? prev
@@ -74,7 +75,6 @@ export default function ChatRoom() {
         );
       });
 
-      await conn.start();
       await conn.invoke("JoinRoom", userId, roomId);
 
       connectionRef.current = conn;
@@ -96,36 +96,29 @@ export default function ChatRoom() {
     try {
       const res = await getUserByIdAPI(id);
       setUserTwoInfo(res.data);
-      console.log(res.data);
     } catch (error) {
       console.log("get user by id err", error);
     }
   };
 
+  const handleGetMessageRoom = async () => {
+    setIsLoading(true);
+    try {
+      const res = await getRoomDetailBetweenUserAPI(roomId, userId, accountId2);
+      setMessages(res.data);
+    } catch (error) {
+      console.log("get mess room between err", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   // get all message
   useFocusEffect(
     useCallback(() => {
-      const handleGetMessageRoom = async () => {
-        setIsLoading(true);
-        try {
-          const res = await getRoomDetailBetweenUserAPI(
-            roomId,
-            userId,
-            accountId2
-          );
-          console.log("get mess room between res", res.data);
-          setMessages(res.data);
-        } catch (error) {
-          console.log("get mess room between err", error);
-        } finally {
-          setIsLoading(false);
-        }
-      };
       handleGetUserById(accountId2);
       handleGetMessageRoom();
     }, [])
   );
-
   const [sendMessageForm, setSendMessageForm] = useState({
     roomId,
     senderId: userId,
@@ -135,9 +128,7 @@ export default function ChatRoom() {
 
   const handleSendMessage = async () => {
     try {
-      console.log("send mess form", sendMessageForm);
       const res = await sendMessageAPI(sendMessageForm);
-      console.log("send mess res", res.data);
       setSendMessageForm({ ...sendMessageForm, content: "" });
     } catch (error) {
       console.log("send mess err", error);
@@ -152,7 +143,6 @@ export default function ChatRoom() {
       };
 
       const res = await createReportMessageAPI(payload);
-      console.log("reportMessageForm res", res.data);
 
       setReportMessageForm((prev) => ({
         ...prev,
@@ -183,7 +173,7 @@ export default function ChatRoom() {
   }, [messages]);
 
   if (isLoading) {
-    return <LoadingCustom label="Loading messages..." />;
+    return <LoadingCustom label="Đang tải tin nhắn..." />;
   }
 
   return (
@@ -205,7 +195,7 @@ export default function ChatRoom() {
               <MaterialIcons
                 name="keyboard-arrow-left"
                 size={34}
-                color="#FBD157"
+                color="black"
               />
             </TouchableOpacity>
             <View className="flex-row gap-2 items-center">
@@ -245,7 +235,7 @@ export default function ChatRoom() {
           contentContainerStyle={{ paddingBottom: 20 }}
         >
           {messages.length > 0 &&
-            messages.map((item) => (
+            messages?.map((item) => (
               // line wrap all message
               <View
                 key={item?.messageId}
@@ -285,7 +275,6 @@ export default function ChatRoom() {
                     {activeMessageId === item?.messageId && (
                       <TouchableOpacity
                         onPress={() => {
-                          console.log("messid", item.messageId);
                           setMessageReportId(item?.messageId);
                         }}
                         className="absolute right-[-30px] top-[50%] translate-y-[-50%] flex-row"
@@ -311,12 +300,9 @@ export default function ChatRoom() {
 
         {/*Input */}
         <View className="flex-row px-4 items-center gap-4 ">
-          <View className="rounded-full h-14 flex-1 items-center flex-row px-3 bg-black/5">
-            <View className="w-11 h-11 bg-yellow-primary rounded-full overflow-hidden items-center justify-center">
-              <Ionicons name="image" size={24} color="white" />
-            </View>
+          <View className="rounded-xl h-12 flex-1 items-center flex-row px-3 bg-black/5">
             <TextInput
-              className="flex-1 h-full px-3 pb-1 text-xl text-yellow-primary"
+              className="flex-1 h-full px-3 pb-2 text-xl text-black"
               onChangeText={(text) =>
                 setSendMessageForm((prev) => ({
                   ...prev,
@@ -328,11 +314,15 @@ export default function ChatRoom() {
               placeholder="Nhập tin nhắn..."
               placeholderTextColor="#00000050"
             />
+            {sendMessageForm.content != "" && (
+              <TouchableOpacity onPress={handleSendMessage}>
+                <Ionicons name="send" size={24} color="black" />
+              </TouchableOpacity>
+            )}
           </View>
-
-          <TouchableOpacity onPress={handleSendMessage}>
-            <Ionicons name="send" size={24} color="#FBD157" />
-          </TouchableOpacity>
+          <Feather name="mic" size={22} color="black" />
+          <Feather name="smile" size={22} color="black" />
+          <Feather name="camera" size={24} color="black" />
         </View>
       </SafeAreaView>
 

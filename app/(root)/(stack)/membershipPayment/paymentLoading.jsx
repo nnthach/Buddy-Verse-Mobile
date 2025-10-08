@@ -16,24 +16,24 @@ export default function PaymentLoading() {
   }, [next]);
 
   return (
-    <View className="flex-1 justify-center items-center bg-beige-primary">
+    <View className="flex-1 justify-center items-center bg-black">
       <View className="justify-center items-center">
-        <View className="w-36 h-36 rounded-full border-4 border-purple-primary mb-4 items-center justify-center">
+        <View className="w-36 h-36 rounded-full border-4 border-white-primary mb-4 items-center justify-center">
           <ActivityIndicator
             size={"large"}
-            color={"#57298D"}
+            color={"white"}
             className="scale-150"
           />
         </View>
-        <Text className="font-bold text-purple-primary text-2xl">
-          {label || "Loading..."}
+        <Text className="font-bold text-white-primary text-2xl">
+          {label || "Chờ chút nhé..."}
         </Text>
         <View className="flex-row items-center gap-2">
           <Image
             source={require("@assets/icons/light_bulb.png")}
             className="w-3 h-3 mt-1"
           />
-          <Text className="text-purple-primary/50 text-sm mt-2">
+          <Text className="text-white-primary/50 text-sm mt-2">
             Pro tip: A clear profile photo gets 3x more connections!
           </Text>
         </View>

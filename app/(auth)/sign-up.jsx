@@ -79,11 +79,17 @@ export default function SignUpScreen() {
         imageUrlList.push(url);
       }
 
+      console.log("register form", {
+        ...submitRegisterForm,
+        photoUrls: imageUrlList,
+      });
+
       // call api
       const res = await registerAPI({
         ...submitRegisterForm,
         photoUrls: imageUrlList,
       });
+      console.log("register res", res.data);
 
       setSubmitRegisterForm(initialRegisterForm);
       Toast.show({
@@ -112,10 +118,16 @@ export default function SignUpScreen() {
             bounces={false}
             className="px-6"
           >
+            {/*Logo */}
+            <Image
+              source={require("@assets/images/applogo.png")}
+              className="w-24 h-24 mx-auto rounded-xl"
+            />
+
             {/*Title */}
-            <View className="mb-8">
+            <View className="my-6">
               <Text className="text-3xl font-bold text-black text-center">
-                Đăng ký tài khoản buddyverse.
+                Đăng ký vào buddyverse.
               </Text>
             </View>
 
@@ -167,10 +179,14 @@ export default function SignUpScreen() {
                     <TouchableOpacity
                       onPress={() => setOpenSelect(true)}
                       activeOpacity={0.5}
-                      className="relative border-yellow-primary"
+                      className="relative"
                     >
-                      <View className="z-0 bg-white-primary h-14 px-2 rounded-xl border border-yellow-primary flex-row w-full justify-between items-center">
-                        <Text>
+                      <View
+                        className={`z-0 bg-white-primary h-14 px-4 rounded-xl border ${submitRegisterForm?.gender != "" ? "border-black" : "border-gray-400"} flex-row w-full justify-between items-center`}
+                      >
+                        <Text
+                          className={` ${submitRegisterForm?.gender != "" ? "text-black" : "text-gray-400"}`}
+                        >
                           {submitRegisterForm?.gender
                             ? submitRegisterForm?.gender
                                 .charAt(0)
@@ -186,7 +202,7 @@ export default function SignUpScreen() {
                       </View>
                     </TouchableOpacity>
                     {openSelect && (
-                      <View className="shadow-custom absolute top-16 z-10 w-full max-h-[250px] rounded-xl border border-gray-400 overflow-hidden">
+                      <View className="bg-white-primary shadow-custom absolute top-16 z-10 w-full max-h-[250px] rounded-xl border border-gray-400 overflow-hidden">
                         <ScrollView
                           className="flex-1"
                           showsVerticalScrollIndicator={false}
@@ -228,8 +244,12 @@ export default function SignUpScreen() {
                       activeOpacity={0.5}
                       onPress={() => setDatePickerVisibility(true)}
                     >
-                      <View className="bg-white-primary h-14 px-4 rounded-xl border border-yellow-primary flex-row w-full justify-between items-center">
-                        <Text>
+                      <View
+                        className={`bg-white-primary h-14 px-4 rounded-xl border ${submitRegisterForm?.dob != "" ? "border-black" : "border-gray-400"} flex-row w-full justify-between items-center`}
+                      >
+                        <Text
+                          className={` ${submitRegisterForm?.dob != "" ? "text-black" : "text-gray-400"}`}
+                        >
                           {submitRegisterForm?.dob
                             ? submitRegisterForm?.dob
                             : "Chọn ngày sinh"}

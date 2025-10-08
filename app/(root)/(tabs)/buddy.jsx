@@ -4,25 +4,21 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
-  ActivityIndicator,
   FlatList,
   Dimensions,
 } from "react-native";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MatchContext } from "../../../context/MatchContext";
-import Toast from "react-native-toast-message";
-import { router } from "expo-router";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import SelectInterestModal from "@components/BuddyScreenComponents/SelectInterestModal";
+import Entypo from "@expo/vector-icons/Entypo";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { router } from "expo-router";
 
 export default function BuddyScreen() {
   const { matchForm, setMatchForm } = useContext(MatchContext);
   const flatListRef = useRef(null);
   const { width } = Dimensions.get("window");
-
-  const [openModal, setOpenModal] = useState(false);
 
   //banner
   const imgBannerList = [
@@ -31,6 +27,25 @@ export default function BuddyScreen() {
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  const handleSelectConnect = (name) => {
+    setMatchForm((prev) => ({
+      ...prev,
+      roomType: name,
+    }));
+    console.log("match form", matchForm);
+
+    if (matchForm.interestIds.length < 3) {
+      router.push("/(stack)/match/chooseInterest");
+    } else {
+      router.replace({
+        pathname: "/(stack)/match/matchLoading",
+        params: {
+          label: "Đang kết nối...",
+        },
+      });
+    }
+  };
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -106,25 +121,25 @@ export default function BuddyScreen() {
   ];
 
   return (
-    <>
-      <SafeAreaView edges={["top"]} className="flex-1 bg-white-primary">
-        {/*Header */}
-        <View className="px-6 h-16 flex-row justify-between items-center">
-          {/*Logo */}
-          <View className="w-[150px] overflow-hidden">
-            <Image
-              source={require("@assets/images/logoTextBlack.png")}
-              style={{ width: "100%", height: 84, resizeMode: "contain" }}
-            />
-          </View>
-          <FontAwesome5 name="bell" size={24} color="black" />
+    <SafeAreaView edges={["top"]} className="flex-1 bg-white-primary">
+      {/*Header */}
+      <View className="px-6 h-16 flex-row justify-between items-center">
+        {/*Logo */}
+        <View className="w-[150px] overflow-hidden">
+          <Image
+            source={require("@assets/images/logoTextBlack.png")}
+            style={{ width: "100%", height: 84, resizeMode: "contain" }}
+          />
         </View>
+        <Entypo name="notification" size={22} color="black" />
+      </View>
 
-        <ScrollView
-          className="flex-1 px-6"
-          contentContainerStyle={{ paddingBottom: 90 }}
-        >
-          <View className="gap-6">
+      <ScrollView
+        className="flex-1 mt-4"
+        contentContainerStyle={{ paddingBottom: 90 }}
+      >
+        <View className="gap-6">
+          <View className="px-6 gap-6">
             {/*Banner */}
             <View className="bg-gray-200 w-full h-[100px] rounded-2xl overflow-hidden">
               <FlatList
@@ -150,26 +165,14 @@ export default function BuddyScreen() {
             {/*Select type */}
             <View className="flex-row justify-between items-center w-full gap-3">
               <TouchableOpacity
-                onPress={() => {
-                  setMatchForm((prev) => ({
-                    ...prev,
-                    roomType: "Private",
-                  }));
-                  setOpenModal(true);
-                }}
+                onPress={() => handleSelectConnect("Private")}
                 className={`${matchForm?.roomType == "Private" ? "bg-gray-300" : "bg-gray-100"} h-[80px] flex-1 rounded-md items-center justify-center flex-row gap-2`}
               >
                 <FontAwesome name="user" size={16} color="black" />
                 <Text className="text-gray-700 font-semibold">Chat</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => {
-                  setMatchForm((prev) => ({
-                    ...prev,
-                    roomType: "group",
-                  }));
-                  setOpenModal(true);
-                }}
+                onPress={() => handleSelectConnect("Group")}
                 className={`${matchForm?.roomType == "group" ? "bg-gray-300" : "bg-gray-100"} h-[80px] flex-1 rounded-md items-center justify-center flex-row gap-2`}
               >
                 <FontAwesome name="users" size={16} color="black" />
@@ -183,120 +186,122 @@ export default function BuddyScreen() {
                 battles”
               </Text>
             </View>
-
-            {/*For you */}
-            <View className="gap-3">
-              <Text className="text-base font-semibold text-black-primary">
-                For you
-              </Text>
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                className="-mx-1"
-              >
-                {forYouData.map((item) => (
-                  <TouchableOpacity key={item.id} className="w-[180px] mr-4">
-                    <Image
-                      source={item.image}
-                      className="w-full h-[110px] rounded-xl"
-                      resizeMode="cover"
-                    />
-                    <View className="mt-2">
-                      <Text
-                        numberOfLines={1}
-                        className="text-[13px] font-semibold text-black-primary"
-                      >
-                        {item.title}
-                      </Text>
-                      <Text className="text-[12px] text-gray-500">
-                        {item.members.toLocaleString()} Members
-                      </Text>
-                      <View className="mt-1 self-start bg-gray-100 px-2 py-1 rounded-full">
-                        <Text className="text-[11px] text-gray-600">
-                          {item.tag}
-                        </Text>
-                      </View>
-                    </View>
-                  </TouchableOpacity>
-                ))}
-              </ScrollView>
-            </View>
-
-            {/*Community by interest */}
-            <View className="gap-3">
-              <Text className="text-base font-semibold text-black-primary">
-                Communities by Interests
-              </Text>
-              {/* filter */}
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                className="-mx-1"
-              >
-                {[
-                  "All",
-                  "Movies",
-                  "Art",
-                  "Sports",
-                  "Crypto",
-                  "Finance",
-                  "Health",
-                ].map((label, index) => (
-                  <View
-                    key={index}
-                    className={`mr-2 px-3 py-2 rounded-full ${index === 0 ? "bg-black-primary" : "bg-gray-100"}`}
-                  >
-                    <Text
-                      className={`text-[12px] ${index === 0 ? "text-white" : "text-gray-700"}`}
-                    >
-                      {label}
-                    </Text>
-                  </View>
-                ))}
-              </ScrollView>
-
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                className="-mx-1"
-              >
-                {communityByInterestData.map((item) => (
-                  <TouchableOpacity key={item.id} className="w-[180px] mr-4">
-                    <Image
-                      source={item.image}
-                      className="w-full h-[110px] rounded-xl"
-                      resizeMode="cover"
-                    />
-                    <View className="mt-2">
-                      <Text
-                        numberOfLines={1}
-                        className="text-[13px] font-semibold text-black-primary"
-                      >
-                        {item.title}
-                      </Text>
-                      <Text className="text-[12px] text-gray-500">
-                        {item.members.toLocaleString()} Members
-                      </Text>
-                      <View className="mt-1 self-start bg-gray-100 px-2 py-1 rounded-full">
-                        <Text className="text-[11px] text-gray-600">
-                          {item.tag}
-                        </Text>
-                      </View>
-                    </View>
-                  </TouchableOpacity>
-                ))}
-              </ScrollView>
-            </View>
           </View>
-        </ScrollView>
-      </SafeAreaView>
 
-      {openModal && (
-        <SelectInterestModal
-          openModal={openModal}
-          setOpenModal={setOpenModal}
-        />
-      )}
-    </>
+          {/*For you */}
+          <View className="gap-3">
+            <Text className="text-base font-semibold text-black-primary px-6">
+              For you
+            </Text>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              className="-mx-1"
+            >
+              {forYouData.map((item, index) => (
+                <TouchableOpacity key={item.id} className="w-[180px] mr-4">
+                  <Image
+                    source={item.image}
+                    className="w-full h-[110px] rounded-xl"
+                    resizeMode="cover"
+                  />
+                  <View className="mt-2">
+                    <Text
+                      numberOfLines={1}
+                      className="text-[13px] font-semibold text-black-primary"
+                    >
+                      {item.title}
+                    </Text>
+                    <Text className="text-[12px] text-gray-500">
+                      {item.members.toLocaleString()} Members
+                    </Text>
+                    <View className="mt-1 self-start bg-gray-100 px-2 py-1 rounded-full">
+                      <Text className="text-[11px] text-gray-600">
+                        {item.tag}
+                      </Text>
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
+
+          {/*Community by interest */}
+          <View className="gap-3">
+            <Text className="text-base font-semibold text-black px-6">
+              Communities by Interests
+            </Text>
+            {/* filter */}
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              className="mx-6"
+            >
+              {[
+                "All",
+                "Movies",
+                "Art",
+                "Sports",
+                "Crypto",
+                "Finance",
+                "Health",
+              ].map((label, index) => (
+                <View
+                  key={index}
+                  className={`mr-2 px-3 py-2 rounded-full ${index === 0 ? "bg-black" : "bg-gray-100"}`}
+                >
+                  <Text
+                    className={`text-[12px] ${index === 0 ? "text-white-primary" : "text-gray-700"}`}
+                  >
+                    {label}
+                  </Text>
+                </View>
+              ))}
+            </ScrollView>
+
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              className="-mx-1"
+            >
+              {communityByInterestData.map((item) => (
+                <TouchableOpacity key={item.id} className="w-[180px] mr-4">
+                  <Image
+                    source={item.image}
+                    className="w-full h-[110px] rounded-xl"
+                    resizeMode="cover"
+                  />
+                  <View className="mt-2">
+                    <Text
+                      numberOfLines={1}
+                      className="text-[13px] font-semibold text-black-primary"
+                    >
+                      {item.title}
+                    </Text>
+                    <Text className="text-[12px] text-gray-500">
+                      {item.members.toLocaleString()} Members
+                    </Text>
+                    <View className="mt-1 self-start bg-gray-100 px-2 py-1 rounded-full">
+                      <Text className="text-[11px] text-gray-600">
+                        {item.tag}
+                      </Text>
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
+        </View>
+      </ScrollView>
+
+      {/*floating button */}
+      <TouchableOpacity
+        activeOpacity={0.85}
+        onPress={() => router.push("/(stack)/match/chooseInterest")}
+        className="absolute right-4 bottom-24 bg-yellow-400 w-16 h-16 rounded-full items-center justify-center shadow-md"
+      >
+        <FontAwesome6 name="sliders" size={20} color="black" />
+      </TouchableOpacity>
+    </SafeAreaView>
   );
 }

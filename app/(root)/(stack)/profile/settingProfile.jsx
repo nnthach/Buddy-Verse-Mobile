@@ -28,6 +28,7 @@ export default function SettingProfile() {
     {
       icon: <Feather name="bell-off" size={24} color="black" />,
       label: "Thông báo",
+      onPress: () => router.push("/(stack)/reward/mainScreenReward"),
       type: "onoff",
     },
     {
@@ -84,22 +85,15 @@ export default function SettingProfile() {
   };
   return (
     <SafeAreaView className="flex-1 bg-white-primary">
+      {/*Heading */}
+      <View className="h-16 flex-row justify-between items-center px-6">
+        <TouchableOpacity onPress={() => router.back()}>
+          <MaterialIcons name="keyboard-arrow-left" size={34} color="black" />
+        </TouchableOpacity>
+        <Text className="text-black font-semibold text-2xl">Cài đặt</Text>
+        <Text className="w-[34px]" />
+      </View>
       <ScrollView className="flex-1 px-6">
-        {/*Heading */}
-        <View className="h-16 flex-row justify-between items-center ">
-          <TouchableOpacity onPress={() => router.back()}>
-            <MaterialIcons
-              name="keyboard-arrow-left"
-              size={34}
-              color="#FBD157"
-            />
-          </TouchableOpacity>
-          <Text className="text-yellow-primary font-semibold text-2xl">
-            Cài đặt
-          </Text>
-          <Text className="w-[34px]" />
-        </View>
-
         {/*Avatar */}
         <View className="mt-6 justify-center items-center">
           <Image
@@ -114,7 +108,7 @@ export default function SettingProfile() {
           <TouchableOpacity
             onPress={() => router.push("/profile/characterCartoon")}
           >
-            <Text className="text-xl text-yellow-primary font-bold mt-3 mb-1">
+            <Text className="text-xl text-black font-bold mt-3 mb-1">
               {userInfo?.lastname} {userInfo?.firstname}
             </Text>
           </TouchableOpacity>
@@ -122,7 +116,7 @@ export default function SettingProfile() {
 
         {/*Content */}
         <View className="mt-6 gap-4">
-          <View className="bg-white-primary rounded-xl">
+          <View className="bg-gray-100 rounded-2xl">
             {settingList.slice(0, 4).map((item, index) => (
               <View key={index} className="p-4">
                 <TouchableOpacity
@@ -156,7 +150,7 @@ export default function SettingProfile() {
             ))}
           </View>
 
-          <View className="bg-white rounded-xl">
+          <View className="bg-gray-100 rounded-2xl">
             {settingList.slice(4, 7).map((item, index) => (
               <View key={index} className="p-4 flex-row items-center gap-4">
                 {item.icon}
@@ -185,7 +179,7 @@ export default function SettingProfile() {
             ))}
           </View>
 
-          <View className="bg-white rounded-xl">
+          <View className="bg-gray-100 rounded-2xl">
             {settingList.slice(7).map((item, index) => (
               <View key={index} className="p-4 flex-row items-center gap-4">
                 {item.icon}
@@ -217,9 +211,9 @@ export default function SettingProfile() {
           <View className="mt-4">
             <TouchableOpacity
               onPress={handleLogout}
-              className="bg-yellow-primary py-4 px-6 rounded-full w-full"
+              className="bg-yellow-primary py-3 px-6 rounded-full w-full"
             >
-              <Text className="text-white text-xl font-medium text-center">
+              <Text className="text-white-primary text-lg font-medium text-center">
                 Đăng xuất
               </Text>
             </TouchableOpacity>

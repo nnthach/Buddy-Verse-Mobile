@@ -17,62 +17,51 @@ export default function Payment() {
 
   const RadioButton = ({ select }) => {
     return (
-      <View className="bg-purple-200 border border-purple-500 w-10 h-10 rounded-full justify-center items-center">
-        <View className="bg-purple-primary/80 w-7 h-7 rounded-full" />
+      <View className="bg-yellow-200 border border-yellow-500 w-10 h-10 rounded-full justify-center items-center">
+        <View className="bg-yellow-primary/80 w-7 h-7 rounded-full" />
       </View>
     );
   };
   return (
-    <SafeAreaView className="flex-1 bg-beige-primary">
+    <SafeAreaView className="flex-1 bg-white-primary">
+      {/*Heading */}
+      <View className="px-6 h-16 flex-row justify-between items-center">
+        <TouchableOpacity onPress={() => router.back()}>
+          <MaterialIcons name="keyboard-arrow-left" size={34} color="black" />
+        </TouchableOpacity>
+        <Text className="text-black font-semibold text-2xl">Payment</Text>
+        <AntDesign name="questioncircleo" size={24} color="black" />
+      </View>
       <ScrollView className="flex-1 px-6">
-        {/*Heading */}
-        <View className="h-16 flex-row justify-between items-center">
-          <TouchableOpacity onPress={() => router.back()}>
-            <MaterialIcons
-              name="keyboard-arrow-left"
-              size={34}
-              color="#57298D"
-            />
-          </TouchableOpacity>
-          <Text className="text-purple-primary font-semibold text-2xl">
-            Payment
-          </Text>
-          <AntDesign name="questioncircleo" size={24} color="#57298D" />
-        </View>
-
         {/*Payment method */}
         <View className="mt-6">
-          <Text className="text-purple-primary/70 text-lg">Payment Method</Text>
+          <Text className="text-black/70 text-lg">Payment Method</Text>
           {/*Payment method item */}
           <View className="mt-1">
             {methodPayment.map((item, index) => (
               <View
                 key={index}
-                className="items-center gap-4 flex-row border-b border-purple-secondary py-4"
+                className="items-center gap-4 flex-row border-b border-black py-4"
               >
-                <View className="bg-purple-third w-14 h-14 rounded-2xl justify-center items-center">
+                <View className="bg-yellow-100 w-14 h-14 rounded-2xl justify-center items-center">
                   <Image
                     source={item.icon}
                     className="w-10 h-10"
                     resizeMode="cover"
                   />
                 </View>
-                <Text className="text-purple-third font-medium">
-                  {item.title}
-                </Text>
+                <Text className="text-black font-medium">{item.title}</Text>
                 <View className="flex-1 items-end">
                   <RadioButton select={false} />
                 </View>
               </View>
             ))}
             <View className="pt-4 items-center justify-between flex-row">
-              <Text className="text-purple-third font-medium text-lg">
-                Other
-              </Text>
+              <Text className="text-black font-medium text-lg">Other</Text>
               <MaterialIcons
                 name="keyboard-arrow-right"
                 size={30}
-                color="#57298D"
+                color="black"
               />
             </View>
           </View>
@@ -80,13 +69,13 @@ export default function Payment() {
 
         {/*Payment detail */}
         <View className="mt-6">
-          <Text className="text-purple-primary/70 text-lg">Payment Method</Text>
+          <Text className="text-black/70 text-lg">Payment Method</Text>
 
           <View className="flex-row items-start gap-4 mt-3">
             <View className="bg-white w-14 h-14 rounded-xl"></View>
             <View>
               <Text className="font-semibold text-lg">Basic Membership</Text>
-              <Text className="text-purple-primary font-semibold text-xl">
+              <Text className="text-yellow-primary font-semibold text-xl">
                 29,999 đ
               </Text>
             </View>
@@ -101,11 +90,9 @@ export default function Payment() {
           <Checkbox
             value={isChecked}
             onValueChange={setIsChecked}
-            color={"#57298D"}
+            color={"black"}
           />
-          <Text className="text-purple-primary ml-2">
-            Agree with payment policy
-          </Text>
+          <Text className="text-black ml-2">Agree with payment policy</Text>
         </View>
 
         {/*Accept BTN */}
@@ -120,11 +107,13 @@ export default function Payment() {
               },
             })
           }
-          className={`bg-purple-primary py-3 rounded-xl items-center mt-8 ${
+          className={`bg-yellow-primary py-3 rounded-xl items-center mt-8 ${
             isChecked ? "" : "opacity-50"
           }`}
         >
-          <Text className="text-white text-lg font-semibold">Payment</Text>
+          <Text className="text-white-primary text-lg font-semibold">
+            Payment
+          </Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>

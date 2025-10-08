@@ -27,6 +27,7 @@ import {
   getChatConnection,
   getMatchConnection,
 } from "@services/signalRService";
+import Feather from "@expo/vector-icons/Feather";
 import Toast from "react-native-toast-message";
 
 export default function ChatTempRoom() {
@@ -311,12 +312,9 @@ export default function ChatTempRoom() {
 
       {/*Input */}
       <View className="flex-row px-4 items-center gap-4 ">
-        <View className="rounded-full h-14 flex-1 items-center flex-row px-3 bg-black/5">
-          <View className="w-11 h-11 bg-yellow-primary rounded-full overflow-hidden items-center justify-center">
-            <Ionicons name="image" size={24} color="white" />
-          </View>
+        <View className="rounded-full h-12 flex-1 items-center flex-row px-3 bg-black/5">
           <TextInput
-            className="flex-1 h-full px-3 pb-1 text-xl text-yellow-primary"
+            className="flex-1 h-full px-3 pb-1 text-xl text-black"
             onChangeText={(text) =>
               setSendMessageForm((prev) => ({
                 ...prev,
@@ -330,9 +328,14 @@ export default function ChatTempRoom() {
           />
         </View>
 
-        <TouchableOpacity onPress={handleSendMessage}>
-          <Ionicons name="send" size={24} color="#FBD157" />
-        </TouchableOpacity>
+        {sendMessageForm.content != "" && (
+          <TouchableOpacity onPress={handleSendMessage}>
+            <Ionicons name="send" size={24} color="black" />
+          </TouchableOpacity>
+        )}
+        <Feather name="mic" size={22} color="black" />
+        <Feather name="smile" size={22} color="black" />
+        <Feather name="camera" size={24} color="black" />
       </View>
 
       {/* Floating continue button */}

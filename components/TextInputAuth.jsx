@@ -17,10 +17,10 @@ function TextInputAuth({
   return (
     <>
       <View
-        className={`relative border ${error ? "border-red-500" : "border-yellow-primary"} rounded-xl h-14 `}
+        className={`relative border ${error ? "border-red-500" : isFocused ? "border-black" : "border-gray-400"} rounded-xl h-14 `}
       >
         <TextInput
-          className={`h-full w-full px-4 pb-1 text-xl text-yellow-primary`}
+          className={`h-full w-full px-4 pb-1 text-xl text-black`}
           value={value}
           onChangeText={onChangeText}
           onFocus={() => setFocusedField(name)}
@@ -29,11 +29,11 @@ function TextInputAuth({
           {...props}
         />
         <Text
-          className={`absolute bg-white-primary px-1 
+          className={`absolute bg-white-primary left-4 
                         transition-all duration-200 ease-in-out ${
                           isFocused || value
-                            ? `-top-3 ${customLeftCSSOnfocus} scale-90 text-yellow-primary`
-                            : `top-1/2 -translate-y-1/2 ${customLeftCSSOnblur} scale-125 text-gray-400`
+                            ? `-top-3 px-1 scale-90 text-black`
+                            : `top-1/2 -translate-y-1/2 scale-100 text-gray-400`
                         }`}
         >
           {label}

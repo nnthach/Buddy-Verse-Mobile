@@ -3,6 +3,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useState } from "react";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import Entypo from "@expo/vector-icons/Entypo";
 
 export default function HomeScreen() {
   const [posts] = useState([
@@ -79,7 +80,7 @@ export default function HomeScreen() {
             style={{ width: "100%", height: 84, resizeMode: "contain" }}
           />
         </View>
-        <FontAwesome5 name="bell" size={24} color="#6C757D" />
+        <Entypo name="notification" size={22} color="black" />
       </View>
 
       <ScrollView
@@ -113,27 +114,23 @@ export default function HomeScreen() {
 
                 {/* Post content */}
                 {post.content?.length > 0 && (
-                  <Text className="pb-3 text-[16px] text-purple-third">
+                  <Text className="pb-3 text-[16px] text-black">
                     {post.content}
                   </Text>
                 )}
 
                 {/* Actions */}
-                <View className="flex-row items-center justify-between pb-2">
-                  <View className="flex-row items-center gap-4">
-                    <TouchableOpacity className="flex-row items-center gap-2">
-                      <FontAwesome5 name="heart" size={18} color="#6C757D" />
-                      <Text className="text-gray-600 text-sm">
-                        {post.likes}
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity className="flex-row items-center gap-2">
-                      <FontAwesome5 name="comment" size={18} color="#6C757D" />
-                      <Text className="text-gray-600 text-sm">
-                        {post.comments}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
+                <View className="flex-row items-center gap-4 mb-2">
+                  <TouchableOpacity className="flex-row items-center gap-2">
+                    <FontAwesome5 name="heart" size={18} color="#6C757D" />
+                    <Text className="text-gray-600 text-sm">{post.likes}</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity className="flex-row items-center gap-2">
+                    <FontAwesome5 name="comment" size={18} color="#6C757D" />
+                    <Text className="text-gray-600 text-sm">
+                      {post.comments}
+                    </Text>
+                  </TouchableOpacity>
                   <TouchableOpacity>
                     <MaterialIcons
                       name="bookmark-border"

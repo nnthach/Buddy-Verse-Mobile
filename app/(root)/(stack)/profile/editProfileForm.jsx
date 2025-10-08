@@ -217,7 +217,7 @@ export default function EditProfileForm() {
   return (
     <>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <SafeAreaView className="flex-1 bg-beige-primary">
+        <SafeAreaView className="flex-1 bg-white-primary">
           <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             keyboardVerticalOffset={0}
@@ -230,10 +230,10 @@ export default function EditProfileForm() {
                   <MaterialIcons
                     name="keyboard-arrow-left"
                     size={34}
-                    color="#57298D"
+                    color="black"
                   />
                 </TouchableOpacity>
-                <Text className="text-purple-primary font-semibold text-2xl">
+                <Text className="text-black font-semibold text-2xl">
                   Thông tin cá nhân
                 </Text>
                 <Text className="w-[34px]" />
@@ -251,7 +251,7 @@ export default function EditProfileForm() {
                   resizeMode="cover"
                 />
                 <TouchableOpacity onPress={handleImagePick}>
-                  <Text className="text-lg text-purple-primary mt-1 mb-1">
+                  <Text className="text-lg text-black mt-1 mb-1">
                     Thay đổi hình ảnh
                   </Text>
                 </TouchableOpacity>
@@ -370,12 +370,12 @@ export default function EditProfileForm() {
                 /> */}
               </View>
 
-              <View className="mt-4">
+              <View className="mt-6">
                 <TouchableOpacity
                   onPress={handleSubmit}
-                  className="bg-purple-third py-4 px-6 rounded-full w-full"
+                  className="bg-yellow-primary py-3 px-6 rounded-full w-full"
                 >
-                  <Text className="text-white text-xl font-medium text-center">
+                  <Text className="text-white-primary text-lg font-medium text-center">
                     Cập nhật thông tin
                   </Text>
                 </TouchableOpacity>
@@ -385,7 +385,7 @@ export default function EditProfileForm() {
         </SafeAreaView>
       </TouchableWithoutFeedback>
 
-      {isLoading && <LoadingCustom label={"Updating your profile"} />}
+      {isLoading && <LoadingCustom label={"Đang cập nhật"} />}
     </>
   );
 }

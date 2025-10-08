@@ -2,22 +2,18 @@ import {
   View,
   Text,
   TouchableOpacity,
-  ScrollView,
-  TextInput,
   Image,
   FlatList,
   ActivityIndicator,
 } from "react-native";
 import React, { useCallback, useContext, useState } from "react";
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { fakeDataMessageList } from "data/fakeData";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { router, useFocusEffect } from "expo-router";
+import { router } from "expo-router";
 import { AuthContext } from "../../../context/AuthContext";
 import { getAllRoomOfUserAPI } from "@services/messageService";
 import LoadingCustom from "@components/LoadingCustom";
 import useFetchList from "hooks/useFetchList";
+import Entypo from "@expo/vector-icons/Entypo";
 
 export default function ChatScreen() {
   const [searchAccount, setSearchAccount] = useState("");
@@ -96,7 +92,7 @@ export default function ChatScreen() {
             style={{ width: "100%", height: 84, resizeMode: "contain" }}
           />
         </View>
-        <FontAwesome5 name="bell" size={24} color="black" />
+        <Entypo name="notification" size={22} color="black" />
       </View>
 
       {loading ? (

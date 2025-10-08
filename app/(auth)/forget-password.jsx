@@ -171,7 +171,7 @@ export default function ForgetPasswordScreen() {
               <TouchableOpacity
                 activeOpacity={0.8}
                 onPress={handleSubmit}
-                className="h-14 bg-purple-primary rounded-[50px] items-center justify-center mt-3"
+                className="h-14 bg-yellow-primary rounded-[50px] items-center justify-center mt-3"
               >
                 <Text className="text-beige-primary text-xl font-medium">
                   {stepForgetPassword == 1

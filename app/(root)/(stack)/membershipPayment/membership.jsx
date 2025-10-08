@@ -10,31 +10,28 @@ import { LinearGradient } from "expo-linear-gradient";
 export default function Membership() {
   const [selectMembership, setSelectMembership] = useState("Basic");
   return (
-    <SafeAreaView className="flex-1 bg-beige-primary">
-      <ScrollView className="flex-1 px-6">
-        {/*Heading */}
-        <View className="h-16 flex-row justify-between items-center ">
-          <TouchableOpacity onPress={() => router.back()}>
-            <MaterialIcons
-              name="keyboard-arrow-left"
-              size={34}
-              color="#57298D"
-            />
-          </TouchableOpacity>
-          <Text className="text-purple-primary font-semibold text-2xl">
-            Membership Benefits
-          </Text>
-          <Text className="w-[34px]" />
-        </View>
+    <SafeAreaView className="flex-1 bg-white-primary">
+      {/*Heading */}
+      <View className="px-6 h-16 flex-row justify-between items-center">
+        <TouchableOpacity onPress={() => router.back()}>
+          <MaterialIcons name="keyboard-arrow-left" size={34} color="black" />
+        </TouchableOpacity>
+        <Text className="text-black font-semibold text-2xl">
+          Membership Benefits
+        </Text>
+        <Text className="w-[34px]" />
+      </View>
 
+      {/*Co */}
+      <ScrollView className="flex-1 px-6">
         {/*Filter */}
         <View className="flex-row items-center justify-between my-8">
           <TouchableOpacity
             onPress={() => setSelectMembership("Basic")}
-            className={`h-12 w-[33.3%] items-center justify-center ${selectMembership == "Basic" ? "bg-black" : "bg-white"} border border-black`}
+            className={`h-12 w-[33.3%] items-center justify-center ${selectMembership == "Basic" ? "bg-black" : "bg-white-primary"} border border-black`}
           >
             <Text
-              className={` ${selectMembership == "Basic" ? " text-white" : " text-black"} `}
+              className={` ${selectMembership == "Basic" ? "text-white-primary" : " text-black"} `}
             >
               Basic
             </Text>
@@ -44,7 +41,7 @@ export default function Membership() {
             className={`h-12 w-[33.3%] items-center justify-center ${selectMembership == "Monthly" ? "bg-black" : "bg-white"} border-y border-black`}
           >
             <Text
-              className={` ${selectMembership == "Monthly" ? " text-white" : " text-black"} `}
+              className={` ${selectMembership == "Monthly" ? "text-white-primary" : " text-black"} `}
             >
               Monthly
             </Text>
@@ -54,7 +51,7 @@ export default function Membership() {
             className={`h-12 w-[33.3%] items-center justify-center ${selectMembership == "Yearly" ? "bg-black" : "bg-white"} border border-black`}
           >
             <Text
-              className={` ${selectMembership == "Yearly" ? " text-white" : " text-black"} `}
+              className={` ${selectMembership == "Yearly" ? "text-white-primary" : " text-black"} `}
             >
               Yearly
             </Text>
@@ -74,18 +71,20 @@ export default function Membership() {
             <View className="p-8">
               {/*Header info */}
               <View
-                className={`gap-3 border-b ${selectMembership == "Basic" ? "border-gray-500" : "border-beige-primary/70"} pb-8`}
+                className={`gap-3 border-b ${selectMembership == "Basic" ? "border-gray-500" : "border-white-primary/70"} pb-8`}
               >
                 {membershipPlansData[selectMembership].info.tag && (
                   <Text className="bg-blue-300 p-1 rounded-lg self-start ">
                     {membershipPlansData[selectMembership].info.tag}
                   </Text>
                 )}
-                <Text className="bg-gray-200 text-black self-start p-2 px-4 rounded-xl font-semibold">
+                <Text
+                  className={`${selectMembership == "Basic" ? "bg-black text-white-primary" : "bg-white-primary text-black"} self-start p-2 px-4 rounded-xl font-semibold`}
+                >
                   {membershipPlansData[selectMembership].info.name}
                 </Text>
                 <Text
-                  className={`${selectMembership == "Basic" ? "text-black" : "text-beige-primary"}`}
+                  className={`${selectMembership == "Basic" ? "text-black" : "text-white-primary"}`}
                 >
                   {membershipPlansData[selectMembership].info.description}
                 </Text>
@@ -93,15 +92,15 @@ export default function Membership() {
 
               {/*Price */}
               <View
-                className={`border-b ${selectMembership == "Basic" ? "border-gray-500" : "border-beige-primary/70"} py-8 pt-6 `}
+                className={`border-b ${selectMembership == "Basic" ? "border-gray-500" : "border-white-primary/70"} py-8 pt-6 `}
               >
                 <Text
-                  className={`text-[60px] font-semibold ${selectMembership == "Basic" ? "text-black" : "text-beige-primary"}`}
+                  className={`text-[55px] font-semibold ${selectMembership == "Basic" ? "text-black" : "text-white-primary"}`}
                 >
                   {membershipPlansData[selectMembership].info.price} đ
                 </Text>
                 <Text
-                  className={`font-semibold ${selectMembership == "Basic" ? "text-black" : "text-beige-primary"}`}
+                  className={`font-semibold ${selectMembership == "Basic" ? "text-black" : "text-white-primary"}`}
                 >
                   {membershipPlansData[selectMembership].info.rule}
                 </Text>
@@ -125,11 +124,11 @@ export default function Membership() {
                             ? "red"
                             : selectMembership == "Basic"
                               ? "black"
-                              : "#F1F3E7"
+                              : "white"
                         }
                       />
                       <Text
-                        className={`font-medium ${selectMembership == "Basic" ? "text-black" : "text-beige-primary"}`}
+                        className={`font-medium ${selectMembership == "Basic" ? "text-black" : "text-white-primary"}`}
                       >
                         {item.label}
                       </Text>
@@ -145,15 +144,17 @@ export default function Membership() {
 
               {/*Button */}
               <View className="mt-2">
-                <TouchableOpacity onPress={() => router.push("/membershipPayment/payment")}>
+                <TouchableOpacity
+                  onPress={() => router.push("/membershipPayment/payment")}
+                >
                   <Text
-                    className={` ${selectMembership == "Basic" ? "bg-black text-white" : "bg-yellow-300/70 text-black"} text-center p-2 font-medium rounded-lg`}
+                    className={` ${selectMembership == "Basic" ? "bg-black text-white-primary" : "bg-yellow-300/70 text-white-primary"} text-center p-2 font-medium rounded-lg`}
                   >
                     Start free 14-days trial
                   </Text>
                 </TouchableOpacity>
                 <Text
-                  className={`text-center mt-2 text-sm ${selectMembership == "Basic" ? " text-black" : " text-white"}`}
+                  className={`text-center mt-2 text-sm ${selectMembership == "Basic" ? " text-black" : "text-white-primary"}`}
                 >
                   No credit card required
                 </Text>

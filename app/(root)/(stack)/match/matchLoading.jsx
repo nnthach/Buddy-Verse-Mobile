@@ -92,16 +92,16 @@ export default function MatchLoading() {
   }, [userId]);
 
   return (
-    <View className="flex-1 justify-center items-center bg-white-primary">
+    <View className="flex-1 justify-center items-center bg-black">
       <View className="justify-center items-center">
-        <View className="w-36 h-36 rounded-full border-4 border-yellow-primary mb-4 items-center justify-center">
+        <View className="w-36 h-36 rounded-full border-4 border-white-primary mb-4 items-center justify-center">
           <ActivityIndicator
             size={"large"}
-            color={"#FBD157"}
+            color={"white"}
             className="scale-150"
           />
         </View>
-        <Text className="font-bold text-yellow-primary text-2xl">
+        <Text className="font-bold text-white-primary text-2xl">
           {label || "Loading..."}
         </Text>
         <View className="flex-row items-center gap-2">
@@ -109,13 +109,13 @@ export default function MatchLoading() {
             source={require("@assets/icons/light_bulb.png")}
             className="w-3 h-3 mt-1"
           />
-          <Text className="text-yellow-primary/50 text-sm mt-2">
+          <Text className="text-white-primary/50 text-sm mt-2">
             Pro tip: A clear profile photo gets 3x more connections!
           </Text>
         </View>
 
         <TouchableOpacity onPress={handleDisconnect} className="mt-4">
-          <Text>Ngừng kết nối</Text>
+          <Text className="text-white-primary">Ngừng kết nối</Text>
         </TouchableOpacity>
       </View>
     </View>

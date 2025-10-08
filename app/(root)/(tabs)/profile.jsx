@@ -5,6 +5,8 @@ import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { AuthContext } from "../../../context/AuthContext";
 import Feather from "@expo/vector-icons/Feather";
+import Entypo from "@expo/vector-icons/Entypo";
+import { router } from "expo-router";
 
 export default function ProfileScreen() {
   const { userInfo } = useContext(AuthContext);
@@ -74,7 +76,7 @@ export default function ProfileScreen() {
           />
         </View>
         <View className="flex-row justify-between items-center gap-4">
-          <FontAwesome5 name="bell" size={24} color="black" />
+          <Entypo name="notification" size={22} color="black" />
           <TouchableOpacity
             onPress={() => router.push("/(stack)/profile/settingProfile")}
           >
@@ -106,7 +108,7 @@ export default function ProfileScreen() {
                   ? { uri: userInfo.photos[0] }
                   : require("@assets/images/avatar.png")
               }
-              className="w-20 h-20 rounded-full border-4 border-white"
+              className="w-20 h-20 rounded-full"
               resizeMode="cover"
             />
           </View>

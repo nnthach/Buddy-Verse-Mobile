@@ -9,6 +9,7 @@ import {
   Platform,
   ScrollView,
   TextInput,
+  Image,
 } from "react-native";
 import React, { useContext, useState } from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -123,10 +124,16 @@ export default function SignInScreen() {
             bounces={false}
             className="px-6"
           >
+            {/*Logo */}
+            <Image
+              source={require("@assets/images/applogo.png")}
+              className="w-24 h-24 mx-auto rounded-xl"
+            />
+            
             {/*Title */}
-            <View className="mb-8">
+            <View className="my-6">
               <Text className="text-3xl font-bold text-black text-center">
-                Đăng nhập vào buddy verse.
+                Đăng nhập vào buddyverse.
               </Text>
             </View>
 

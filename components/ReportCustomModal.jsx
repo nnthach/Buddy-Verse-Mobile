@@ -1,8 +1,6 @@
 import {
   View,
   Text,
-  Image,
-  ActivityIndicator,
   TouchableOpacity,
 } from "react-native";
 import React, { useEffect } from "react";

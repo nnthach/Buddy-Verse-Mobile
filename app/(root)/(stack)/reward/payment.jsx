@@ -20,7 +20,7 @@ export default function Payment() {
     return (
       <View className="flex-row items-center gap-4">
         {/*Icon payment */}
-        <View className="bg-purple-five w-14 h-14 rounded-2xl justify-center items-center">
+        <View className="bg-yellow-100 w-14 h-14 rounded-2xl justify-center items-center overflow-hidden">
           <Image
             source={require("@assets/icons/payment_card.png")}
             className="w-10 h-10"
@@ -29,14 +29,12 @@ export default function Payment() {
         </View>
         {/*Name */}
         <View className="gap-1">
-          <Text className="text-purple-primary font-semibold text-lg">
-            {item.title}
-          </Text>
+          <Text className="text-black font-semibold text-lg">{item.title}</Text>
           <Text className="text-gray-400 text-sm">{item.time}</Text>
         </View>
         {/*Money & status*/}
         <View className="flex-1 items-end gap-1">
-          <Text className="text-purple-primary text-lg font-bold">
+          <Text className="text-black text-lg font-bold">
             {item.total.toLocaleString("vi-VN")}đ
           </Text>
           <Text
@@ -49,29 +47,23 @@ export default function Payment() {
     );
   };
   return (
-    <SafeAreaView className="flex-1 bg-beige-primary">
+    <SafeAreaView edges={["top"]} className="flex-1 bg-white-primary">
+      {/*Heading */}
+      <View className="h-16 flex-row justify-between items-center px-6">
+        <TouchableOpacity onPress={() => router.back()}>
+          <MaterialIcons name="keyboard-arrow-left" size={34} color="black" />
+        </TouchableOpacity>
+        <Text className="text-black font-semibold text-2xl">Payment</Text>
+        <AntDesign name="questioncircleo" size={24} color="black" />
+      </View>
+      {/*Content */}
       <ScrollView
         className="flex-1 px-6 gap-6 space-y-6"
         showsVerticalScrollIndicator={false}
       >
-        {/*Heading */}
-        <View className="h-16 flex-row justify-between items-center ">
-          <TouchableOpacity onPress={() => router.back()}>
-            <MaterialIcons
-              name="keyboard-arrow-left"
-              size={34}
-              color="#57298D"
-            />
-          </TouchableOpacity>
-          <Text className="text-purple-primary font-semibold text-2xl">
-            Payment
-          </Text>
-          <AntDesign name="questioncircleo" size={24} color="#57298D" />
-        </View>
-
         {/*Info user */}
         <View className=" my-4">
-          <View className="bg-blue-primary rounded-2xl">
+          <View className="bg-gray-50 rounded-2xl overflow-hidden">
             {/*Top */}
             <View className=" flex-row items-center justify-between p-2">
               <View className="flex-row items-center gap-2">
@@ -79,22 +71,22 @@ export default function Payment() {
                   source={require("@assets/icons/point.png")}
                   className="w-5 h-5"
                 />
-                <Text className="font-semibold text-xl text-purple-primary">
+                <Text className="font-semibold text-xl text-black">
                   6,868 Pts
                 </Text>
               </View>
 
               <View className="flex-row items-center">
-                <Text className="text-purple-primary/50 text-md">History</Text>
+                <Text className="text-black/50 text-md">History</Text>
                 <MaterialIcons
                   name="keyboard-arrow-right"
                   size={20}
-                  color="rgba(87,41,141,0.5)"
+                  color="rgba(0,0,0,0.5)"
                 />
               </View>
             </View>
             {/*Content */}
-            <View className="bg-purple-five rounded-2xl p-4">
+            <View className="bg-yellow-primary p-4">
               {/*Avatar */}
               <View className="mt-6 justify-center items-center">
                 <Image
@@ -104,7 +96,7 @@ export default function Payment() {
                   className="w-32 h-32 rounded-full"
                   resizeMode="cover"
                 />
-                <Text className="text-xl text-purple-primary font-semibold mt-3 mb-1">
+                <Text className="text-xl text-white-primary font-semibold mt-3 mb-1">
                   Nguyen Ngoc Thach
                 </Text>
               </View>
@@ -116,7 +108,7 @@ export default function Payment() {
                     className="w-6 h-6"
                     resizeMode="cover"
                   />
-                  <Text className="text-purple-primary font-medium">
+                  <Text className="text-white-primary font-medium">
                     Premium Member
                   </Text>
                 </View>
@@ -128,12 +120,12 @@ export default function Payment() {
                       )
                     }
                   >
-                    <Text className="text-gray-400 text-md">See benefits</Text>
+                    <Text className="text-black/50 text-md">See benefits</Text>
                   </TouchableOpacity>
                   <MaterialIcons
                     name="keyboard-arrow-right"
                     size={20}
-                    color="#9ca3af"
+                    color="rgba(0,0,0,0.5)"
                   />
                 </View>
               </View>
@@ -142,8 +134,8 @@ export default function Payment() {
         </View>
 
         {/*Recent transactions*/}
-        <View className="bg-blue-primary rounded-2xl p-4 mb-10">
-          <Text className="text-xl text-blue-500 font-semibold">
+        <View className="bg-gray-50 rounded-2xl p-4 mb-10">
+          <Text className="text-xl text-black font-semibold">
             Recent transactions
           </Text>
           <View className="mt-4">
@@ -156,7 +148,7 @@ export default function Payment() {
               ItemSeparatorComponent={() => <View className="h-4" />}
             />
           </View>
-          <Text className="text-center border border-purple-primary self-center p-2 rounded-full text-purple-primary font-medium mt-4">
+          <Text className="text-center border border-black self-center p-2 rounded-full text-black font-medium mt-4">
             View More
           </Text>
         </View>

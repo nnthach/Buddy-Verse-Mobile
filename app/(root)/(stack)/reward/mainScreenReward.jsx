@@ -20,14 +20,14 @@ import {
   getQuestListAPI,
   startQuestAPI,
 } from "@services/questService";
-import { AuthContext } from "../../../context/AuthContext";
+import { AuthContext } from "../../../../context/AuthContext";
 import YourTask from "@components/RewardScreenComponents/YourTask";
 import ActiveTask from "@components/RewardScreenComponents/ActiveTask";
 import TaskDetailModal from "@components/RewardScreenComponents/TaskDetailModal";
 import LoadingCustom from "@components/LoadingCustom";
 import useFetchList from "hooks/useFetchList";
 
-export default function RewardScreen() {
+export default function MainScreenReward() {
   const [points, setPoints] = useState(8868);
   const [openModalRewardHistory, setOpenModalRewardHistory] = useState(false);
   const { userId, userInfo } = useContext(AuthContext);
@@ -54,7 +54,6 @@ export default function RewardScreen() {
   if (isLoading) {
     return <LoadingCustom label="Loading..." />;
   }
-
   return (
     <>
       <SafeAreaView edges={["top"]} className="flex-1 bg-beige-primary">
