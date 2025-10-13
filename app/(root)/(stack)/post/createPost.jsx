@@ -21,6 +21,8 @@ import { AuthContext } from "@context/AuthContext";
 import { pickImage, removeImage } from "utils/imagePickerUtils";
 import uploadImage from "utils/uploadImage";
 import Entypo from "@expo/vector-icons/Entypo";
+import { createPostAPI } from "@services/postService";
+import Toast from "react-native-toast-message";
 
 function PostMediaItem({ item, index, onRemove, screenWidth }) {
   const mediaWidth = screenWidth - 42;
@@ -87,11 +89,11 @@ function PostMediaItem({ item, index, onRemove, screenWidth }) {
 
 export default function CreatePost() {
   const screenWidth = Dimensions.get("window").width;
-  const { userInfo } = useContext(AuthContext);
-
-  const [createForm, setCreateForm] = useState({
+  const { userInfo, userId } = useContext(AuthContext);
+  const [createPostForm, setCreatePostForm] = useState({
+    authorId: userId,
     content: "",
-    images: [],
+    attachmentUrls: [],
   });
 
   const [imageUpload, setImageUpload] = useState([]);
@@ -120,10 +122,23 @@ export default function CreatePost() {
         imageUrlList.push(url);
       }
 
+      console.log("img url list", imageUrlList);
+
       console.log("create post form", {
-        ...createForm,
-        images: imageUrlList,
+        ...createPostForm,
+        attachmentUrls: imageUrlList,
       });
+
+      const res = await createPostAPI({
+        ...createPostForm,
+        attachmentUrls: imageUrlList,
+      });
+      Toast.show({
+        type: "success",
+        text1: "Tạo bài thành công",
+        text2: "Cám ơn ban",
+      });
+      console.log("create post res", res);
     } catch (error) {
       console.log("create post error", error);
     }
@@ -146,7 +161,7 @@ export default function CreatePost() {
             <TouchableOpacity
               activeOpacity={0.8}
               onPress={handleSubmit}
-              className={`rounded-xl items-center justify-center ${createForm.content ? "bg-yellow-primary" : "bg-gray-200"}`}
+              className={`rounded-xl items-center justify-center ${createPostForm.content ? "bg-yellow-primary" : "bg-gray-200"}`}
             >
               <Text className={` py-1 px-2 text-lg text-white-primary`}>
                 Đăng
@@ -179,9 +194,9 @@ export default function CreatePost() {
               className="text-lg"
               placeholderTextColor="gray"
               placeholder="Nhập tại đây"
-              value={createForm.content}
+              value={createPostForm.content}
               onChangeText={(text) =>
-                setCreateForm((prev) => ({
+                setCreatePostForm((prev) => ({
                   ...prev,
                   content: text,
                 }))
@@ -215,7 +230,7 @@ export default function CreatePost() {
         </View>
       </TouchableWithoutFeedback>
 
-      {createForm.images < 10 && (
+      {createPostForm.attachmentUrls < 10 && (
         <TouchableOpacity
           activeOpacity={0.85}
           onPress={handleImagePick}

@@ -10,8 +10,28 @@ const uriToBlob = async (uri) => {
 };
 
 const uploadImage = async (asset) => {
+  console.log("asset", asset);
   const blob = await uriToBlob(asset.uri); // call convert
-  const storageRef = ref(storage, asset.fileName || `${Date.now()}.jpg`);
+  console.log("blob type", blob);
+
+  // Lấy extension
+  let extension = "jpg";
+  if (asset.fileName && asset.fileName.includes(".")) {
+    extension = asset.fileName.split(".").pop();
+  } else {
+    const uriParts = asset.uri.split(".");
+    if (uriParts.length > 1) {
+      extension = uriParts.pop().split("?")[0];
+    }
+  }
+  console.log("extension");
+  const type = asset.type?.startsWith("video") ? "videos" : "images";
+  console.log("type type", type);
+  const fileName = asset.fileName || `${Date.now()}.${extension}`;
+  console.log("file name", fileName);
+
+  // const storageRef = ref(storage, asset.fileName || `${Date.now()}.jpg`);
+  const storageRef = ref(storage, `${type}/${fileName}`);
   console.log("storageRef", storageRef);
   await uploadBytes(storageRef, blob);
   const downloadURL = await getDownloadURL(storageRef);
