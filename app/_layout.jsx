@@ -8,6 +8,8 @@ import { AuthProvider } from "../context/AuthContext";
 import { MatchProvider } from "../context/MatchContext";
 import Toast from "react-native-toast-message";
 import toastConfig from "@components/CustomToast";
+import Notification from "@components/Notification";
+import { NotificationProvider } from "@context/NotificationContext";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -36,8 +38,11 @@ export default function RootLayout() {
   return (
     <AuthProvider>
       <MatchProvider>
-        <RootLayoutNav />
-        <Toast config={toastConfig} />
+        <NotificationProvider>
+          <RootLayoutNav />
+          <Toast config={toastConfig} />
+          <Notification />
+        </NotificationProvider>
       </MatchProvider>
     </AuthProvider>
   );

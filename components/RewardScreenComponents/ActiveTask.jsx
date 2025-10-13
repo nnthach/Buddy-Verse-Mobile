@@ -14,7 +14,7 @@ function ActiveTask({ questList, setTaskDetailId, loading }) {
   const activeTaskItem = ({ item, index }) => {
     return (
       <View
-        className={`w-40 h-40 bg-white rounded-2xl p-3 ${
+        className={`w-40 h-40 bg-gray-100 rounded-2xl p-3 ${
           index == 0
             ? "mx-4 ml-6"
             : index == questList.length - 1
@@ -37,10 +37,15 @@ function ActiveTask({ questList, setTaskDetailId, loading }) {
         </View>
 
         <TouchableOpacity
-          onPress={() => setTaskDetailId(item?.questId)}
-          className="bg-purple-primary/70 mt-auto rounded-full px-4 py-1 flex-row items-center justify-center gap-2 "
+          onPress={() => {
+            console.log("item?.questId", item?.questId);
+            setTaskDetailId(item?.questId);
+          }}
+          className="bg-yellow-primary mt-auto rounded-full px-4 py-1 flex-row items-center justify-center gap-2 "
         >
-          <Text className="text-white text-sm font-semibold">Chi tiết</Text>
+          <Text className="text-white-primary text-sm font-semibold">
+            Chi tiết
+          </Text>
         </TouchableOpacity>
       </View>
     );
@@ -49,7 +54,7 @@ function ActiveTask({ questList, setTaskDetailId, loading }) {
     <View className="py-6">
       {/*Heading */}
       <View className="w-full flex-row items-center justify-between px-6">
-        <Text className="text-purple-primary text-2xl font-bold">Nhiệm vụ</Text>
+        <Text className="text-black text-2xl font-bold">Nhiệm vụ</Text>
         <TouchableOpacity
           onPress={() =>
             router.push({
@@ -59,11 +64,11 @@ function ActiveTask({ questList, setTaskDetailId, loading }) {
           }
           className="flex-row items-center"
         >
-          <Text className="text-purple-primary/50 text-lg">Xem thêm</Text>
+          <Text className="text-black/50 text-lg">Xem thêm</Text>
           <MaterialIcons
             name="keyboard-arrow-right"
             size={24}
-            color="rgba(87,41,141,0.5)"
+            color="rgba(0,0,0,0.5)"
           />
         </TouchableOpacity>
       </View>

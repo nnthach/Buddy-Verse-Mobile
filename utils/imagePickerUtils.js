@@ -2,7 +2,7 @@ import * as ImagePicker from "expo-image-picker";
 
 export const pickImage = async () => {
   let result = await ImagePicker.launchImageLibraryAsync({
-    mediaTypes: ["images"], // "videos"
+    mediaTypes: ["images", "videos"], // "videos"
     allowsEditing: true,
     aspect: [4, 3],
     quality: 1,
@@ -10,7 +10,10 @@ export const pickImage = async () => {
   });
 
   if (!result.canceled) {
-    return result.assets; // return array of images object
+    return result.assets.map((asset) => ({
+      uri: asset.uri,
+      type: asset.type?.startsWith("video") ? "video" : "image",
+    })); // return array of images object
   }
 };
 

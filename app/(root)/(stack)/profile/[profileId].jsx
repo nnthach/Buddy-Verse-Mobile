@@ -16,12 +16,13 @@ import { router, useLocalSearchParams } from "expo-router";
 import { getUserByIdAPI } from "@services/userService";
 import ModalReportAccount from "@components/ReportComponent/ModalReportAccount";
 import { createReportMessageAPI } from "@services/reportService";
-import useFetchList from "hooks/useFetchList";
 
 export default function ProfileByIdScreen() {
   const { profileId } = useLocalSearchParams();
 
   const [openReportAccount, setOpenReportAccount] = useState(false);
+
+  const { userInfo } = useContext(AuthContext);
 
   const [reportAccountForm, setReportAccountForm] = useState({
     reporterId: userInfo.accountId,
@@ -31,11 +32,17 @@ export default function ProfileByIdScreen() {
     reason: "",
   });
 
-  const fetchUserTwo = useCallback(
-    () => getUserByIdAPI(profileId),
-    [profileId]
-  );
-  const { data: profileInfo, loading } = useFetchList(fetchUserTwo);
+  const [profileInfo, setProfileInfo] = useState(null);
+
+  const handleGetUserById = async (id) => {
+    try {
+      const res = await getUserByIdAPI(profileId);
+      console.log("get profile detail", res.data);
+      setProfileInfo(res.data);
+    } catch (error) {
+      console.log("get profile by id err", error);
+    }
+  };
 
   const handleSubmitReport = useCallback(async () => {
     try {
@@ -53,9 +60,6 @@ export default function ProfileByIdScreen() {
       console.log("submit report err", error);
     }
   }, [reportAccountForm]);
-
-  const displayName =
-    (profileInfo?.lastname || "Yuna") + " " + (profileInfo?.firstname || "Lu");
 
   const [activeTab, setActiveTab] = useState("posts");
   const tags = [
@@ -107,6 +111,10 @@ export default function ProfileByIdScreen() {
     },
   ]);
 
+  useEffect(() => {
+    handleGetUserById();
+  }, []);
+
   return (
     <>
       <SafeAreaView edges={["top"]} className="flex-1 bg-beige-primary">
@@ -148,7 +156,7 @@ export default function ProfileByIdScreen() {
             {/* Name and stats */}
             <View className="mt-2 items-center">
               <Text className="text-[20px] font-semibold text-black text-center">
-                {displayName}
+                {profileInfo?.lastname} {profileInfo?.firstname}
               </Text>
               <View className="flex-row items-center justify-center gap-3 mt-2">
                 <Text className="text-gray-500 text-[12px]">San Francisco</Text>
@@ -239,7 +247,7 @@ export default function ProfileByIdScreen() {
 
                   {/* Post content */}
                   {post.content?.length > 0 && (
-                    <Text className="pb-3 text-[16px] text-purple-third">
+                    <Text className="pb-3 text-[16px] text-black">
                       {post.content}
                     </Text>
                   )}

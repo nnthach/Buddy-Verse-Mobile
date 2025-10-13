@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   ScrollView,
+  Image,
 } from "react-native";
 import React, { useContext } from "react";
 import useFetchList from "hooks/useFetchList";
@@ -59,7 +60,7 @@ export default function ChooseInterest() {
         </TouchableOpacity>
       </View>
 
-      <ScrollView
+      <View
         className="flex-1 px-6"
         contentContainerStyle={{ paddingBottom: 100 }}
       >
@@ -70,7 +71,15 @@ export default function ChooseInterest() {
           </Text>
 
           {/*Interest Grid */}
-          <View className="flex-row flex-wrap justify-start gap-3 mb-12">
+          <ScrollView
+            className="max-h-[70%] overflow-auto"
+            contentContainerStyle={{
+              flexDirection: "row",
+              flexWrap: "wrap",
+              justifyContent: "space-between",
+            }}
+            showsVerticalScrollIndicator={false}
+          >
             {loading ? (
               <ActivityIndicator size="large" color="#FBD157" />
             ) : (
@@ -79,20 +88,28 @@ export default function ChooseInterest() {
                   key={item.interestId}
                   activeOpacity={0.8}
                   onPress={() => handleAddInterestList(item.interestId)}
-                  className={`w-[30%] aspect-square rounded-xl items-center justify-center p-3 ${
+                  className={`w-[30%] aspect-square rounded-xl items-center justify-center p-3 mb-4 ${
                     matchForm.interestIds.includes(item.interestId)
                       ? "bg-yellow-primary"
                       : "bg-gray-five"
                   }`}
                 >
-                  <View className="w-8 h-8 bg-gray-primary rounded-full mb-2" />
+                  <View className="w-16 h-16 bg-white-primary rounded-full mb-2">
+                    <Image
+                      source={{
+                        uri: item.image,
+                      }}
+                      className="w-full h-full"
+                      resizeMode="cover"
+                    />
+                  </View>
                   <Text className="text-lg text-black text-center font-medium">
                     {item.name}
                   </Text>
                 </TouchableOpacity>
               ))
             )}
-          </View>
+          </ScrollView>
         </View>
 
         {/*Bottom Buttons */}
@@ -119,7 +136,7 @@ export default function ChooseInterest() {
             </Text>
           </TouchableOpacity>
         </View>
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 }

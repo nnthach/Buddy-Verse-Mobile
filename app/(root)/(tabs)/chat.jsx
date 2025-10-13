@@ -14,10 +14,9 @@ import { getAllRoomOfUserAPI } from "@services/messageService";
 import LoadingCustom from "@components/LoadingCustom";
 import useFetchList from "hooks/useFetchList";
 import Entypo from "@expo/vector-icons/Entypo";
+import MainHeader from "@components/MainHeader";
 
 export default function ChatScreen() {
-  const [searchAccount, setSearchAccount] = useState("");
-  const [filterState, setFilterState] = useState("all");
   const { userId } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -31,8 +30,6 @@ export default function ChatScreen() {
     const otherMember = item.roomMembers.find(
       (member) => member.accountId !== userId
     );
-
-    const timeText = otherMember?.time || item?.lastMessage?.time || "";
 
     return (
       <View className="py-3">
@@ -48,10 +45,10 @@ export default function ChatScreen() {
           className="flex-row items-start gap-3"
         >
           {/* avatar */}
-          <View className="w-10 h-10 bg-gray-500 rounded-full">
+          <View className="w-12 h-12 bg-gray-500 rounded-full">
             <Image
               source={{ uri: otherMember?.photos[0] }}
-              className="w-10 h-10 rounded-full"
+              className="w-full h-full rounded-full"
               resizeMode="cover"
             />
           </View>
@@ -61,15 +58,20 @@ export default function ChatScreen() {
             <View className="flex-row items-center justify-between">
               <Text
                 numberOfLines={1}
-                className="text-gray-700 font-semibold text-[14px]"
+                className="text-gray-700 font-semibold text-lg"
               >
                 {otherMember?.username}
               </Text>
               {/*Time */}
-              <Text className="text-[11px] text-gray-400 ml-2">23:11</Text>
+              <Text className="text-[11px] text-gray-400 ml-2">
+                {new Date(item?.lastMessageAt).toLocaleTimeString("vi-VN", {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}{" "}
+              </Text>
             </View>
-            <Text numberOfLines={1} className="text-[13px] text-gray-600 mt-1">
-              an com chua bro
+            <Text numberOfLines={1} className="text-base text-gray-600">
+              {item?.lastMessageContent}
             </Text>
           </View>
         </TouchableOpacity>
@@ -84,16 +86,7 @@ export default function ChatScreen() {
   return (
     <SafeAreaView edges={["top"]} className="flex-1 bg-white-primary">
       {/*Heading */}
-      <View className="h-16 flex-row justify-between items-center px-6">
-        {/*Logo */}
-        <View className="w-[150px] overflow-hidden">
-          <Image
-            source={require("@assets/images/logoTextBlack.png")}
-            style={{ width: "100%", height: 84, resizeMode: "contain" }}
-          />
-        </View>
-        <Entypo name="notification" size={22} color="black" />
-      </View>
+      <MainHeader />
 
       {loading ? (
         <ActivityIndicator />

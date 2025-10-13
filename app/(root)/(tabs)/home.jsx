@@ -3,7 +3,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useState } from "react";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import Entypo from "@expo/vector-icons/Entypo";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { router } from "expo-router";
+import MainHeader from "@components/MainHeader";
 
 export default function HomeScreen() {
   const [posts] = useState([
@@ -72,16 +74,7 @@ export default function HomeScreen() {
   return (
     <SafeAreaView edges={["top"]} className="flex-1 bg-white-primary">
       {/*Header */}
-      <View className="px-6 h-16 flex-row justify-between items-center overflow-hidden">
-        {/*Logo */}
-        <View className="w-[150px] overflow-hidden">
-          <Image
-            source={require("@assets/images/logoTextBlack.png")}
-            style={{ width: "100%", height: 84, resizeMode: "contain" }}
-          />
-        </View>
-        <Entypo name="notification" size={22} color="black" />
-      </View>
+      <MainHeader />
 
       <ScrollView
         className="flex-1 px-6 gap-6 space-y-6"
@@ -150,6 +143,15 @@ export default function HomeScreen() {
           </View>
         </View>
       </ScrollView>
+
+      {/*floating button */}
+      <TouchableOpacity
+        activeOpacity={0.85}
+        onPress={() => router.push("/(root)/(stack)/post/createPost")}
+        className="absolute right-4 bottom-24 bg-yellow-400 w-16 h-16 rounded-full items-center justify-center shadow-md"
+      >
+        <FontAwesome6 name="plus" size={20} color="black" />
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }

@@ -14,14 +14,14 @@ export default function GetStartThreeScreen() {
   const screenWidth = Dimensions.get("window").width;
 
   return (
-    <SafeAreaView className="flex-1 bg-beige-primary">
-      <View className="flex-1 bg-beige-primary ">
+    <SafeAreaView className="flex-1 bg-white-primary">
+      <View className="flex-1 bg-white-primary ">
         {/*Heading */}
         <View className="mt-8 px-8">
-          <Text className="text-[38px] text-purple-secondary font-bold">
+          <Text className="text-[38px] text-black font-bold">
             What we have here in
           </Text>
-          <Text className="text-xl text-purple-secondary/70">buddyverse.</Text>
+          <Text className="text-xl text-black/70">buddyverse.</Text>
         </View>
 
         {/*Content */}
@@ -29,7 +29,7 @@ export default function GetStartThreeScreen() {
           className="my-auto pb-8 items-center px-8"
           style={{ width: screenWidth }}
         >
-          <View className="bg-white rounded-xl w-full h-[450px] p-6">
+          <View className="bg-gray-100 rounded-2xl w-full h-[450px] p-6">
             {/*heading */}
             <View className="flex-row gap-4">
               <Image
@@ -37,7 +37,7 @@ export default function GetStartThreeScreen() {
                 className="w-12 h-12 rounded-full"
               />
               <View>
-                <Text className="text-yellow-primary font-semibold text-lg">
+                <Text className="text-black font-semibold text-lg">
                   Buddy Verse
                 </Text>
                 <Text className="text-sm text-gray-500 mt-[-2px]">
@@ -54,7 +54,7 @@ export default function GetStartThreeScreen() {
               />
             </View>
 
-            <Text className="text-center text-purple-third font-semibold">
+            <Text className="text-center text-black font-semibold">
               Let's explore more features!!!
             </Text>
           </View>

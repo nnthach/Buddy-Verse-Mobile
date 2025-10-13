@@ -198,7 +198,7 @@ export default function SignInScreen() {
             {/*Sign Up Link */}
             <View className="items-center">
               <Text className="text-gray-primary text-base">
-                Don't have an account?{" "}
+                Chưa có tài khoản?{" "}
                 <Text
                   className="text-black font-bold"
                   onPress={() => router.push("/sign-up")}

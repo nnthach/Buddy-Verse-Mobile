@@ -18,7 +18,7 @@ const InputField = ({
   setOpenSelect,
   isLoading,
   data,
-  setUserProfile,
+  setDataForm,
   userProfile,
   name,
   value,
@@ -30,15 +30,15 @@ const InputField = ({
     <View className="gap-1">
       <Text className="text-gray-primary text-xl">{label}</Text>
       {type == "text" && (
-        <View className="bg-white-secondary h-14 rounded-xl border border-gray-four">
+        <View className="bg-white-primary h-14 rounded-xl border border-gray-four">
           <TextInput
-            className="h-full w-full px-4 pb-1 text-xl text-black "
+            className="h-full w-full px-4 pb-2 text-xl text-black "
             placeholderTextColor="#718EBF50"
             keyboardType={keyboardType || "default"}
             secureTextEntry={secureTextEntry}
             value={value}
             onChangeText={(text) =>
-              setUserProfile((prev) => ({
+              setDataForm((prev) => ({
                 ...prev,
                 [name]: text,
               }))
@@ -56,7 +56,10 @@ const InputField = ({
             className="relative"
             disabled={isLoading}
           >
-            <View className="z-0 bg-white-secondary h-14 px-2 rounded-xl border border-gray-four flex-row w-full justify-between items-center">
+            <View
+              className="z-0 bg-white-primary
+             h-14 px-4 rounded-xl border border-gray-four flex-row w-full justify-between items-center"
+            >
               <Text>{value ? value : `Select ${label}`}</Text>
               <MaterialIcons
                 name="keyboard-arrow-down"
@@ -75,14 +78,14 @@ const InputField = ({
                   <TouchableOpacity
                     activeOpacity={0.9}
                     onPress={() => {
-                      setUserProfile((prev) => ({
+                      setDataForm((prev) => ({
                         ...prev,
                         [name]: item.label,
                       }));
                       setOpenSelect(false);
                     }}
                     key={index}
-                    className="bg-white p-4"
+                    className="bg-white-primary p-4"
                   >
                     <Text>{item.label}</Text>
                   </TouchableOpacity>
@@ -99,7 +102,7 @@ const InputField = ({
             activeOpacity={0.5}
             onPress={() => setDatePickerVisibility(true)}
           >
-            <View className="bg-white-secondary h-14 px-4 rounded-xl border border-gray-four flex-row w-full justify-between items-center">
+            <View className="bg-white-primary h-14 px-4 rounded-xl border border-gray-four flex-row w-full justify-between items-center">
               <Text>{value ? value : `Select ${label}`}</Text>
               <MaterialIcons name="calendar-today" size={22} color="#6C757D" />
             </View>
@@ -110,7 +113,7 @@ const InputField = ({
             mode="date"
             onConfirm={(date) => {
               setDatePickerVisibility(false);
-              setUserProfile((prev) => ({
+              setDataForm((prev) => ({
                 ...prev,
                 [name]: date.toISOString().split("T")[0], // yyyy-mm-dd
               }));

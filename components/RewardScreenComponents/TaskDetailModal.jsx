@@ -4,11 +4,14 @@ import {
   claimQuestAPI,
   completeQuestAPI,
   getAccountQuestByIdAPI,
+  startQuestAPI,
 } from "@services/questService";
 
-function TaskDetailModal({ taskId, setTaskDetailId }) {
+function TaskDetailModal({ taskId, setTaskDetailId, refreshList }) {
   const [questDetail, setQuestDetail] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  console.log("task detail id", taskId);
 
   const handleGetTaskDetail = async () => {
     setIsLoading(true);
@@ -42,6 +45,7 @@ function TaskDetailModal({ taskId, setTaskDetailId }) {
       const res = await claimQuestAPI(accountQuestId);
       console.log("claim quest res: ", res.data);
       handleGetTaskDetail();
+      refreshList();
     } catch (error) {
       console.log("claim quest error: ", error);
     }
@@ -53,6 +57,7 @@ function TaskDetailModal({ taskId, setTaskDetailId }) {
       const res = await completeQuestAPI(accountQuestId);
       console.log("complete quest res: ", res.data);
       handleGetTaskDetail();
+      refreshList();
     } catch (error) {
       console.log("complete quest error: ", error);
     }
@@ -79,13 +84,13 @@ function TaskDetailModal({ taskId, setTaskDetailId }) {
     >
       {/* Overlay */}
       <Pressable
-        className="flex-1 bg-beige-primary opacity-50"
+        className="flex-1 bg-white-primary opacity-50"
         onPress={handleClose} // click ra ngoài để tắt
       />
 
       {/* Content */}
       <View className="absolute inset-0 items-center justify-center">
-        <View className="bg-white p-4 rounded-2xl w-[90%]">
+        <View className="bg-white-primary border border-black p-4 rounded-2xl w-[90%]">
           <View className="absolute top-[-10px] bg-purple-primary p-4 py-1 self-center rounded-full">
             <Text className="text-beige-primary font-medium text-lg">
               Chi tiét nhiệm vụ
@@ -95,11 +100,11 @@ function TaskDetailModal({ taskId, setTaskDetailId }) {
           <View className="my-4 mt-6">
             <Text className="font-semibold">Tên: {questDetail?.title}</Text>
             <Text className="">
-              <Text className="font-semibold">Mô tả:</Text>{" "}
+              <Text className="font-semibold">Mô tả:</Text>
               {questDetail?.description}
             </Text>
             <Text className="">
-              <Text className="font-semibold">Trạng thái:</Text>{" "}
+              <Text className="font-semibold">Trạng thái:</Text>
               {questDetail?.status == "InProgress"
                 ? "Đang thực hiện"
                 : questDetail?.status == "Completed"

@@ -6,6 +6,7 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { AuthContext } from "../../../context/AuthContext";
 import Feather from "@expo/vector-icons/Feather";
 import Entypo from "@expo/vector-icons/Entypo";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { router } from "expo-router";
 
 export default function ProfileScreen() {
@@ -243,6 +244,14 @@ export default function ProfileScreen() {
           </View>
         </View>
       </ScrollView>
+      {/*floating btn */}
+      <TouchableOpacity
+        activeOpacity={0.85}
+        onPress={() => router.push("/(stack)/profile/editInterest")}
+        className="absolute right-4 bottom-24 bg-yellow-400 w-16 h-16 rounded-full items-center justify-center shadow-md"
+      >
+        <FontAwesome6 name="edit" size={20} color="black" />
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }

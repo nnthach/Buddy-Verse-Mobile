@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/applogo.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
@@ -40,6 +40,13 @@
           "cameraPermission": true,
           "microphonePermission": false
         }
+      ],
+      [
+        "expo-video",
+        {
+          "supportsBackgroundPlayback": true,
+          "supportsPictureInPicture": true
+        }
       ]
     ],
     "extra": {
@@ -47,7 +54,6 @@
       "eas": {
         "projectId": "b0c5902f-dff2-47b3-810f-c2fd7ee253df"
       }
-    },
-    "userInterfaceStyle": "automatic"
+    }
   }
 }

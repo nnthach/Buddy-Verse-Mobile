@@ -6,15 +6,17 @@ import {
   FlatList,
   ScrollView,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { fakeDataTransaction } from "data/fakeData";
+import { AuthContext } from "@context/AuthContext";
 
 export default function Payment() {
   const [transactionList, setTransactionList] = useState(fakeDataTransaction);
+  const { userInfo } = useContext(AuthContext);
 
   const transactionItem = ({ item }) => {
     return (
@@ -91,13 +93,13 @@ export default function Payment() {
               <View className="mt-6 justify-center items-center">
                 <Image
                   source={{
-                    uri: "https://m.media-amazon.com/images/S/pv-target-images/16627900db04b76fae3b64266ca161511422059cd24062fb5d900971003a0b70._SX1080_FMjpg_.jpg",
+                    uri: userInfo?.photos[0],
                   }}
-                  className="w-32 h-32 rounded-full"
+                  className="w-32 h-32 rounded-full bg-gray-100"
                   resizeMode="cover"
                 />
                 <Text className="text-xl text-white-primary font-semibold mt-3 mb-1">
-                  Nguyen Ngoc Thach
+                  {userInfo?.lastname} {userInfo?.firstname}
                 </Text>
               </View>
               {/*Membership */}

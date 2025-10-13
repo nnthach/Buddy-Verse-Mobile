@@ -14,6 +14,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Entypo from "@expo/vector-icons/Entypo";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { router } from "expo-router";
+import MainHeader from "@components/MainHeader";
 
 export default function BuddyScreen() {
   const { matchForm, setMatchForm } = useContext(MatchContext);
@@ -106,7 +107,7 @@ export default function BuddyScreen() {
       members: 4412,
       tag: "Crypto",
       image: {
-        uri: "https://images.unsplash.com/photo-1621416894569-0f39b4950fd8?w=800",
+        uri: "https://images.unsplash.com/photo-1518779578993-ec3579fee39f?w=800",
       },
     },
     {
@@ -123,16 +124,7 @@ export default function BuddyScreen() {
   return (
     <SafeAreaView edges={["top"]} className="flex-1 bg-white-primary">
       {/*Header */}
-      <View className="px-6 h-16 flex-row justify-between items-center">
-        {/*Logo */}
-        <View className="w-[150px] overflow-hidden">
-          <Image
-            source={require("@assets/images/logoTextBlack.png")}
-            style={{ width: "100%", height: 84, resizeMode: "contain" }}
-          />
-        </View>
-        <Entypo name="notification" size={22} color="black" />
-      </View>
+      <MainHeader />
 
       <ScrollView
         className="flex-1 mt-4"
@@ -196,7 +188,8 @@ export default function BuddyScreen() {
             <ScrollView
               horizontal
               showsHorizontalScrollIndicator={false}
-              className="-mx-1"
+              className="px-6"
+              contentContainerStyle={{ paddingRight: 24 }}
             >
               {forYouData.map((item, index) => (
                 <TouchableOpacity key={item.id} className="w-[180px] mr-4">
@@ -235,7 +228,8 @@ export default function BuddyScreen() {
             <ScrollView
               horizontal
               showsHorizontalScrollIndicator={false}
-              className="mx-6"
+              className="px-6"
+              contentContainerStyle={{ paddingRight: 24 }}
             >
               {[
                 "All",
@@ -262,7 +256,8 @@ export default function BuddyScreen() {
             <ScrollView
               horizontal
               showsHorizontalScrollIndicator={false}
-              className="-mx-1"
+              className="px-6"
+              contentContainerStyle={{ paddingRight: 24 }}
             >
               {communityByInterestData.map((item) => (
                 <TouchableOpacity key={item.id} className="w-[180px] mr-4">
@@ -290,6 +285,16 @@ export default function BuddyScreen() {
                 </TouchableOpacity>
               ))}
             </ScrollView>
+          </View>
+
+          {/*Go to reward */}
+          <View className="px-6">
+            <TouchableOpacity
+              onPress={() => router.push("/(stack)/reward/mainScreenReward")}
+              className="w-full h-[100px] bg-gray-100 rounded-md justify-center items-center p-4"
+            >
+              <Text className="text-gray-600">Reward</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>

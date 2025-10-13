@@ -13,13 +13,13 @@ function YourTask({ yourTaskList, setTaskDetailId, loading }) {
   const yourTaskItem = ({ item, index }) => {
     return (
       <View
-        className={`w-full bg-white rounded-2xl p-2 px-4 flex-row items-center justify-between`}
+        className={`w-full bg-gray-100 rounded-2xl p-2 px-4 flex-row items-center justify-between`}
       >
         <View className="gap-1">
           <Text
-            className={`font-medium text-white self-start rounded-xl px-2 pt-1 ${
+            className={`font-medium text-white-primary self-start rounded-xl px-2 pt-1 ${
               item?.status === "InProgress"
-                ? "bg-yellow-400"
+                ? "bg-yellow-primary"
                 : item?.status === "Completed"
                   ? "bg-blue-400"
                   : "bg-green-400"
@@ -48,9 +48,7 @@ function YourTask({ yourTaskList, setTaskDetailId, loading }) {
     <View className="pt-6">
       {/*Heading */}
       <View className="w-full flex-row items-center justify-between px-6">
-        <Text className="text-purple-primary text-2xl font-bold">
-          Nhiệm vụ đang làm
-        </Text>
+        <Text className="text-black text-2xl font-bold">Nhiệm vụ đang làm</Text>
         <TouchableOpacity
           onPress={() =>
             router.push({
@@ -60,11 +58,11 @@ function YourTask({ yourTaskList, setTaskDetailId, loading }) {
           }
           className="flex-row items-center"
         >
-          <Text className="text-purple-primary/50 text-lg">Xem thêm</Text>
+          <Text className="text-black/50 text-lg">Xem thêm</Text>
           <MaterialIcons
             name="keyboard-arrow-right"
             size={24}
-            color="rgba(87,41,141,0.5)"
+            color="rgba(0,0,0,0.5)"
           />
         </TouchableOpacity>
       </View>

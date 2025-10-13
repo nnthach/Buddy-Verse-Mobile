@@ -15,6 +15,7 @@ module.exports = function (api) {
             "@app": "./app",
             "@assets": "./assets",
             "@services": "./services",
+            "@context": "./context",
           },
         },
       ],

@@ -5,7 +5,8 @@
       "@components/*": ["components/*"],
       "@app/*": ["app/*"],
       "@assets/*": ["assets/*"],
-      "@services/*": ["services/*"]
+      "@services/*": ["services/*"],
+      "@context/*": ["context/*"]
     }
   },
   "include": ["app/**/*", "components/**/*"]

@@ -1,4 +1,3 @@
-
 import { memo, useContext, useState } from "react";
 import {
   Modal,
@@ -34,9 +33,9 @@ function ModalReportMessage({
     >
       <TouchableWithoutFeedback onPress={handleClose}>
         {/* Overlay */}
-        <View className="flex-1 justify-center items-center">
+        <View className="flex-1 justify-center items-center bg-white-primary/50">
           {/* Content */}
-          <View className="bg-white w-[300px] rounded-2xl p-6">
+          <View className="bg-white-primary w-[300px] p-6 border-[0.5px] border-black rounded-2xl">
             <Text className="text-lg font-medium text-center mb-4">
               Hãy ghi lý do
             </Text>
@@ -59,9 +58,9 @@ function ModalReportMessage({
 
             <TouchableOpacity
               onPress={handleSubmitReport}
-              className="bg-purple-primary p-2 w-full rounded-full mt-4"
+              className="bg-yellow-primary p-2 w-full rounded-full mt-4"
             >
-              <Text className="text-beige-primary text-center text-lg font-mediums">
+              <Text className="text-white-primary text-center text-lg font-medium">
                 Gửi
               </Text>
             </TouchableOpacity>

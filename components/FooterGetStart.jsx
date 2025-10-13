@@ -9,7 +9,7 @@ function FooterGetStart({ pageIndex, back = "", next, disabled = false }) {
         {[...Array(3)].map((_, index) => (
           <View
             key={index}
-            className={`w-[16px] h-[16px] rounded-full border border-purple-primary ${index == pageIndex && "bg-purple-primary"}`}
+            className={`w-[16px] h-[16px] rounded-full border border-yellow-primary ${index == pageIndex && "bg-yellow-primary"}`}
           />
         ))}
       </View>
@@ -20,7 +20,7 @@ function FooterGetStart({ pageIndex, back = "", next, disabled = false }) {
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={() => router.back(back)}
-            className="rounded-full w-14 h-14 bg-purple-primary/50 items-center justify-center"
+            className="rounded-full w-14 h-14 bg-yellow-primary/50 items-center justify-center"
           >
             <MaterialIcons
               name="keyboard-arrow-left"
@@ -34,7 +34,7 @@ function FooterGetStart({ pageIndex, back = "", next, disabled = false }) {
           disabled={disabled}
           activeOpacity={0.8}
           onPress={() => router.push(next)}
-          className={`rounded-full w-14 h-14 items-center justify-center ${disabled ? "bg-gray-500" : "bg-purple-primary"}`}
+          className={`rounded-full w-14 h-14 items-center justify-center ${disabled ? "bg-gray-500" : "bg-yellow-primary"}`}
         >
           <MaterialIcons
             name="keyboard-arrow-right"

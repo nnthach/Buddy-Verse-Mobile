@@ -13,37 +13,26 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { AuthContext } from "../../../../context/AuthContext";
-import {
-  getRoomDetailBetweenUserAPI,
-  sendMessageAPI,
-} from "@services/messageService";
 import LoadingCustom from "@components/LoadingCustom";
-import { getUserByIdAPI } from "@services/userService";
 import ReportCustomModal from "@components/ReportCustomModal";
 import ModalReportMessage from "@components/ReportComponent/ModalReportMessage";
 import { createReportMessageAPI } from "@services/reportService";
 import Feather from "@expo/vector-icons/Feather";
-import { getChatConnection } from "@services/signalRService";
+import useChatRoom from "../../../../hooks/useChatRoom";
 
 export default function ChatRoom() {
   const { roomId, accountId2 } = useLocalSearchParams();
-
-  const [userInfoTwo, setUserTwoInfo] = useState();
-  const [messages, setMessages] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
   const { userId } = useContext(AuthContext);
+  const scrollViewRef = useRef(null);
 
   const [isOpenReport, setIsOpenReport] = useState(false);
-
   const [activeMessageId, setActiveMessageId] = useState(null);
-
   const [messageReportId, setMessageReportId] = useState(null);
-
   const [reportMessageForm, setReportMessageForm] = useState({
     reporterId: userId,
     reportedAccountId: accountId2,
@@ -51,74 +40,6 @@ export default function ChatRoom() {
     reportedRoomId: roomId,
     reason: "",
   });
-
-  const scrollViewRef = useRef(null);
-
-  // signalr connect
-  const connectionRef = useRef(null);
-
-  const joinRoom = async () => {
-    try {
-      // 1. Connect
-      const conn = await getChatConnection();
-
-      if (conn.state === "Disconnected") {
-        await conn.start();
-      }
-
-      // lắng nghe tin nhắn từ server
-      conn.on("ReceiveMessage", (msg) => {
-        setMessages((prev) =>
-          prev.some((m) => m.messageId === msg.messageId)
-            ? prev
-            : [...prev, msg]
-        );
-      });
-
-      await conn.invoke("JoinRoom", userId, roomId);
-
-      connectionRef.current = conn;
-    } catch (error) {
-      console.log("join room err", error);
-    }
-  };
-
-  useEffect(() => {
-    joinRoom();
-
-    return () => {
-      if (connectionRef.current) connectionRef.current.stop();
-    };
-  }, [roomId, userId]);
-  // end signalr connect
-
-  const handleGetUserById = async (id) => {
-    try {
-      const res = await getUserByIdAPI(id);
-      setUserTwoInfo(res.data);
-    } catch (error) {
-      console.log("get user by id err", error);
-    }
-  };
-
-  const handleGetMessageRoom = async () => {
-    setIsLoading(true);
-    try {
-      const res = await getRoomDetailBetweenUserAPI(roomId, userId, accountId2);
-      setMessages(res.data);
-    } catch (error) {
-      console.log("get mess room between err", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  // get all message
-  useFocusEffect(
-    useCallback(() => {
-      handleGetUserById(accountId2);
-      handleGetMessageRoom();
-    }, [])
-  );
   const [sendMessageForm, setSendMessageForm] = useState({
     roomId,
     senderId: userId,
@@ -126,13 +47,16 @@ export default function ChatRoom() {
     replyTo: null,
   });
 
+  const { messages, userInfoTwo, isLoading, sendMessage } = useChatRoom(
+    roomId,
+    userId,
+    accountId2
+  );
+
   const handleSendMessage = async () => {
-    try {
-      const res = await sendMessageAPI(sendMessageForm);
-      setSendMessageForm({ ...sendMessageForm, content: "" });
-    } catch (error) {
-      console.log("send mess err", error);
-    }
+    if (!sendMessageForm.content.trim()) return;
+    await sendMessage(sendMessageForm);
+    setSendMessageForm({ ...sendMessageForm, content: "" });
   };
 
   const handleSubmitReport = useCallback(async () => {
@@ -142,7 +66,7 @@ export default function ChatRoom() {
         reportedMessageId: messageReportId,
       };
 
-      const res = await createReportMessageAPI(payload);
+      await createReportMessageAPI(payload);
 
       setReportMessageForm((prev) => ({
         ...prev,
@@ -159,13 +83,11 @@ export default function ChatRoom() {
   const handleLongPress = (messageId) => {
     setActiveMessageId(messageId);
 
-    // Auto close sau 5s
     setTimeout(() => {
       setActiveMessageId(null);
     }, 5000);
   };
 
-  // auto scroll down when have new message
   useEffect(() => {
     if (scrollViewRef.current) {
       scrollViewRef.current.scrollToEnd({ animated: true });

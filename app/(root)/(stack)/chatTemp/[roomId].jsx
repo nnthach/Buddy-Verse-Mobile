@@ -38,6 +38,10 @@ export default function ChatTempRoom() {
 
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [continueChatResData, setContinueChatResData] = useState({
+    roomId: "",
+    accountId2: "",
+  });
 
   const [countdown, setCountdown] = useState(120);
 
@@ -104,12 +108,7 @@ export default function ChatTempRoom() {
       //  RoomPermanent -------------------------------------------------------------------------------------
       conn.on("RoomPermanent", async (roomId) => {
         try {
-          console.log(
-            "Nhận RoomPermanent:",
-            roomId,
-            "ConnId:",
-            conn.connectionId
-          );
+          console.log("Nhận RoomPermanent:", roomId);
           if (roomId) {
             router.replace(`/(stack)/chat/${roomId}`);
           }
@@ -227,7 +226,8 @@ export default function ChatTempRoom() {
   const handleContinueChat = async () => {
     try {
       const res = await matchContinueAPI({ accountId: userId, roomId });
-      console.log("continue chat res", res);
+      console.log("continue chat res", res.data);
+      console.log("continue chat res info", res.data.info);
     } catch (err) {
       console.log("continue chat API error:", err);
     }
@@ -241,7 +241,7 @@ export default function ChatTempRoom() {
   }, [messages]);
 
   if (isLoading) {
-    return <LoadingCustom label="Loading messages..." />;
+    return <LoadingCustom label="Đang tải tin nhắn..." />;
   }
 
   return (

@@ -37,6 +37,7 @@ export default function EditProfileForm() {
     firstname: userInfo?.firstname,
     lastname: userInfo?.lastname,
     username: userInfo?.username,
+    bio: userInfo?.bio,
     gender: userInfo?.gender,
     dob: userInfo?.dob,
     interestIds: userInfo?.interests || [],
@@ -264,21 +265,28 @@ export default function EditProfileForm() {
                   placeholder={"Johnny"}
                   value={userProfile.firstname}
                   name="firstname"
-                  setUserProfile={setUserProfile}
+                  setDataForm={setUserProfile}
                 />
                 <InputField
                   label={"Tên cuối"}
                   placeholder={"Johnny"}
                   value={userProfile.lastname}
                   name="lastname"
-                  setUserProfile={setUserProfile}
+                  setDataForm={setUserProfile}
                 />
                 <InputField
                   label={"Tên đăng nhập"}
                   placeholder={"johnny_fhf"}
                   value={userProfile.username}
                   name="username"
-                  setUserProfile={setUserProfile}
+                  setDataForm={setUserProfile}
+                />
+                <InputField
+                  label={"Tiểu sử"}
+                  placeholder={"Nội dung"}
+                  value={userProfile.bio}
+                  name="bio"
+                  setDataForm={setUserProfile}
                 />
                 <InputField
                   label={"Giới tính"}
@@ -290,7 +298,7 @@ export default function EditProfileForm() {
                     setOpenSelect(openSelect === "gender" ? null : "gender")
                   }
                   data={genderData}
-                  setUserProfile={setUserProfile}
+                  setDataForm={setUserProfile}
                   name="gender"
                   value={userProfile.gender}
                 />
@@ -300,7 +308,7 @@ export default function EditProfileForm() {
                   type="date"
                   openSelect={openSelect === "dob"}
                   name="dob"
-                  setUserProfile={setUserProfile}
+                  setDataForm={setUserProfile}
                   setOpenSelect={() =>
                     setOpenSelect(openSelect === "dob" ? null : "dob")
                   }
