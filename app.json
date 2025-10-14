@@ -19,7 +19,8 @@
         "foregroundImage": "./assets/images/applogo.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.nnthach.buddyverse"
     },
     "splash": {
       "image": "./assets/images/splash.png",

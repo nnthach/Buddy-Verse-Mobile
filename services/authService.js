@@ -5,6 +5,11 @@ export const loginAPI = async (body) => {
   return res;
 };
 
+export const loginGoogleAPI = async (body) => {
+  const res = await axiosClient.post("/account/login-google", body);
+  return res;
+};
+
 export const registerAPI = async (data) => {
   const res = await axiosClient.post("/account/register", data);
 

@@ -17,15 +17,30 @@ import { router } from "expo-router";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { AuthContext } from "../../context/AuthContext";
-import { registerAPI } from "services/authService";
+import { registerAPI, loginGoogleAPI } from "services/authService";
 import { pickImage, removeImage } from "../../utils/imagePickerUtils";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import uploadImage from "../../utils/uploadImage";
 import Toast from "react-native-toast-message";
+import {
+  GoogleSignin,
+  isSuccessResponse,
+  statusCodes,
+} from "@react-native-google-signin/google-signin";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+GoogleSignin.configure({
+  webClientId: process.env.EXPO_PUBLIC_GG_WEB_CLIENT_ID,
+});
 
 export default function SignUpScreen() {
-  const { submitRegisterForm, setSubmitRegisterForm, initialRegisterForm } =
-    useContext(AuthContext);
+  const {
+    submitRegisterForm,
+    setSubmitRegisterForm,
+    initialRegisterForm,
+    handleGetUserById,
+    setUserId,
+  } = useContext(AuthContext);
 
   const [signupStep, setSignupStep] = useState(1);
 
@@ -104,6 +119,60 @@ export default function SignUpScreen() {
     }
   };
 
+  const handleGoogleSignIn = async () => {
+    try {
+      console.log("start gg signin");
+      await GoogleSignin.hasPlayServices();
+      const response = await GoogleSignin.signIn();
+      console.log("gg sign in res", response);
+      if (isSuccessResponse(response)) {
+        console.log("is success");
+        // CALL API LOGIN GG
+        const loginGGRes = await loginGoogleAPI({
+          idToken: response.data.idToken,
+        });
+        console.log("login gg api res", loginGGRes.data);
+        const { accessToken, refreshToken, accountId } = loginGGRes.data;
+
+        AsyncStorage.setItem("accessToken", accessToken);
+        AsyncStorage.setItem("refreshToken", refreshToken);
+        AsyncStorage.setItem("userId", accountId);
+
+        setUserId(accountId);
+
+        await handleGetUserById(accountId);
+
+        Toast.show({
+          type: "success",
+          text1: "Đăng ký thành công!",
+          text2: "Chào mừng bạn",
+        });
+
+        setTimeout(() => {
+          router.replace("/(root)/(tabs)/home");
+        }, 1500);
+        // END CALL API LOGIN GG
+      } else {
+        console.log("ggsignin cancel res.data", response.data);
+      }
+    } catch (error) {
+      if (isErrorWithCode(error)) {
+        switch (error.code) {
+          case statusCodes.IN_PROGRESS:
+            console.log("gg sign in err in process", error);
+            break;
+          case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
+            console.log("gg sign in err PLAY_SERVICES_NOT_AVAILABLE", error);
+            break;
+          default:
+            console.log("gg sign in err", error);
+        }
+      } else {
+        console.log("gg sign in err", error);
+      }
+    }
+  };
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <SafeAreaView className="flex-1 bg-white-primary">
@@ -134,6 +203,7 @@ export default function SignUpScreen() {
             {/*Google Sign Up Button */}
             <TouchableOpacity
               activeOpacity={0.8}
+              onPress={handleGoogleSignIn}
               className="h-14 bg-white-primary border border-gray-four rounded-xl items-center justify-center flex-row gap-3 mb-6"
             >
               <AntDesign name="google" size={20} color={"#4285F4"} />
