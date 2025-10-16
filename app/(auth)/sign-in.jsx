@@ -30,7 +30,8 @@ GoogleSignin.configure({
 });
 
 export default function SignInScreen() {
-  const { setUserId, handleGetUserById } = useContext(AuthContext);
+  const { setUserId, handleGetUserById, handleGetUserSubscriptionById } =
+    useContext(AuthContext);
 
   const [signinForm, setSignInForm] = useState({
     email: "",
@@ -96,6 +97,7 @@ export default function SignInScreen() {
       setUserId(accountId);
 
       await handleGetUserById(accountId);
+      await handleGetUserSubscriptionById(accountId);
 
       Toast.show({
         type: "success",
@@ -235,13 +237,9 @@ export default function SignInScreen() {
                 onChangeText={(text) => handleChange("password", text)}
                 focusedField={focusedField}
                 setFocusedField={setFocusedField}
+                error={errors.password}
                 secureTextEntry={true}
               />
-              {errors.password && (
-                <Text className="text-red-500 text-sm mt-1">
-                  {errors.password}
-                </Text>
-              )}
               <TouchableOpacity onPress={() => router.push("/forget-password")}>
                 <Text>Quên mật khẩu</Text>
               </TouchableOpacity>

@@ -11,16 +11,11 @@ import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MatchContext } from "../../../context/MatchContext";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import Entypo from "@expo/vector-icons/Entypo";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { router } from "expo-router";
 import MainHeader from "@components/MainHeader";
-import useFetchList from "hooks/useFetchList";
-import { getInterestListAPI } from "@services/interestService";
-import useQuery from "hooks/useQuery";
-import { useDebounce } from "hooks/useDebounce";
-import { getAllGroupAPI } from "@services/matchService";
 import CommunityByInterest from "@app/(root)/(stack)/buddyscreen/CommunityByInterest";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 export default function BuddyScreen() {
   const { matchForm, setMatchForm } = useContext(MatchContext);
@@ -99,7 +94,20 @@ export default function BuddyScreen() {
   return (
     <SafeAreaView edges={["top"]} className="flex-1 bg-white-primary">
       {/*Header */}
-      <MainHeader />
+      <View className="px-6 h-16 flex-row justify-between items-center overflow-hidden">
+        {/*Logo */}
+        <View className="w-[150px] overflow-hidden">
+          <Image
+            source={require("@assets/images/logoTextBlack.png")}
+            style={{ width: "100%", height: 84, resizeMode: "contain" }}
+          />
+        </View>
+        <TouchableOpacity
+          onPress={() => router.push("/(stack)/reward/mainScreenReward")}
+        >
+          <Ionicons name="calendar-outline" size={24} color="black" />
+        </TouchableOpacity>
+      </View>
 
       <ScrollView
         className="flex-1 mt-4"
@@ -139,7 +147,9 @@ export default function BuddyScreen() {
                 <Text className="text-gray-700 font-semibold">Chat</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => handleSelectConnect("Group")}
+                onPress={() =>
+                  router.push("/(stack)/match/chooseInterestGroup")
+                }
                 className={`${matchForm?.roomType == "group" ? "bg-gray-300" : "bg-gray-100"} h-[80px] flex-1 rounded-md items-center justify-center flex-row gap-2`}
               >
                 <FontAwesome name="users" size={16} color="black" />
@@ -196,16 +206,6 @@ export default function BuddyScreen() {
 
           {/*Community by interest */}
           <CommunityByInterest />
-
-          {/*Go to reward */}
-          <View className="px-6">
-            <TouchableOpacity
-              onPress={() => router.push("/(stack)/reward/mainScreenReward")}
-              className="w-full h-[100px] bg-gray-100 rounded-md justify-center items-center p-4"
-            >
-              <Text className="text-gray-600">Reward</Text>
-            </TouchableOpacity>
-          </View>
         </View>
       </ScrollView>
 

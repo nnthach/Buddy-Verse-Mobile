@@ -1,17 +1,37 @@
 import { View, Text, TouchableOpacity, ScrollView, Image } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Checkbox from "expo-checkbox";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
+import { getSubscriptionPlanDetailAPI } from "@services/userSubscriptionService";
 
 export default function Payment() {
-  const [selectMethod, setSelectMethod] = useState("");
   const [isChecked, setIsChecked] = useState(false);
+  const { planId } = useLocalSearchParams();
+  const [loading, setLoading] = useState(false);
+  const [subscriptionDetail, setSubscriptionDetail] = useState(null);
+  console.log("planId", planId);
+
+  useEffect(() => {
+    const handleFetchSubscriptionDetail = async () => {
+      try {
+        setLoading(true);
+        const res = await getSubscriptionPlanDetailAPI(planId);
+        console.log("fetch res detail", res.data);
+        setSubscriptionDetail(res?.data);
+      } catch (error) {
+        console.error("Fetch subscription failed:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    handleFetchSubscriptionDetail();
+  }, []);
 
   const methodPayment = [
-    { title: "ATM Card", icon: require("@assets/icons/atm_card.png") },
+    // { title: "ATM Card", icon: require("@assets/icons/atm_card.png") },
     { title: "QR Code", icon: require("@assets/icons/qr_method.png") },
   ];
 
@@ -22,6 +42,7 @@ export default function Payment() {
       </View>
     );
   };
+
   return (
     <SafeAreaView className="flex-1 bg-white-primary">
       {/*Heading */}
@@ -72,11 +93,13 @@ export default function Payment() {
           <Text className="text-black/70 text-lg">Payment Method</Text>
 
           <View className="flex-row items-start gap-4 mt-3">
-            <View className="bg-white w-14 h-14 rounded-xl"></View>
+            <View className="bg-white w-14 h-14 rounded-xl bg-yellow-200"></View>
             <View>
-              <Text className="font-semibold text-lg">Basic Membership</Text>
+              <Text className="font-semibold text-lg">
+                {subscriptionDetail?.name}
+              </Text>
               <Text className="text-yellow-primary font-semibold text-xl">
-                29,999 đ
+                {subscriptionDetail?.price?.toLocaleString()} đ
               </Text>
             </View>
             <View className="flex-1 items-end">

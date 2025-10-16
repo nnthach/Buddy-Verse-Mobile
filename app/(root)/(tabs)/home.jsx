@@ -119,7 +119,7 @@ export default function HomeScreen() {
         <View className="flex-row items-center gap-3 mb-3 px-6">
           <Image
             source={{ uri: post?.author?.photoUrls?.[0] }}
-            className="w-10 h-10 rounded-full"
+            className="w-10 h-10 rounded-full border"
             resizeMode="cover"
           />
           <View className="flex-1">
@@ -252,4 +252,3 @@ export default function HomeScreen() {
     </>
   );
 }
-

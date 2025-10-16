@@ -1,14 +1,42 @@
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { membershipPlans, membershipPlansData } from "data/fakeData";
 import { LinearGradient } from "expo-linear-gradient";
+import { getSubscriptionPlanAPI } from "@services/userSubscriptionService";
+import useQuery from "hooks/useQuery";
 
 export default function Membership() {
-  const [selectMembership, setSelectMembership] = useState("Basic");
+  const { query, updateQuery, resetQuery } = useQuery({
+    name: "Cơ bản",
+  });
+
+  const [subscription, setSubscription] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleSearchName = (data) => {
+    updateQuery({ name: data });
+  };
+
+  useEffect(() => {
+    const fetchSubscription = async () => {
+      try {
+        setLoading(true);
+        const res = await getSubscriptionPlanAPI(query);
+        console.log("fetch res", res.data);
+        setSubscription(res?.data[0]);
+      } catch (error) {
+        console.error("Fetch subscription failed:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSubscription();
+  }, [query]);
+
   return (
     <SafeAreaView className="flex-1 bg-white-primary">
       {/*Heading */}
@@ -27,33 +55,33 @@ export default function Membership() {
         {/*Filter */}
         <View className="flex-row items-center justify-between my-8">
           <TouchableOpacity
-            onPress={() => setSelectMembership("Basic")}
-            className={`h-12 w-[33.3%] items-center justify-center ${selectMembership == "Basic" ? "bg-black" : "bg-white-primary"} border border-black`}
+            onPress={() => handleSearchName("Cơ bản")}
+            className={`h-12 w-[33.3%] items-center justify-center ${query.name == "Cơ bản" ? "bg-black" : "bg-white-primary"} border border-black`}
           >
             <Text
-              className={` ${selectMembership == "Basic" ? "text-white-primary" : " text-black"} `}
+              className={` ${query.name == "Cơ bản" ? "text-white-primary" : " text-black"} `}
             >
-              Basic
+              Cơ bản
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => setSelectMembership("Monthly")}
-            className={`h-12 w-[33.3%] items-center justify-center ${selectMembership == "Monthly" ? "bg-black" : "bg-white"} border-y border-black`}
+            onPress={() => handleSearchName("Cao cấp")}
+            className={`h-12 w-[33.3%] items-center justify-center ${query.name == "Cao cấp" ? "bg-black" : "bg-white"} border-y border-black`}
           >
             <Text
-              className={` ${selectMembership == "Monthly" ? "text-white-primary" : " text-black"} `}
+              className={` ${query.name == "Cao cấp" ? "text-white-primary" : " text-black"} `}
             >
-              Monthly
+              Cao cấp
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => setSelectMembership("Yearly")}
-            className={`h-12 w-[33.3%] items-center justify-center ${selectMembership == "Yearly" ? "bg-black" : "bg-white"} border border-black`}
+            onPress={() => handleSearchName("Theo năm")}
+            className={`h-12 w-[33.3%] items-center justify-center ${query.name == "Theo năm" ? "bg-black" : "bg-white"} border border-black`}
           >
             <Text
-              className={` ${selectMembership == "Yearly" ? "text-white-primary" : " text-black"} `}
+              className={` ${query.name == "Theo năm" ? "text-white-primary" : " text-black"} `}
             >
-              Yearly
+              Theo năm
             </Text>
           </TouchableOpacity>
         </View>
@@ -62,7 +90,7 @@ export default function Membership() {
         <View className="flex-1 rounded-xl overflow-hidden border border-black">
           <LinearGradient
             colors={
-              selectMembership === "Basic"
+              query.name === "Cơ bản"
                 ? ["#ffffff", "#ffffff"]
                 : ["#4B164C30", "#4B164C"]
             }
@@ -71,92 +99,88 @@ export default function Membership() {
             <View className="p-8">
               {/*Header info */}
               <View
-                className={`gap-3 border-b ${selectMembership == "Basic" ? "border-gray-500" : "border-white-primary/70"} pb-8`}
+                className={`gap-3 border-b ${query.name == "Cơ bản" ? "border-gray-500" : "border-white-primary/70"} pb-8`}
               >
-                {membershipPlansData[selectMembership].info.tag && (
+                {query.name != "Cơ bản" && (
                   <Text className="bg-blue-300 p-1 rounded-lg self-start ">
-                    {membershipPlansData[selectMembership].info.tag}
+                    Phổ biến
                   </Text>
                 )}
                 <Text
-                  className={`${selectMembership == "Basic" ? "bg-black text-white-primary" : "bg-white-primary text-black"} self-start p-2 px-4 rounded-xl font-semibold`}
+                  className={`${query.name == "Cơ bản" ? "bg-black text-white-primary" : "bg-white-primary text-black"} self-start p-2 px-4 rounded-xl font-semibold`}
                 >
-                  {membershipPlansData[selectMembership].info.name}
+                  {subscription?.name}
                 </Text>
                 <Text
-                  className={`${selectMembership == "Basic" ? "text-black" : "text-white-primary"}`}
+                  className={`${query.name == "Cơ bản" ? "text-black" : "text-white-primary"}`}
                 >
-                  {membershipPlansData[selectMembership].info.description}
+                  {subscription?.description}
                 </Text>
               </View>
 
               {/*Price */}
               <View
-                className={`border-b ${selectMembership == "Basic" ? "border-gray-500" : "border-white-primary/70"} py-8 pt-6 `}
+                className={`border-b ${query.name == "Cơ bản" ? "border-gray-500" : "border-white-primary/70"} py-8 pt-6 `}
               >
                 <Text
-                  className={`text-[55px] font-semibold ${selectMembership == "Basic" ? "text-black" : "text-white-primary"}`}
+                  className={`text-[55px] font-semibold ${query.name == "Cơ bản" ? "text-black" : "text-white-primary"}`}
                 >
-                  {membershipPlansData[selectMembership].info.price} đ
+                  {subscription?.price?.toLocaleString()}đ
                 </Text>
                 <Text
-                  className={`font-semibold ${selectMembership == "Basic" ? "text-black" : "text-white-primary"}`}
+                  className={`font-semibold ${query.name == "Cơ bản" ? "text-black" : "text-white-primary"}`}
                 >
-                  {membershipPlansData[selectMembership].info.rule}
+                  For everyone
                 </Text>
               </View>
 
               {/*Benefits */}
               <View className="py-8 gap-4">
                 {/*Single benefit */}
-                {membershipPlansData[selectMembership].benefits.map(
-                  (item, index) => (
-                    <View key={index} className="flex-row items-center gap-3">
-                      <AntDesign
-                        name={
-                          item.available == false
-                            ? "closecircle"
-                            : "checkcircle"
-                        }
-                        size={20}
-                        color={
-                          item.available == false
-                            ? "red"
-                            : selectMembership == "Basic"
-                              ? "black"
-                              : "white"
-                        }
-                      />
-                      <Text
-                        className={`font-medium ${selectMembership == "Basic" ? "text-black" : "text-white-primary"}`}
-                      >
-                        {item.label}
-                      </Text>
-                      {item.tag && (
-                        <Text className="bg-green-200 text-green-500 text-xs p-1 rounded-lg">
-                          {item.tag}
-                        </Text>
-                      )}
-                    </View>
-                  )
-                )}
+                {subscription?.planFeatures?.map((item, index) => (
+                  <View key={index} className="flex-row items-center gap-3">
+                    <AntDesign
+                      name={
+                        item?.isEnabled == false ? "closecircle" : "checkcircle"
+                      }
+                      size={20}
+                      color={
+                        item?.isEnabled == false
+                          ? "red"
+                          : query.name == "Cơ bản"
+                            ? "black"
+                            : "white"
+                      }
+                    />
+                    <Text
+                      className={`font-medium ${query.name == "Cơ bản" ? "text-black" : "text-white-primary"}`}
+                    >
+                      {item?.feature?.name}
+                    </Text>
+                  </View>
+                ))}
               </View>
 
               {/*Button */}
               <View className="mt-2">
                 <TouchableOpacity
-                  onPress={() => router.push("/membershipPayment/payment")}
+                  onPress={() =>
+                    router.push({
+                      pathname: "/membershipPayment/payment",
+                      params: { planId: subscription?.planId },
+                    })
+                  }
                 >
                   <Text
-                    className={` ${selectMembership == "Basic" ? "bg-black text-white-primary" : "bg-yellow-300/70 text-white-primary"} text-center p-2 font-medium rounded-lg`}
+                    className={` ${query.name == "Cơ bản" ? "bg-black text-white-primary" : "bg-yellow-300/70 text-white-primary"} text-center p-2 font-medium rounded-lg`}
                   >
-                    Start free 14-days trial
+                    Đăng ký ngay
                   </Text>
                 </TouchableOpacity>
                 <Text
-                  className={`text-center mt-2 text-sm ${selectMembership == "Basic" ? " text-black" : "text-white-primary"}`}
+                  className={`text-center mt-2 text-sm ${query.name == "Cơ bản" ? " text-black" : "text-white-primary"}`}
                 >
-                  No credit card required
+                  Không cần thẻ
                 </Text>
               </View>
             </View>

@@ -29,8 +29,6 @@ export default function ChatRoom() {
   const { roomId, accountId2 } = useLocalSearchParams();
   const { userId } = useContext(AuthContext);
   const scrollViewRef = useRef(null);
-  console.log("receive room id", roomId);
-  console.log("receive accountId2 id", accountId2);
 
   const [isOpenReport, setIsOpenReport] = useState(false);
   const [activeMessageId, setActiveMessageId] = useState(null);
@@ -110,11 +108,7 @@ export default function ChatRoom() {
           <View className="flex-row items-center gap-4 w-[80%]">
             <TouchableOpacity
               onPress={() => {
-                if (router.canGoBack()) {
-                  router.back();
-                } else {
-                  router.replace("/(tabs)/chat");
-                }
+                router.replace("/(tabs)/chat");
               }}
             >
               <MaterialIcons

@@ -112,9 +112,6 @@ export default function SearchScreen() {
         contentContainerStyle={{ paddingBottom: 70 }}
         showsVerticalScrollIndicator={true}
       >
-
-          
-
         {/* Pets you follow */}
         <View className="px-6 mb-6 mt-4">
           <Text className="text-lg font-bold text-black mb-3">
@@ -130,10 +127,10 @@ export default function SearchScreen() {
                 key={index}
                 className="w-44 h-32 bg-yellow-100 rounded-lg mr-3 overflow-hidden"
               >
-                {/* <Image
-                  source={require("@assets/images/searchListImage.png")}
+                <Image
+                  source={{ uri: group?.image }}
                   style={{ width: "100%", height: "100%" }}
-                /> */}
+                />
               </View>
             ))}
           </ScrollView>

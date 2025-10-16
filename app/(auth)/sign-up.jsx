@@ -68,6 +68,104 @@ export default function SignUpScreen() {
     setImageUpload((prev) => removeImage(prev, index));
   };
 
+  const handleValidationStep1 = () => {
+    let errors = {};
+    let isError = false;
+
+    // Validate firstname
+    if (!submitRegisterForm.firstname.trim()) {
+      errors.firstname = "Vui lòng nhập tên đầu!";
+      isError = true;
+    }
+
+    // Validate lastname
+    if (!submitRegisterForm.lastname.trim()) {
+      errors.lastname = "Vui lòng nhập tên cuối!";
+      isError = true;
+    }
+
+    // Validate gender
+    if (!submitRegisterForm.gender) {
+      errors.gender = "Vui lòng chọn giới tính!";
+      isError = true;
+    }
+
+    // Validate dob
+    if (!submitRegisterForm.dob) {
+      errors.dob = "Vui lòng chọn ngày sinh!";
+      isError = true;
+    }
+
+    setErrors(errors);
+    return isError;
+  };
+
+  const handleValidationStep2 = () => {
+    let errors = {};
+    let isError = false;
+
+    // Validate username
+    if (!submitRegisterForm.username.trim()) {
+      errors.username = "Vui lòng nhập tên đăng nhập!";
+      isError = true;
+    } else if (submitRegisterForm.username.length < 3) {
+      errors.username = "Tên đăng nhập phải có ít nhất 3 ký tự.";
+      isError = true;
+    }
+
+    // Validate email
+    if (!submitRegisterForm.email.trim()) {
+      errors.email = "Vui lòng nhập email!";
+      isError = true;
+    } else {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(submitRegisterForm.email)) {
+        errors.email = "Email không hợp lệ!";
+        isError = true;
+      }
+    }
+
+    // Validate password
+    if (!submitRegisterForm.password) {
+      errors.password = "Vui lòng nhập mật khẩu!";
+      isError = true;
+    } else if (submitRegisterForm.password.length < 6) {
+      errors.password = "Mật khẩu phải có ít nhất 6 ký tự.";
+      isError = true;
+    }
+
+    // Validate confirm password
+    if (!submitRegisterForm.confirmPassword) {
+      errors.confirmPassword = "Vui lòng nhập lại mật khẩu!";
+      isError = true;
+    } else if (
+      submitRegisterForm.confirmPassword !== submitRegisterForm.password
+    ) {
+      errors.confirmPassword = "Mật khẩu không khớp!";
+      isError = true;
+    }
+
+    setErrors(errors);
+    return isError;
+  };
+
+  const handleValidationStep3 = () => {
+    let errors = {};
+    let isError = false;
+
+    if (imageUpload.length < 1) {
+      errors.avatar = "Vui lòng tải lên ít nhất 1 ảnh đại diện!";
+      isError = true;
+    }
+
+    Toast.show({
+      type: "error",
+      text1: "Hãy tải 1 ảnh lên",
+      text2: "Lỗi",
+    });
+    return isError;
+  };
+
   const handleChange = (name, value) => {
     setSubmitRegisterForm((prev) => ({
       ...prev,
@@ -77,11 +175,13 @@ export default function SignUpScreen() {
 
   const handleSignUp = async () => {
     if (signupStep === 1) {
+      if (handleValidationStep1()) return;
       setSignupStep(2);
       return;
     }
 
     if (signupStep === 2) {
+      if (handleValidationStep2()) return;
       setSignupStep(3);
       return;
     }
@@ -99,7 +199,6 @@ export default function SignUpScreen() {
         photoUrls: imageUrlList,
       });
 
-      // call api
       const res = await registerAPI({
         ...submitRegisterForm,
         photoUrls: imageUrlList,
@@ -306,6 +405,11 @@ export default function SignUpScreen() {
                         </ScrollView>
                       </View>
                     )}
+                    {errors.gender && (
+                      <Text className="text-red-500 text-sm mt-1">
+                        {errors.gender}
+                      </Text>
+                    )}
                   </View>
 
                   {/*Select DOB */}
@@ -344,6 +448,11 @@ export default function SignUpScreen() {
                       }}
                       onCancel={() => setDatePickerVisibility(false)}
                     />
+                    {errors.dob && (
+                      <Text className="text-red-500 text-sm mt-1">
+                        {errors.dob}
+                      </Text>
+                    )}
                   </View>
                 </>
               ) : signupStep == 2 ? (

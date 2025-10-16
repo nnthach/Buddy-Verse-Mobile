@@ -60,6 +60,7 @@ export const getAllGroupAPI = async (params) => {
   }
 
   const res = await axiosClient.get(url);
+  // const res = await axiosClient.get(`/match/get-all-groups`, { params });
   return res;
 };
 

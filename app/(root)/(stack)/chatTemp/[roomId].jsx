@@ -273,11 +273,11 @@ export default function ChatTempRoom() {
 
       <View className="flex-row p-3 items-center justify-center gap-2">
         <Image
-          source={require("@assets/images/applogo.png")}
+          source={require("@assets/images/andanhavatar/andanh_daulau.jpg")}
           className="w-10 h-10 rounded-full bg-gray-200"
         />
         <Image
-          source={require("@assets/images/applogo.png")}
+          source={require("@assets/images/andanhavatar/andanh_ocsen.jpg")}
           className="w-10 h-10 rounded-full bg-gray-200"
         />
       </View>

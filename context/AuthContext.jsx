@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createContext, useEffect, useState } from "react";
 import { getUserByIdAPI } from "../services/userService";
+import { getUserSubscriptionByAccountAPI } from "../services/userSubscriptionService";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext({
@@ -10,6 +11,7 @@ export const AuthContext = createContext({
 export const AuthProvider = ({ children }) => {
   const [userId, setUserId] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
+  const [userSubscriptionInfo, setUserSubscriptionInfo] = useState(null);
 
   const [modalType, setModalType] = useState("");
 
@@ -47,10 +49,21 @@ export const AuthProvider = ({ children }) => {
   const handleGetUserById = async (id) => {
     try {
       const res = await getUserByIdAPI(id);
-      console.log('get user detail', res.data)
+      console.log("get user detail", res.data);
       setUserInfo(res.data);
     } catch (error) {
       console.log("get user by id err", error);
+    }
+  };
+
+  const handleGetUserSubscriptionById = async (id) => {
+    console.log("start get user subscription");
+    try {
+      const res = await getUserSubscriptionByAccountAPI(id);
+      console.log("get user subscription", res.data);
+      setUserSubscriptionInfo(res.data);
+    } catch (error) {
+      console.log("get user subscription err", error);
     }
   };
 
@@ -68,6 +81,8 @@ export const AuthProvider = ({ children }) => {
         setSubmitRegisterForm,
         initialRegisterForm,
         handleGetUserById,
+        handleGetUserSubscriptionById,
+        userSubscriptionInfo,
       }}
     >
       {children}

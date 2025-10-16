@@ -12,8 +12,7 @@ function CommunityByInterest() {
     name: "",
     interestIds: [],
   });
-  const { setGroupRoomId } =
-    useContext(ChatGroupContext);
+  const { setGroupRoomId } = useContext(ChatGroupContext);
 
   const debouncedSearchInterest = useDebounce(query.interestIds, 500);
   const debouncedQuery = useMemo(
@@ -98,7 +97,7 @@ function CommunityByInterest() {
             className="w-[180px] mr-4 overflow-hidden"
           >
             <Image
-              source={item?.image}
+              source={{ uri: item?.image }}
               className="w-full h-[110px] rounded-xl bg-gray-200"
               resizeMode="cover"
             />
