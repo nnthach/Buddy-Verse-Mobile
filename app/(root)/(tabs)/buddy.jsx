@@ -7,7 +7,7 @@ import {
   FlatList,
   Dimensions,
 } from "react-native";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MatchContext } from "../../../context/MatchContext";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
@@ -15,6 +15,12 @@ import Entypo from "@expo/vector-icons/Entypo";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { router } from "expo-router";
 import MainHeader from "@components/MainHeader";
+import useFetchList from "hooks/useFetchList";
+import { getInterestListAPI } from "@services/interestService";
+import useQuery from "hooks/useQuery";
+import { useDebounce } from "hooks/useDebounce";
+import { getAllGroupAPI } from "@services/matchService";
+import CommunityByInterest from "@app/(root)/(stack)/buddyscreen/CommunityByInterest";
 
 export default function BuddyScreen() {
   const { matchForm, setMatchForm } = useContext(MatchContext);
@@ -86,37 +92,6 @@ export default function BuddyScreen() {
       tag: "Movies",
       image: {
         uri: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800",
-      },
-    },
-  ];
-
-  //community by interest data
-  const communityByInterestData = [
-    {
-      id: 11,
-      title: "Tech World",
-      members: 22114,
-      tag: "Tech",
-      image: {
-        uri: "https://images.unsplash.com/photo-1518779578993-ec3579fee39f?w=800",
-      },
-    },
-    {
-      id: 12,
-      title: "Crypto Insiders",
-      members: 4412,
-      tag: "Crypto",
-      image: {
-        uri: "https://images.unsplash.com/photo-1518779578993-ec3579fee39f?w=800",
-      },
-    },
-    {
-      id: 13,
-      title: "Web Dev News",
-      members: 9875,
-      tag: "Web",
-      image: {
-        uri: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800",
       },
     },
   ];
@@ -220,72 +195,7 @@ export default function BuddyScreen() {
           </View>
 
           {/*Community by interest */}
-          <View className="gap-3">
-            <Text className="text-base font-semibold text-black px-6">
-              Communities by Interests
-            </Text>
-            {/* filter */}
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              className="px-6"
-              contentContainerStyle={{ paddingRight: 24 }}
-            >
-              {[
-                "All",
-                "Movies",
-                "Art",
-                "Sports",
-                "Crypto",
-                "Finance",
-                "Health",
-              ].map((label, index) => (
-                <View
-                  key={index}
-                  className={`mr-2 px-3 py-2 rounded-full ${index === 0 ? "bg-black" : "bg-gray-100"}`}
-                >
-                  <Text
-                    className={`text-[12px] ${index === 0 ? "text-white-primary" : "text-gray-700"}`}
-                  >
-                    {label}
-                  </Text>
-                </View>
-              ))}
-            </ScrollView>
-
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              className="px-6"
-              contentContainerStyle={{ paddingRight: 24 }}
-            >
-              {communityByInterestData.map((item) => (
-                <TouchableOpacity key={item.id} className="w-[180px] mr-4">
-                  <Image
-                    source={item.image}
-                    className="w-full h-[110px] rounded-xl"
-                    resizeMode="cover"
-                  />
-                  <View className="mt-2">
-                    <Text
-                      numberOfLines={1}
-                      className="text-[13px] font-semibold text-black-primary"
-                    >
-                      {item.title}
-                    </Text>
-                    <Text className="text-[12px] text-gray-500">
-                      {item.members.toLocaleString()} Members
-                    </Text>
-                    <View className="mt-1 self-start bg-gray-100 px-2 py-1 rounded-full">
-                      <Text className="text-[11px] text-gray-600">
-                        {item.tag}
-                      </Text>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
-          </View>
+          <CommunityByInterest />
 
           {/*Go to reward */}
           <View className="px-6">

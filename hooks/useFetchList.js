@@ -8,6 +8,7 @@ const useFetchList = (api, params = null) => {
   const fetchAPI = useCallback(async () => {
     try {
       setLoading(true);
+      console.log("param in use fetch list", params);
       const res = params ? await api(params) : await api();
       console.log("res fetch list", res.data);
       setData(res.data);

@@ -26,6 +26,7 @@ export default function Layout() {
           overflow: "hidden",
           position: "absolute",
           borderTopWidth: 0,
+          height: 76,
         },
         tabBarItemStyle: {
           height: 64,

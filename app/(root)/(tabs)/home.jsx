@@ -5,19 +5,20 @@ import {
   TouchableOpacity,
   FlatList,
   Dimensions,
+  ScrollView,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { router, useFocusEffect } from "expo-router";
 import MainHeader from "@components/MainHeader";
-import useFetchList from "hooks/useFetchList";
 import { getAllPostAPI, likePostAPI } from "@services/postService";
 import { AuthContext } from "@context/AuthContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CommentModal from "@components/CommentModal";
+import { VideoView, useVideoPlayer } from "expo-video";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 export default function HomeScreen() {
   const { userId } = useContext(AuthContext);
@@ -25,6 +26,44 @@ export default function HomeScreen() {
   const [postList, setPostList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [postId, setPostId] = useState(null);
+
+  function PostAttachmentItem({ item }) {
+    const screenWidth = Dimensions.get("window").width;
+
+    const player = useVideoPlayer(item?.fileUrl, (player) => {
+      player.loop = true;
+      player.play();
+    });
+
+    const isVideo = item?.fileType === "VIDEO";
+
+    return (
+      <View
+        style={{
+          width: screenWidth - 54,
+          height: screenWidth - 54,
+          backgroundColor: "black",
+          overflow: "hidden",
+          borderRadius: 12,
+          marginRight: 10,
+        }}
+      >
+        {isVideo ? (
+          <VideoView
+            player={player}
+            style={{ width: "100%", height: "100%" }}
+            resizeMode="cover"
+          />
+        ) : (
+          <Image
+            source={{ uri: item.fileUrl }}
+            style={{ width: "100%", height: "100%" }}
+            resizeMode="cover"
+          />
+        )}
+      </View>
+    );
+  }
 
   const handleFetchAllPost = async () => {
     setLoading(true);
@@ -74,12 +113,10 @@ export default function HomeScreen() {
   };
 
   const renderPostItem = ({ item: post }) => {
-    const screenWidth = Dimensions.get("window").width;
-
     return (
-      <View key={post?.postId} className="bg-white px-6 py-3 mb-4">
+      <View key={post?.postId} className="bg-white py-3 mb-3">
         {/* Post header */}
-        <View className="flex-row items-center gap-3 mb-3">
+        <View className="flex-row items-center gap-3 mb-3 px-6">
           <Image
             source={{ uri: post?.author?.photoUrls?.[0] }}
             className="w-10 h-10 rounded-full"
@@ -96,43 +133,30 @@ export default function HomeScreen() {
           <MaterialIcons name="more-horiz" size={22} color="#6C757D" />
         </View>
 
-        {/* Post content */}
-        {post?.content?.length > 0 && (
-          <Text className="pb-3 text-[16px] text-black">{post.content}</Text>
-        )}
-
         {/* 🖼️ Attachments (carousel) */}
         {post?.attachments?.length > 0 && (
-          <FlatList
-            data={post.attachments}
+          <ScrollView
             keyExtractor={(_, index) => index.toString()}
             horizontal
             showsHorizontalScrollIndicator={false}
-            pagingEnabled
-            snapToAlignment="center"
-            decelerationRate="fast"
-            renderItem={({ item }) => (
-              <View
-                style={{
-                  width: screenWidth - 42,
-                  height: screenWidth - 48,
-                  backgroundColor: "lightgray",
-                  overflow: "hidden",
-                  borderRadius: 12,
-                }}
-              >
-                <Image
-                  source={{ uri: item.fileUrl }}
-                  className="w-full h-full"
-                  resizeMode="cover"
-                />
-              </View>
-            )}
-          />
+            className="px-6"
+            contentContainerStyle={{ paddingRight: 24 }}
+          >
+            {post?.attachments?.map((item, index) => (
+              <PostAttachmentItem key={index} item={item} />
+            ))}
+          </ScrollView>
+        )}
+
+        {/* Post content */}
+        {post?.content?.length > 0 && (
+          <Text className="my-1 mt-2 text-[16px] text-black px-6">
+            {post.content}
+          </Text>
         )}
 
         {/* Actions */}
-        <View className="flex-row items-center gap-4 mt-3 mb-2">
+        <View className="flex-row items-center gap-4 mt-3 mb-2 px-6">
           <TouchableOpacity
             className="flex-row items-center gap-2"
             onPress={() => handleLike(post)}
@@ -167,10 +191,12 @@ export default function HomeScreen() {
         </View>
 
         {/* Timestamp */}
-        <Text className="pb-3 text-gray-500 text-xs">{post?.createdAt}</Text>
-
-        {/* Separator */}
-        <View className="h-[1px] bg-black/10" />
+        <Text className="pb-3 text-gray-500 text-xs px-6">
+          {new Date(post?.createdAt).toLocaleTimeString("en-US", {
+            hour: "numeric",
+            minute: "2-digit",
+          })}
+        </Text>
       </View>
     );
   };
@@ -226,3 +252,4 @@ export default function HomeScreen() {
     </>
   );
 }
+

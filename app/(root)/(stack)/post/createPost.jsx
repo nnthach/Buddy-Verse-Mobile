@@ -47,7 +47,7 @@ function PostMediaItem({ item, index, onRemove, screenWidth }) {
       style={{
         width: mediaWidth,
         height: mediaWidth,
-        backgroundColor: "lightgray",
+        backgroundColor: "black",
         justifyContent: "center",
         alignItems: "center",
         borderRadius: 12,
@@ -122,23 +122,21 @@ export default function CreatePost() {
         imageUrlList.push(url);
       }
 
-      console.log("img url list", imageUrlList);
-
-      console.log("create post form", {
-        ...createPostForm,
-        attachmentUrls: imageUrlList,
-      });
-
       const res = await createPostAPI({
         ...createPostForm,
         attachmentUrls: imageUrlList,
+      });
+      setCreatePostForm({
+        authorId: userId,
+        content: "",
+        attachmentUrls: [],
       });
       Toast.show({
         type: "success",
         text1: "Tạo bài thành công",
         text2: "Cám ơn ban",
       });
-      console.log("create post res", res);
+      router.back();
     } catch (error) {
       console.log("create post error", error);
     }

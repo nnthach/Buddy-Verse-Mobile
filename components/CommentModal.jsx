@@ -17,8 +17,121 @@ import { AuthContext } from "@context/AuthContext";
 import { memo, useContext, useEffect, useState } from "react";
 import { commentPostAPI, getPostCommentAPI } from "@services/postService";
 
+// ReplyList.jsx
+const ReplyList = ({ replies, onReply, userId }) => {
+  return (
+    <>
+      <View className="mt-3">
+        {replies.map((reply) => (
+          <View key={reply.commentId} style={{ marginBottom: 10 }}>
+            <View className="flex-row items-center justify-between">
+              <View className="flex-row items-center gap-2">
+                <Image
+                  source={{ uri: reply?.account?.photoUrls?.[0] }}
+                  className="w-8 h-8 rounded-full bg-gray-300"
+                />
+                <Text className="font-semibold text-base text-black">
+                  {reply?.account?.username || "unknown"}
+                </Text>
+                <Text className="text-gray-500 text-xs">{reply?.timeAgo}</Text>
+              </View>
+
+              {reply?.account?.accountId === userId && (
+                <Ionicons name="ellipsis-vertical" size={16} color="black" />
+              )}
+            </View>
+
+            <Text className="text-black mt-1 w-[90%]">
+              {reply?.content || "content"}
+            </Text>
+
+            <TouchableOpacity onPress={() => onReply(reply)}>
+              <Text className="mt-2 text-gray-500 text-sm">Trả lời</Text>
+            </TouchableOpacity>
+
+            {/* Nếu reply này cũng có reply con — vẫn nằm trong cùng khối */}
+            {reply.replies && reply.replies.length > 0 && (
+              <ReplyList
+                replies={reply.replies}
+                onReply={onReply}
+                userId={userId}
+              />
+            )}
+          </View>
+        ))}
+      </View>
+    </>
+  );
+};
+
+// CommentItem.jsx
+const CommentItem = ({ comment, onReply, userId }) => {
+  const [openReply, setOpenReply] = useState(false);
+
+  return (
+    <View style={{ marginVertical: 8 }}>
+      {/* Header */}
+      <View className="flex-row items-center justify-between">
+        <View className="flex-row items-center gap-2">
+          <Image
+            source={{ uri: comment?.account?.photoUrls?.[0] }}
+            className="w-9 h-9 rounded-full bg-gray-300"
+          />
+          <Text className="font-semibold text-lg text-black">
+            {comment?.account?.username || "unknown"}
+          </Text>
+          <Text className="text-gray-500 text-xs">{comment?.timeAgo}</Text>
+        </View>
+
+        {comment?.account?.accountId === userId && (
+          <Ionicons name="ellipsis-vertical" size={18} color="black" />
+        )}
+      </View>
+
+      {/* Nội dung */}
+      <Text className="text-black mt-1 w-[90%]">
+        {comment?.content || "content"}
+      </Text>
+
+      {/* Nút trả lời */}
+      <TouchableOpacity onPress={() => onReply(comment)}>
+        <Text className="mt-2 text-gray-500 text-sm">Trả lời</Text>
+      </TouchableOpacity>
+
+      {/* Nếu có replies */}
+      {comment.replies && comment.replies.length > 0 && (
+        <>
+          <TouchableOpacity
+            onPress={() => setOpenReply(true)}
+            className={`${!openReply ? "" : "hidden"} mt-2 ml-1 flex-row items-center gap-2`}
+          >
+            <View className="h-[1px] w-[20px] bg-gray-300" />
+            <Text className="text-gray-400">Xem thêm câu trả lời khác</Text>
+          </TouchableOpacity>
+          {/*reply list */}
+          <View className={`ml-6 ${openReply ? "" : "hidden"}`}>
+            <ReplyList
+              replies={comment.replies}
+              onReply={onReply}
+              userId={userId}
+            />
+          </View>
+          <TouchableOpacity
+            onPress={() => setOpenReply(false)}
+            className={`${openReply ? "" : "hidden"} mt-[-10px] ml-6 flex-row items-center gap-2`}
+          >
+            <View className="h-[1px] w-[20px] bg-gray-300" />
+            <Text className="text-gray-400">Ẩn câu trả lời</Text>
+          </TouchableOpacity>
+        </>
+      )}
+    </View>
+  );
+};
+
+// root
 function CommentModal({ setPostId, postId }) {
-  const { userId } = useContext(AuthContext);
+  const { userId, userInfo } = useContext(AuthContext);
   const [commentDataForm, setCommentDataForm] = useState({
     content: "",
     parentCommentId: null,
@@ -72,61 +185,6 @@ function CommentModal({ setPostId, postId }) {
     setReplyPeople(null);
   };
 
-  const CommentItem = ({ comment, onReply, userId }) => {
-    return (
-      <View
-        style={{
-          marginVertical: 8,
-        }}
-      >
-        {/* Header */}
-        <View className="flex-row items-center justify-between">
-          {/* Left */}
-          <View className="flex-row items-center gap-2">
-            <Image
-              source={{ uri: comment?.account?.photoUrls[0] }}
-              className="w-9 h-9 rounded-full bg-gray-300"
-            />
-            <Text className="font-semibold text-lg text-black">
-              {comment?.account?.username || "unknown"}
-            </Text>
-            <Text className="text-gray-500 text-xs">{comment?.timeAgo}</Text>
-          </View>
-
-          {/* Right */}
-          <View className="relative">
-            {comment?.account?.accountId === userId && (
-              <Ionicons name="ellipsis-vertical" size={18} color="black" />
-            )}
-          </View>
-        </View>
-
-        {/* Content */}
-        <Text className="text-black mt-1 w-[90%]">
-          {comment?.content || "content"}
-        </Text>
-        {/*Reply comment */}
-        <TouchableOpacity onPress={() => onReply(comment)}>
-          <Text className="mt-2 text-gray-500 text-sm">Trả lời</Text>
-        </TouchableOpacity>
-
-        {/* Replies */}
-        {comment.replies && comment.replies.length > 0 && (
-          <View className="mt-4" style={{ paddingLeft: 12 }}>
-            {comment.replies.map((reply) => (
-              <CommentItem
-                key={reply.commentId}
-                comment={reply}
-                onReply={onReply}
-                userId={userId}
-              />
-            ))}
-          </View>
-        )}
-      </View>
-    );
-  };
-
   useEffect(() => {
     handleGetPostComment();
   }, []);
@@ -142,14 +200,17 @@ function CommentModal({ setPostId, postId }) {
     >
       <View className="flex-1 justify-end bg-black/50">
         <KeyboardAvoidingView
-          className="h-[70%] bg-white-primary rounded-t-2xl p-4"
+          className="h-[70%] rounded-t-2xl pb-0  bg-white-primary"
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           keyboardVerticalOffset={Platform.OS === "ios" ? 20 : 0}
         >
           {/* Header */}
-          <View className="flex-row justify-between items-center mb-3">
+          <View className="flex-row justify-center items-center p-3 pt-4 border-b border-gray-100">
             <Text className="text-lg font-bold text-black">Bình luận</Text>
-            <TouchableOpacity onPress={() => setPostId(null)}>
+            <TouchableOpacity
+              onPress={() => setPostId(null)}
+              className="absolute right-3 top-4"
+            >
               <Ionicons name="close" size={24} color="black" />
             </TouchableOpacity>
           </View>
@@ -166,6 +227,7 @@ function CommentModal({ setPostId, postId }) {
               data={commentList}
               keyExtractor={(item) => item.commentId}
               contentContainerStyle={{ paddingBottom: 20 }}
+              className="px-4"
               renderItem={({ item: comment }) => (
                 <CommentItem
                   comment={comment}
@@ -178,7 +240,9 @@ function CommentModal({ setPostId, postId }) {
 
           {/* Input field */}
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View className={`${Platform.OS === "ios" ? "pb-6" : "pb-3"}`}>
+            <View
+              className={`${Platform.OS === "ios" ? "pb-6" : "pb-3"} border-t border-gray-100 pt-3`}
+            >
               {replyPeople && (
                 <View className="mb-2 bg-gray-100 rounded-lg p-2 flex-row justify-between items-center">
                   <Text>Đang trả lời @{replyPeople}</Text>
@@ -187,16 +251,23 @@ function CommentModal({ setPostId, postId }) {
                   </TouchableOpacity>
                 </View>
               )}
-              <View className="flex-row items-center gap-3 pt-2">
+              <View className="flex-row items-center gap-3 pt-2 px-4">
+                <Image
+                  source={{ uri: userInfo?.photos[0] }}
+                  className="w-11 h-11 rounded-full bg-gray-200"
+                />
                 <TextInput
-                  className="border border-gray-300 rounded-lg px-3 py-2 flex-1 text-base text-black"
+                  className="border border-gray-300 rounded-full px-3 pr-12 py-2 flex-1 text-base text-black"
                   placeholder="Nhập bình luận..."
                   value={commentDataForm.content}
                   onChangeText={(text) =>
                     setCommentDataForm((prev) => ({ ...prev, content: text }))
                   }
                 />
-                <TouchableOpacity onPress={() => handleCreateComment()}>
+                <TouchableOpacity
+                  onPress={() => handleCreateComment()}
+                  className="absolute right-7 top-4"
+                >
                   <Ionicons name="send" size={22} color="black" />
                 </TouchableOpacity>
               </View>
@@ -209,80 +280,3 @@ function CommentModal({ setPostId, postId }) {
 }
 
 export default memo(CommentModal);
-
-// <View key={comment.commentId} className="mb-4 relative">
-//   {/* Header */}
-//   <View className="flex-row items-center justify-between">
-//     {/* Left */}
-//     <View className="flex-row items-center gap-2">
-//       <Text className="font-semibold text-lg text-black">
-//         {comment?.account?.username || "unknown"}
-//       </Text>
-//       <Text className="text-gray-500 text-xs">
-//         {comment?.timeAgo}
-//       </Text>
-//     </View>
-
-//     {/* Right */}
-//     <View className="relative">
-//       {comment?.account?.accountId === userId && (
-//         <Ionicons
-//           name="ellipsis-vertical"
-//           size={18}
-//           color="black"
-//         />
-//       )}
-//     </View>
-//   </View>
-
-//   {/* Content */}
-//   <Text className="text-black mt-1">
-//     {comment?.content || "content"}
-//   </Text>
-//   {/*Reply comment */}
-//   <TouchableOpacity onPress={() => handleReplyComment(comment)}>
-//     <Text className="mt-2 text-gray-500 text-sm">Trả lời</Text>
-//   </TouchableOpacity>
-//   {comment?.replies &&
-//     comment?.replies.map((item) => (
-//       // reply item
-//       <View key={item.commentId} className="ml-2 mt-1">
-//         {/* Header */}
-//         <View className="flex-row items-center justify-between">
-//           {/* Left */}
-//           <View className="flex-row items-center gap-2">
-//             <Text className="font-semibold text-lg text-black">
-//               {item?.account?.username || "unknown"}
-//             </Text>
-//             <Text className="text-gray-500 text-xs">
-//               {item?.timeAgo}
-//             </Text>
-//           </View>
-
-//           {/* Right */}
-//           <View className="relative">
-//             {item?.account?.accountId === userId && (
-//               <Ionicons
-//                 name="ellipsis-vertical"
-//                 size={18}
-//                 color="black"
-//               />
-//             )}
-//           </View>
-//         </View>
-
-//         {/* Content */}
-//         <Text className="text-black mt-1">
-//           {item?.content || "content"}
-//         </Text>
-//         {/*Reply comment */}
-//         <TouchableOpacity
-//           onPress={() => handleReplyComment(item)}
-//         >
-//           <Text className="mt-2 text-gray-500 text-sm">
-//             Trả lời
-//           </Text>
-//         </TouchableOpacity>
-//       </View>
-//     ))}
-// </View>

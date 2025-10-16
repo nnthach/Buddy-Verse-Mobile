@@ -4,6 +4,7 @@ import {
   ScrollView,
   TextInput,
   TouchableOpacity,
+  Image,
 } from "react-native";
 import React, {
   useCallback,
@@ -38,10 +39,6 @@ export default function ChatTempRoom() {
 
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [continueChatResData, setContinueChatResData] = useState({
-    roomId: "",
-    accountId2: "",
-  });
 
   const [countdown, setCountdown] = useState(120);
 
@@ -69,10 +66,6 @@ export default function ChatTempRoom() {
       const conn = await getMatchConnection();
       if (conn.state === "Disconnected") {
         await conn.start();
-        console.log(
-          "[MatchHub] Connection started chat temp:",
-          conn.connectionId
-        );
       }
 
       // gỡ hết handler cũ tránh attach trùng khi re-render
@@ -82,15 +75,8 @@ export default function ChatTempRoom() {
 
       // UserWantsContinue --------------------------------------------------------------------------
       conn.on("UserWantsContinue", async (accountId, roomId) => {
+        console.log("user want continue", roomId);
         try {
-          console.log(
-            "Nhận UserWantsContinue:",
-            accountId,
-            roomId,
-            "ConnId:",
-            conn.connectionId
-          );
-
           if (accountId != userId) {
             Toast.show({
               type: "success",
@@ -107,10 +93,21 @@ export default function ChatTempRoom() {
 
       //  RoomPermanent -------------------------------------------------------------------------------------
       conn.on("RoomPermanent", async (roomId) => {
+        console.log("listen event RoomPermanent", roomId);
         try {
-          console.log("Nhận RoomPermanent:", roomId);
           if (roomId) {
-            router.replace(`/(stack)/chat/${roomId}`);
+            shouldStopConnection = false;
+            const otherId =
+              roomId?.user1 === userId ? roomId?.user2 : roomId?.user1;
+            setTimeout(() => {
+              router.replace({
+                pathname: `/(stack)/chat/[roomId]`,
+                params: {
+                  roomId: roomId?.roomId,
+                  accountId2: otherId,
+                },
+              });
+            }, 1500);
           }
         } catch (err) {
           console.error("Error in RoomPermanent handler:", err);
@@ -119,8 +116,9 @@ export default function ChatTempRoom() {
 
       // ChatEnded ---------------------------------------------------------------------------------------------
       conn.on("ChatEnded", async (roomId) => {
+        console.log("listen event ChatEnded", roomId);
+
         try {
-          console.log("Nhận ChatEnded:", roomId, "ConnId:", conn.connectionId);
           setMessages([]);
           Toast.show({
             type: "success",
@@ -150,7 +148,6 @@ export default function ChatTempRoom() {
 
       // lắng nghe tin nhắn từ server
       conn.on("ReceiveMessage", (msg) => {
-        console.log("receive mess", msg);
         setMessages((prev) =>
           prev.some((m) => m.messageId === msg.messageId)
             ? prev
@@ -217,7 +214,7 @@ export default function ChatTempRoom() {
 
   const handleEndChat = async () => {
     try {
-      const res = await matchDeleteAPI(roomId);
+      await matchDeleteAPI(roomId);
     } catch (err) {
       console.log("Delete match chat API error:", err);
     }
@@ -227,7 +224,6 @@ export default function ChatTempRoom() {
     try {
       const res = await matchContinueAPI({ accountId: userId, roomId });
       console.log("continue chat res", res.data);
-      console.log("continue chat res info", res.data.info);
     } catch (err) {
       console.log("continue chat API error:", err);
     }
@@ -245,9 +241,9 @@ export default function ChatTempRoom() {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-white-primary">
+    <SafeAreaView className="flex-1 bg-black">
       {/*Heading */}
-      <View className="h-16 flex-row items-center justify-between px-4 border-b border-gray-200 bg-white">
+      <View className="h-16 flex-row items-center justify-between px-4">
         {/* Left */}
         <View className="flex-row items-center gap-3">
           {/* Countdown */}
@@ -260,7 +256,7 @@ export default function ChatTempRoom() {
 
           {/* userWantContinue */}
           {userWantContinue !== "" && (
-            <Text className="text-gray-700 font-medium" numberOfLines={1}>
+            <Text className="text-white-primary font-medium" numberOfLines={1}>
               {userWantContinue}
             </Text>
           )}
@@ -270,9 +266,20 @@ export default function ChatTempRoom() {
         <View className="flex-row items-center gap-4">
           <MaterialIcons name="error-outline" size={24} color="red" />
           <TouchableOpacity onPress={() => handleEndChat(roomId)}>
-            <MaterialIcons name="logout" size={24} color="black" />
+            <MaterialIcons name="logout" size={24} color="white" />
           </TouchableOpacity>
         </View>
+      </View>
+
+      <View className="flex-row p-3 items-center justify-center gap-2">
+        <Image
+          source={require("@assets/images/applogo.png")}
+          className="w-10 h-10 rounded-full bg-gray-200"
+        />
+        <Image
+          source={require("@assets/images/applogo.png")}
+          className="w-10 h-10 rounded-full bg-gray-200"
+        />
       </View>
 
       {/*Content */}
@@ -291,10 +298,10 @@ export default function ChatTempRoom() {
                 className={`${item?.senderId === userId ? "items-end" : "items-start"} gap-1 w-full`}
               >
                 <View
-                  className={`${item?.senderId === userId ? "bg-yellow-primary/60" : "bg-purple-200/70"} rounded-full p-3 px-4 max-w-[70%]`}
+                  className={`${item?.senderId === userId ? "bg-[#956F00]" : "bg-[#53435B]"} rounded-md p-3 px-4 max-w-[70%]`}
                 >
                   <Text
-                    className={`${item?.senderId === userId ? "text-white" : "text-black"}`}
+                    className={`${item?.senderId === userId ? "text-white-primary" : "text-white-primary"}`}
                   >
                     {item?.content}
                   </Text>
@@ -312,9 +319,9 @@ export default function ChatTempRoom() {
 
       {/*Input */}
       <View className="flex-row px-4 items-center gap-4 ">
-        <View className="rounded-full h-12 flex-1 items-center flex-row px-3 bg-black/5">
+        <View className="rounded-md h-12 flex-1 items-center flex-row px-3 bg-[#48434B]">
           <TextInput
-            className="flex-1 h-full px-3 pb-1 text-xl text-black"
+            className="flex-1 h-full px-3 pb-3 text-xl text-white-primary"
             onChangeText={(text) =>
               setSendMessageForm((prev) => ({
                 ...prev,
@@ -330,12 +337,12 @@ export default function ChatTempRoom() {
 
         {sendMessageForm.content != "" && (
           <TouchableOpacity onPress={handleSendMessage}>
-            <Ionicons name="send" size={24} color="black" />
+            <Ionicons name="send" size={24} color="white" />
           </TouchableOpacity>
         )}
-        <Feather name="mic" size={22} color="black" />
-        <Feather name="smile" size={22} color="black" />
-        <Feather name="camera" size={24} color="black" />
+        <Feather name="mic" size={22} color="white" />
+        <Feather name="smile" size={22} color="white" />
+        <Feather name="camera" size={24} color="white" />
       </View>
 
       {/* Floating continue button */}

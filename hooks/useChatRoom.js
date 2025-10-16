@@ -12,6 +12,9 @@ function useChatRoom(roomId, userId, accountId2) {
   const [userInfoTwo, setUserInfoTwo] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const connectionRef = useRef(null);
+  console.log("receive room id in usechatroom", roomId);
+  console.log("receive accountId2 id usechatroom", accountId2);
+  console.log("receive userId id usechatroom", userId);
 
   // 1. Connect signalR and listen event ReceiveMessage
   const joinRoom = useCallback(async () => {
@@ -35,7 +38,7 @@ function useChatRoom(roomId, userId, accountId2) {
 
       connectionRef.current = conn;
     } catch (err) {
-      console.log("join room err", err);
+      console.log("join room err usechatroom", err);
     }
   }, [roomId, userId]);
 
@@ -46,7 +49,7 @@ function useChatRoom(roomId, userId, accountId2) {
       const res = await getRoomDetailBetweenUserAPI(roomId, userId, accountId2);
       setMessages(res.data);
     } catch (err) {
-      console.log("fetch message err", err);
+      console.log("fetch message err usechatroom", err);
     } finally {
       setIsLoading(false);
     }

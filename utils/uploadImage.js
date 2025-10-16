@@ -12,7 +12,6 @@ const uriToBlob = async (uri) => {
 const uploadImage = async (asset) => {
   console.log("asset", asset);
   const blob = await uriToBlob(asset.uri); // call convert
-  console.log("blob type", blob);
 
   // Lấy extension
   let extension = "jpg";
@@ -24,13 +23,10 @@ const uploadImage = async (asset) => {
       extension = uriParts.pop().split("?")[0];
     }
   }
-  console.log("extension");
   const type = asset.type?.startsWith("video") ? "videos" : "images";
-  console.log("type type", type);
   const fileName = asset.fileName || `${Date.now()}.${extension}`;
   console.log("file name", fileName);
 
-  // const storageRef = ref(storage, asset.fileName || `${Date.now()}.jpg`);
   const storageRef = ref(storage, `${type}/${fileName}`);
   console.log("storageRef", storageRef);
   await uploadBytes(storageRef, blob);

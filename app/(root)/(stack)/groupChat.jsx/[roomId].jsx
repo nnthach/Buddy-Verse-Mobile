@@ -25,7 +25,7 @@ import { createReportMessageAPI } from "@services/reportService";
 import Feather from "@expo/vector-icons/Feather";
 import useChatRoom from "../../../../hooks/useChatRoom";
 
-export default function ChatRoom() {
+export default function GroupChatRoom() {
   const { roomId, accountId2 } = useLocalSearchParams();
   const { userId } = useContext(AuthContext);
   const scrollViewRef = useRef(null);
@@ -188,7 +188,7 @@ export default function ChatRoom() {
                     <TouchableOpacity
                       onLongPress={() => handleLongPress(item?.messageId)}
                       activeOpacity={0.7}
-                      className={`${item?.senderId === userId ? "bg-yellow-primary/60" : "bg-purple-200/70"} rounded-md p-3 px-4 max-w-[70%]`}
+                      className={`${item?.senderId === userId ? "bg-yellow-primary/60" : "bg-purple-200/70"} rounded-3xl p-3 px-4 max-w-[70%]`}
                     >
                       <Text
                         className={`${item?.senderId === userId ? "text-white" : "text-black"}`}

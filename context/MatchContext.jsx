@@ -13,7 +13,6 @@ export const MatchProvider = ({ children }) => {
     accountId: userId,
     roomType: "",
     interestIds: [],
-    roomId: "",
   };
 
   const [matchForm, setMatchForm] = useState(initialMatchForm);

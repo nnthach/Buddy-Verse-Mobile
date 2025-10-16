@@ -10,6 +10,8 @@ import Toast from "react-native-toast-message";
 import toastConfig from "@components/CustomToast";
 import Notification from "@components/Notification";
 import { NotificationProvider } from "@context/NotificationContext";
+import { ChatGroupProvider } from "@context/ChatGroupContext";
+import JoinGroupModal from "@components/JoinGroupModal";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -39,9 +41,12 @@ export default function RootLayout() {
     <AuthProvider>
       <MatchProvider>
         <NotificationProvider>
-          <RootLayoutNav />
-          <Toast config={toastConfig} />
-          <Notification />
+          <ChatGroupProvider>
+            <RootLayoutNav />
+            <Toast config={toastConfig} />
+            <Notification />
+            <JoinGroupModal />
+          </ChatGroupProvider>
         </NotificationProvider>
       </MatchProvider>
     </AuthProvider>
