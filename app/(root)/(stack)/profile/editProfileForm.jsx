@@ -9,6 +9,8 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
+  Modal,
+  Pressable,
 } from "react-native";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
@@ -22,9 +24,11 @@ import { updateUserProfileAPI } from "@services/userService";
 import Toast from "react-native-toast-message";
 import { pickImage } from "utils/imagePickerUtils";
 import uploadImage from "utils/uploadImage";
+import ModalOptionSelectAvatar from "@components/ModalOptionSelectAvatar";
 
 export default function EditProfileForm() {
   const ADDRESS_BASE_URL = "https://countriesnow.space/api/v0.1";
+  const [modalVisible, setModalVisible] = useState(false);
   const [countryData, setCountryData] = useState({
     country: "",
     state: "",
@@ -251,11 +255,18 @@ export default function EditProfileForm() {
                   className="w-32 h-32 rounded-full"
                   resizeMode="cover"
                 />
-                <TouchableOpacity onPress={handleImagePick}>
+                <TouchableOpacity onPress={() => setModalVisible(true)}>
                   <Text className="text-lg text-black mt-1 mb-1">
                     Thay đổi hình ảnh
                   </Text>
                 </TouchableOpacity>
+
+                {/*Modal */}
+                <ModalOptionSelectAvatar
+                  modalVisible={modalVisible}
+                  setModalVisible={setModalVisible}
+                  handleImagePick={handleImagePick}
+                />
               </View>
 
               {/*Form */}

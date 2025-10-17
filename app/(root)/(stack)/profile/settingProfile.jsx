@@ -33,6 +33,7 @@ export default function SettingProfile() {
     },
     {
       icon: <Feather name="message-square" size={24} color="black" />,
+      // onPress: () => router.push("/(stack)/gemini/chatSupport"),
       label: "Tin nhắn",
       type: "nest",
     },

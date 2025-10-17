@@ -18,10 +18,10 @@ export default function WelcomeScreen() {
           resizeMode="cover"
         />
         <View>
-          <Text className="text-5xl font-black text-yellow-primary mt-4">
+          <Text className="text-5xl font-black text-black mt-4">
             buddyverse.
           </Text>
-          <Text className="text-base text-yellow-primary/70">
+          <Text className="text-base text-black/70">
             feel deeper live truer
           </Text>
         </View>
@@ -45,7 +45,7 @@ export default function WelcomeScreen() {
           onPress={() => router.push("/sign-in")}
           className="h-14 bg-gray-200 w-[80%] rounded-[50px] items-center justify-center"
         >
-          <Text className="text-black text-xl font-medium">
+          <Text className="text-gray-500 text-xl font-medium">
             Tôi đã có tài khoản
           </Text>
         </TouchableOpacity>

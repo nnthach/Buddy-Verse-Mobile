@@ -1,11 +1,15 @@
 import { View, Text, TouchableOpacity, ScrollView, Image } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Checkbox from "expo-checkbox";
 import { router, useLocalSearchParams } from "expo-router";
-import { getSubscriptionPlanDetailAPI } from "@services/userSubscriptionService";
+import { AuthContext } from "@context/AuthContext";
+import {
+  createPaymentAPI,
+  getSubscriptionPlanDetailAPI,
+} from "@services/userSubscriptionService";
 
 export default function Payment() {
   const [isChecked, setIsChecked] = useState(false);
@@ -13,6 +17,7 @@ export default function Payment() {
   const [loading, setLoading] = useState(false);
   const [subscriptionDetail, setSubscriptionDetail] = useState(null);
   console.log("planId", planId);
+  const { userId } = useContext(AuthContext);
 
   useEffect(() => {
     const handleFetchSubscriptionDetail = async () => {
@@ -29,6 +34,27 @@ export default function Payment() {
     };
     handleFetchSubscriptionDetail();
   }, []);
+
+  const handlePayment = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await createPaymentAPI({
+        accountId: userId,
+        planId,
+        paymentMethod: "Payos",
+      });
+      console.log("payment create res", res);
+
+      if (res?.data?.checkoutUrl) {
+        router.push({
+          pathname: "/paymentQR",
+          params: { url: res.data.checkoutUrl },
+        });
+      }
+    } catch (error) {
+      console.log("payment create err", error);
+    }
+  };
 
   const methodPayment = [
     // { title: "ATM Card", icon: require("@assets/icons/atm_card.png") },
@@ -50,7 +76,9 @@ export default function Payment() {
         <TouchableOpacity onPress={() => router.back()}>
           <MaterialIcons name="keyboard-arrow-left" size={34} color="black" />
         </TouchableOpacity>
-        <Text className="text-black font-semibold text-2xl">Payment</Text>
+        <Text className="text-black font-semibold text-2xl">
+          Phương thức thanh toán
+        </Text>
         <AntDesign name="questioncircleo" size={24} color="black" />
       </View>
       <ScrollView className="flex-1 px-6">

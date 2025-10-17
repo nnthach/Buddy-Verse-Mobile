@@ -24,6 +24,7 @@ export default function BuddyScreen() {
 
   //banner
   const imgBannerList = [
+    require("@assets/images/banner_explore.png"),
     require("@assets/images/bannerMain.png"),
     require("@assets/images/signinbanner.jpg"),
   ];

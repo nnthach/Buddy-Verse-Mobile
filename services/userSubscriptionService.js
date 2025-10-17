@@ -20,3 +20,9 @@ export const getSubscriptionPlanAPI = async (params) => {
 
   return res;
 };
+
+export const createPaymentAPI = async (data) => {
+  const res = await axiosClient.post(`/payment/create-checkout`, data);
+
+  return res;
+};
