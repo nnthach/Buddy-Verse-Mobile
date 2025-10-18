@@ -26,8 +26,14 @@ export const getRoomDetailBetweenUserAPI = async (
   return res;
 };
 
-export const getAllRoomOfUserAPI = async (userId) => {
-  const res = await axiosClient.get(`/room/account/${userId}`);
+export const getAllPrivateRoomOfUserAPI = async (userId) => {
+  const res = await axiosClient.get(`/private/room/account/${userId}`);
+
+  return res;
+};
+
+export const getAllGroupRoomOfUserAPI = async (userId) => {
+  const res = await axiosClient.get(`/group/room/account/${userId}`);
 
   return res;
 };

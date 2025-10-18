@@ -29,15 +29,6 @@ export default function ProfileScreen() {
   const [postList, setPostList] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const tags = [
-    "friendly",
-    "exploring",
-    "eating",
-    "napping",
-    "fetch",
-    "sleeping",
-  ];
-
   const handleGetAllPostOfUser = async () => {
     setLoading(true);
     try {
@@ -264,7 +255,7 @@ export default function ProfileScreen() {
                         ? { uri: userInfo.photos[0] }
                         : require("@assets/images/avatar.png")
                     }
-                    className="w-20 h-20 rounded-full"
+                    className="w-24 h-24 rounded-full"
                     resizeMode="cover"
                   />
                 </View>
@@ -290,30 +281,27 @@ export default function ProfileScreen() {
                 {/* Bio */}
                 <View className="mt-3 gap-3 items-center">
                   <Text className="text-[13px] text-gray-700 text-center">
-                    My name is Yuna, and I’m a 4 year old Shiba Inu. I’m
-                    currently travelling the world! Follow me on Petma
-                    @spicy_yuna_roll!
-                  </Text>
-                  <Text className="text-[13px] text-gray-700 text-center">
-                    初めまして、ユナです。四歳柴犬。世界の犬！
+                    {userInfo?.bio}
                   </Text>
                 </View>
 
-                {/* Tags */}
-                <ScrollView
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  className="mt-3 -mx-1"
-                >
-                  {tags.map((t, idx) => (
-                    <View
-                      key={idx}
-                      className="mr-2 bg-gray-100 px-3 py-2 rounded-full"
-                    >
-                      <Text className="text-[12px] text-gray-700">{t}</Text>
-                    </View>
-                  ))}
-                </ScrollView>
+                {/*interest */}
+                {userInfo?.interests.length > 0 && (
+                  <ScrollView
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    className="mt-3 -mx-1"
+                  >
+                    {userInfo?.interests?.map((t, idx) => (
+                      <View
+                        key={idx}
+                        className="mr-2 bg-gray-100 px-3 py-2 rounded-full"
+                      >
+                        <Text className="text-[12px] text-gray-700">{t}</Text>
+                      </View>
+                    ))}
+                  </ScrollView>
+                )}
 
                 {/* Tabs */}
                 <View className="flex-row items-center gap-6 mt-5">

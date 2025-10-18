@@ -1,12 +1,19 @@
-import { View, Text, ActivityIndicator, FlatList, Image, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  ActivityIndicator,
+  FlatList,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import React, { useCallback } from "react";
-import { getAllRoomOfUserAPI } from "@services/messageService";
+import { getAllPrivateRoomOfUserAPI } from "@services/messageService";
 import useFetchList from "hooks/useFetchList";
 import { router } from "expo-router";
 
 export default function PrivateChat({ userId }) {
   const fetchChatRoomList = useCallback(
-    () => getAllRoomOfUserAPI(userId),
+    () => getAllPrivateRoomOfUserAPI(userId),
     [userId]
   );
   const { data: roomList, loading } = useFetchList(fetchChatRoomList);

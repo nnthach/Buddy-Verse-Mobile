@@ -12,12 +12,26 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import useFetchList from "hooks/useFetchList";
 import { getInterestListAPI } from "@services/interestService";
+import { AuthContext } from "@context/AuthContext";
+import { updateUserProfileAPI } from "@services/userService";
+import Toast from "react-native-toast-message";
 
 export default function EditInterest() {
   const { data: interestList, loading } = useFetchList(getInterestListAPI);
   const [editInterestList, setEditInterestList] = useState({
     interestIds: [],
   });
+  const { userId, userInfo, handleGetUserById } = useContext(AuthContext);
+  const userProfile = {
+    firstname: userInfo?.firstname,
+    lastname: userInfo?.lastname,
+    username: userInfo?.username,
+    bio: userInfo?.bio,
+    gender: userInfo?.gender,
+    dob: userInfo?.dob,
+    interestIds: userInfo?.interests || [],
+    photoUrls: userInfo?.photos || [],
+  };
 
   const handleAddInterestList = (item) => {
     setEditInterestList((prev) => {
@@ -35,6 +49,25 @@ export default function EditInterest() {
   const handleSubmit = async () => {
     try {
       console.log("edit interest", editInterestList);
+      const updatedData = {
+        ...userProfile,
+        interestIds: editInterestList.interestIds,
+      };
+
+      console.log("edit updatedData data", updatedData);
+
+      const res = await updateUserProfileAPI(userId, updatedData);
+      await handleGetUserById(userId);
+
+      Toast.show({
+        type: "success",
+        text1: "Cập nhật hình ảnh thành công!",
+        text2: "Thành công",
+      });
+      setEditInterestList({
+        interestIds: [],
+      });
+      router.back();
     } catch (error) {
       console.log("edit interest err", error);
     }

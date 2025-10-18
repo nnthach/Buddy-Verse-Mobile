@@ -215,6 +215,7 @@ export default function SignUpScreen() {
     } catch (error) {
       console.log("register err", error);
       alert(error?.data?.message);
+      
     }
   };
 

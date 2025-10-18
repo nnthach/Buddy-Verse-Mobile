@@ -172,7 +172,6 @@ export default function EditProfileForm() {
   }, [userProfile.state]);
 
   const handleSubmit = async () => {
-    console.log("edit form data", userProfile);
     setIsLoading(true);
     try {
       const imageUrlList = [];

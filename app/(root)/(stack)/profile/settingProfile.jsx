@@ -43,21 +43,6 @@ export default function SettingProfile() {
       type: "nest",
     },
     {
-      icon: <Feather name="moon" size={24} color="black" />,
-      label: "Tối",
-      type: "onoff",
-    },
-    {
-      icon: <Entypo name="language" size={24} color="black" />,
-      label: "Ngôn ngữ",
-      type: "nest",
-    },
-    {
-      icon: <AntDesign name="contacts" size={24} color="black" />,
-      label: "Liên hệ",
-      type: "nest",
-    },
-    {
       icon: <AntDesign name="questioncircleo" size={24} color="black" />,
       label: "Câu hỏi thường gặp",
       type: "nest",
@@ -94,38 +79,39 @@ export default function SettingProfile() {
         <Text className="text-black font-semibold text-2xl">Cài đặt</Text>
         <Text className="w-[34px]" />
       </View>
-      <ScrollView className="flex-1 px-6">
+
+      <ScrollView className="flex-1 bg-white-primary">
         {/*Avatar */}
-        <View className="mt-6 justify-center items-center">
+        <View className="p-6 justify-start items-center flex-row gap-3 bg-gray-100">
           <Image
             source={
               userInfo?.photos?.[0]
                 ? { uri: userInfo.photos[0] }
                 : require("@assets/images/avatar.png")
             }
-            className="w-32 h-32 rounded-full"
+            className="w-10 h-10 rounded-full"
             resizeMode="cover"
           />
           <TouchableOpacity
             onPress={() => router.push("/profile/characterCartoon")}
           >
-            <Text className="text-xl text-black font-bold mt-3 mb-1">
+            <Text className="text-2xl text-black font-medium">
               {userInfo?.lastname} {userInfo?.firstname}
             </Text>
           </TouchableOpacity>
         </View>
 
         {/*Content */}
-        <View className="mt-6 gap-4">
-          <View className="bg-gray-100 rounded-2xl">
+        <View className=" gap-4">
+          <View className="bg-white-primary ">
             {settingList.slice(0, 4).map((item, index) => (
-              <View key={index} className="p-4">
+              <View key={index} className="p-4 px-6">
                 <TouchableOpacity
                   onPress={item.onPress}
                   className="flex-row items-center gap-4"
                 >
                   {item.icon}
-                  <Text className="text-lg">{item.label}</Text>
+                  <Text className="text-lg font-medium">{item.label}</Text>
                   <View className="flex-1 items-end">
                     {item.type == "nest" ? (
                       <MaterialIcons
@@ -151,11 +137,17 @@ export default function SettingProfile() {
             ))}
           </View>
 
-          <View className="bg-gray-100 rounded-2xl">
+          <Text className="text-xl font-semibold p-6 pb-2 bg-gray-100">
+            Hỗ trợ
+          </Text>
+          <View className="bg-white-primary mt-[-12px]">
             {settingList.slice(4, 7).map((item, index) => (
-              <View key={index} className="p-4 flex-row items-center gap-4">
+              <View
+                key={index}
+                className="p-4 px-6 flex-row items-center gap-4"
+              >
                 {item.icon}
-                <Text className="text-lg">{item.label}</Text>
+                <Text className="text-lg font-medium">{item.label}</Text>
                 <View className="flex-1 items-end">
                   {item.type == "nest" ? (
                     <MaterialIcons
@@ -178,45 +170,13 @@ export default function SettingProfile() {
                 </View>
               </View>
             ))}
-          </View>
-
-          <View className="bg-gray-100 rounded-2xl">
-            {settingList.slice(7).map((item, index) => (
-              <View key={index} className="p-4 flex-row items-center gap-4">
-                {item.icon}
-                <Text className="text-lg">{item.label}</Text>
-                <View className="flex-1 items-end">
-                  {item.type == "nest" ? (
-                    <MaterialIcons
-                      name="keyboard-arrow-right"
-                      size={24}
-                      color="black"
-                    />
-                  ) : (
-                    <Switch
-                      trackColor={{ false: "#767577", true: "#C99BF2" }}
-                      thumbColor={isEnabled ? "#57298D" : "#f4f3f4"}
-                      ios_backgroundColor="#3e3e3e"
-                      onValueChange={() => setIsEnabled((prev) => !prev)}
-                      value={isEnabled}
-                      style={{
-                        transform: [{ scaleY: 0.85 }, { scaleX: 0.85 }],
-                      }}
-                    />
-                  )}
-                </View>
-              </View>
-            ))}
-          </View>
-
-          <View className="mt-4">
+            {/*sign out */}
             <TouchableOpacity
               onPress={handleLogout}
-              className="bg-yellow-primary py-3 px-6 rounded-full w-full"
+              className="bg-red- p-4 px-6 flex-row items-center gap-4"
             >
-              <Text className="text-white-primary text-lg font-medium text-center">
-                Đăng xuất
-              </Text>
+              <Feather name="log-out" size={24} color="black" />
+              <Text className="text-black text-lg font-medium">Đăng xuất</Text>
             </TouchableOpacity>
           </View>
         </View>

@@ -1,18 +1,8 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-  FlatList,
-  ActivityIndicator,
-} from "react-native";
-import React, { useCallback, useContext, useState } from "react";
+import { View, Text, TouchableOpacity } from "react-native";
+import React, { useContext, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { AuthContext } from "../../../context/AuthContext";
-import { getAllRoomOfUserAPI } from "@services/messageService";
-import LoadingCustom from "@components/LoadingCustom";
-import useFetchList from "hooks/useFetchList";
 import MainHeader from "@components/MainHeader";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import PrivateChat from "@components/ChatComponents/PrivateChat";
@@ -21,65 +11,6 @@ import GroupChat from "@components/ChatComponents/GroupChat";
 export default function ChatScreen() {
   const { userId } = useContext(AuthContext);
   const [activeTab, setActiveTab] = useState("Private");
-
-  const fetchChatRoomList = useCallback(
-    () => getAllRoomOfUserAPI(userId),
-    [userId]
-  );
-  const { data: roomList, loading } = useFetchList(fetchChatRoomList);
-
-  const userMessageItem = (item) => {
-    const otherMember = item.roomMembers.find(
-      (member) => member.accountId !== userId
-    );
-
-    return (
-      <View className="py-3">
-        <TouchableOpacity
-          onPress={() =>
-            router.push({
-              pathname: `/(root)/(stack)/chat/${item.roomId}`,
-              params: {
-                accountId2: otherMember.accountId,
-              },
-            })
-          }
-          className="flex-row items-start gap-3"
-        >
-          {/* avatar */}
-          <View className="w-12 h-12 bg-gray-500 rounded-full">
-            <Image
-              source={{ uri: otherMember?.photos[0] }}
-              className="w-full h-full rounded-full"
-              resizeMode="cover"
-            />
-          </View>
-
-          {/* name, preview, time */}
-          <View className="flex-1">
-            <View className="flex-row items-center justify-between">
-              <Text
-                numberOfLines={1}
-                className="text-gray-700 font-semibold text-lg"
-              >
-                {otherMember?.username}
-              </Text>
-              {/*Time */}
-              <Text className="text-[11px] text-gray-400 ml-2">
-                {new Date(item?.lastMessageAt).toLocaleTimeString("vi-VN", {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}{" "}
-              </Text>
-            </View>
-            <Text numberOfLines={1} className="text-base text-gray-600">
-              {item?.lastMessageContent}
-            </Text>
-          </View>
-        </TouchableOpacity>
-      </View>
-    );
-  };
 
   return (
     <SafeAreaView edges={["top"]} className="flex-1 bg-white-primary">

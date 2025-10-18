@@ -8,11 +8,15 @@ import {
 } from "react-native";
 import React, { useCallback } from "react";
 import useFetchList from "hooks/useFetchList";
-import { getAllGroupAPI } from "@services/matchService";
 import { router } from "expo-router";
+import { getAllGroupRoomOfUserAPI } from "@services/messageService";
 
 export default function GroupChat({ userId }) {
-  const { data: groupList, loading } = useFetchList(getAllGroupAPI);
+  const fetchChatGroupRoomList = useCallback(
+    () => getAllGroupRoomOfUserAPI(userId),
+    [userId]
+  );
+  const { data: groupList, loading } = useFetchList(fetchChatGroupRoomList);
 
   const renderGroupItem = (item) => {
     return (

@@ -15,7 +15,7 @@ export default function ModalOptionSelectAvatar({
       onRequestClose={() => setModalVisible(false)}
     >
       <View className="flex-1 justify-center items-center bg-white-primary/50">
-        <View className="bg-white-primary p-6 rounded-2xl w-80">
+        <View className="bg-white-primary border-[1px] border-gray-400 p-6 rounded-2xl w-80">
           <Text className="text-lg font-semibold mb-4 text-center">
             Chọn nguồn ảnh
           </Text>
@@ -27,7 +27,7 @@ export default function ModalOptionSelectAvatar({
                 handleImagePick();
                 setModalVisible(false);
               }}
-              className="py-3 bg-gray-200 rounded-xl mb-3"
+              className="py-3 bg-gray-200 rounded-xl mb-3 w-[50%]"
             >
               <Text className="text-center text-black text-base">
                 Từ thư viện
@@ -40,7 +40,7 @@ export default function ModalOptionSelectAvatar({
                 setModalVisible(false);
                 router.push("/(root)/(stack)/gemini/generateImage"); // ← chuyển trang khác
               }}
-              className="py-3 bg-blue-500 rounded-xl mb-3"
+              className="py-3 bg-yellow-primary rounded-xl mb-3 w-[50%]"
             >
               <Text className="text-center text-white text-base">
                 Tạo bằng AI
