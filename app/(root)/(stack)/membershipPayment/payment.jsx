@@ -121,7 +121,13 @@ export default function Payment() {
           <Text className="text-black/70 text-lg">Payment Method</Text>
 
           <View className="flex-row items-start gap-4 mt-3">
-            <View className="bg-white w-14 h-14 rounded-xl bg-yellow-200"></View>
+            <View className="bg-white w-14 h-14 rounded-xl bg-yellow-200">
+              <Image
+                source={require("@assets/icons/member-card.png")}
+                className="w-full h-full"
+                resizeMode="cover"
+              />
+            </View>
             <View>
               <Text className="font-semibold text-lg">
                 {subscriptionDetail?.name}
@@ -149,15 +155,7 @@ export default function Payment() {
         {/*Accept BTN */}
         <TouchableOpacity
           disabled={!isChecked}
-          onPress={() =>
-            router.replace({
-              pathname: "/membershipPayment/paymentLoading",
-              params: {
-                label: "Purchase Loading...",
-                next: "/membershipPayment/paymentResult",
-              },
-            })
-          }
+          onPress={handlePayment}
           className={`bg-yellow-primary py-3 rounded-xl items-center mt-8 ${
             isChecked ? "" : "opacity-50"
           }`}

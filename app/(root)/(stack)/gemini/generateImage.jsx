@@ -33,7 +33,7 @@ export default function GenerateImage() {
     bio: userInfo?.bio,
     gender: userInfo?.gender,
     dob: userInfo?.dob,
-    interestIds: userInfo?.interests || [],
+    // interestIds: userInfo?.interests || [],
     photoUrls: userInfo?.photos || [],
   };
 

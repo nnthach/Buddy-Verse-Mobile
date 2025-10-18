@@ -44,7 +44,7 @@ export default function EditProfileForm() {
     bio: userInfo?.bio,
     gender: userInfo?.gender,
     dob: userInfo?.dob,
-    interestIds: userInfo?.interests || [],
+    // interestIds: userInfo?.interests || [],
     photoUrls: userInfo?.photos || [],
     // phone: userInfo?.phone,
     // country: "",
@@ -73,7 +73,7 @@ export default function EditProfileForm() {
   const [imageUpload, setImageUpload] = useState([]);
 
   const handleImagePick = async () => {
-    const selectedAssets = await pickImage();
+    const selectedAssets = await pickImage("image");
     if (selectedAssets.length > 0) {
       const formattedAssets = selectedAssets.map((asset) => ({
         uri: asset.uri,
@@ -293,10 +293,10 @@ export default function EditProfileForm() {
                 />
                 <InputField
                   label={"Tiểu sử"}
-                  placeholder={"Nội dung"}
                   value={userProfile.bio}
                   name="bio"
                   setDataForm={setUserProfile}
+                  multiline
                 />
                 <InputField
                   label={"Giới tính"}

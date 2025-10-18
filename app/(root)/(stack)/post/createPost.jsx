@@ -159,7 +159,7 @@ export default function CreatePost() {
             <TouchableOpacity
               activeOpacity={0.8}
               onPress={handleSubmit}
-              className={`rounded-xl items-center justify-center ${createPostForm.content ? "bg-yellow-primary" : "bg-gray-200"}`}
+              className={`rounded-xl items-center justify-center ${createPostForm.content || imageUpload.length > 0 ? "bg-yellow-primary" : "bg-gray-200"}`}
             >
               <Text className={` py-1 px-2 text-lg text-white-primary`}>
                 Đăng

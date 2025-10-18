@@ -85,22 +85,15 @@ export default function MatchGroupLoading() {
       console.log("match group form in loading", newMatchGroupData);
       const res = await matchGroupByInterestAPI(newMatchGroupData);
       console.log("match gr res", res.data);
+      router.replace("/(tabs)/chat");
     } catch (error) {
       console.log("match group err", error);
     }
   };
   useEffect(() => {
-    // joinMatchQueue();
     handleMatchGroup();
 
     return () => {
-      // if (connectionRef.current) connectionRef.current.stop();
-
-      // if (connectionRef.current) {
-      //   connectionRef.current.off("Matched");
-      //   connectionRef.current.off("JoinedQueue");
-      // }
-
       setMatchGroupForm(initialMatchGroupForm);
     };
   }, [userId]);

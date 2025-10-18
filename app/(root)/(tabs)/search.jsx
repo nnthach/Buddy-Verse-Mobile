@@ -24,17 +24,6 @@ export default function SearchScreen() {
   });
   const { setGroupRoomId } = useContext(ChatGroupContext);
 
-  // const debouncedSearchInterest = useDebounce(query.interestIds, 500);
-  // const debouncedSearchName = useDebounce(query.name, 500);
-  // const debouncedQuery = useMemo(
-  //   () => ({
-  //     ...query,
-  //     interestIds: debouncedSearchInterest,
-  //     name: debouncedSearchName,
-  //   }),
-  //   [debouncedSearchInterest, debouncedSearchName]
-  // );
-
   const debouncedQuery = useDebounce(query, 500);
 
   const { data: interestList, loading } = useFetchList(getInterestListAPI);
@@ -58,6 +47,24 @@ export default function SearchScreen() {
   const handleSearchName = (data) => {
     updateQuery({ name: data });
   };
+
+  const trendingData = [
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiRu3CHYnGE9Fq69bqI_sOH_zbSdisP6272Q&s",
+    "https://media.istockphoto.com/id/1035676256/photo/background-of-galaxy-and-stars.jpg?s=612x612&w=0&k=20&c=dh7eWJ6ovqnQZ9QwQQlq2wxqmAR7mgRlQTgaIylgBwc=",
+    "https://jp.static.pronews.com/pronewscore/wp-content/uploads/2024/10/241014_Photoshop_top-560x410.jpg",
+  ];
+
+  const newData = [
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6wHc3OzKebPw9iQ9NMcjKRHSxIFKN2Ds2LQ&s",
+    "https://cdn2.tuoitre.vn/471584752817336320/2025/7/28/2025-07-28t101548z2070528497rc2mvfa7mp9grtrmadp3thailand-cambodia-malaysia-1753701023211168126167.jpg",
+    "https://forbes.vn/wp-content/uploads/2025/04/thailand-cambodia-paetongtarn_Bangkok-Post_c1_3007239_250421093800.jpg",
+  ];
+
+  const suggetData = [
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ45YQWCqiGTmYd4XL6iLsfFNfRhTjaWC27EA&s",
+    "https://vcdn1-thethao.vnecdn.net/2025/10/17/mu-1760694964-1760695093-8893-1760695212.jpg?w=500&h=300&q=100&dpr=1&fit=crop&s=_6Fu6Nq3BFaU4Pov56gLMw",
+    "https://diff.vn/wp-content/uploads/2025/06/Copy-of-MU-team-1.jpg",
+  ];
 
   return (
     <SafeAreaView edges={["top"]} className="flex-1 bg-white-primary">
@@ -115,7 +122,7 @@ export default function SearchScreen() {
         {/* Pets you follow */}
         <View className="px-6 mb-6 mt-4">
           <Text className="text-lg font-bold text-black mb-3">
-            Pets you follow
+            Nhóm hoạt động
           </Text>
           <ScrollView
             horizontal
@@ -125,7 +132,7 @@ export default function SearchScreen() {
             {groupList?.map((group, index) => (
               <View
                 key={index}
-                className="w-44 h-32 bg-yellow-100 rounded-lg mr-3 overflow-hidden"
+                className="w-44 h-32 bg-gray-100 rounded-lg mr-3 overflow-hidden"
               >
                 <Image
                   source={{ uri: group?.image }}
@@ -138,19 +145,19 @@ export default function SearchScreen() {
 
         {/* Trending */}
         <View className="px-6 mb-6">
-          <Text className="text-lg font-bold text-black mb-3">Trending</Text>
+          <Text className="text-lg font-bold text-black mb-3">Xu hướng</Text>
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
             className="flex-row"
           >
-            {Array.from({ length: 3 }).map((_, index) => (
+            {trendingData.map((item, index) => (
               <View
                 key={index}
-                className="w-44 h-32 bg-yellow-100 rounded-lg mr-3 overflow-hidden"
+                className="w-44 h-32 bg-gray-100 rounded-lg mr-3 overflow-hidden"
               >
                 <Image
-                  source={require("@assets/images/searchListImage.png")}
+                  source={{ uri: item }}
                   style={{ width: "100%", height: "100%" }}
                 />
               </View>
@@ -160,19 +167,19 @@ export default function SearchScreen() {
 
         {/* New */}
         <View className="px-6 mb-6">
-          <Text className="text-lg font-bold text-black mb-3">New</Text>
+          <Text className="text-lg font-bold text-black mb-3">Tin tức</Text>
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
             className="flex-row"
           >
-            {Array.from({ length: 3 }).map((_, index) => (
+            {newData.map((item, index) => (
               <View
                 key={index}
-                className="w-44 h-32 bg-yellow-100 rounded-lg mr-3 overflow-hidden"
+                className="w-44 h-32 bg-gray-100 rounded-lg mr-3 overflow-hidden"
               >
                 <Image
-                  source={require("@assets/images/searchListImage.png")}
+                  source={{ uri: item }}
                   style={{ width: "100%", height: "100%" }}
                 />
               </View>
@@ -183,20 +190,20 @@ export default function SearchScreen() {
         {/* Suggested for you */}
         <View className="px-6 mb-6">
           <Text className="text-lg font-bold text-black mb-3">
-            Suggested for you
+            Gợi ý cho bạn
           </Text>
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
             className="flex-row"
           >
-            {Array.from({ length: 3 }).map((_, index) => (
+            {suggetData.map((item, index) => (
               <View
                 key={index}
-                className="w-44 h-32 bg-yellow-100 rounded-lg mr-3 overflow-hidden"
+                className="w-44 h-32 bg-gray-100 rounded-lg mr-3 overflow-hidden"
               >
                 <Image
-                  source={require("@assets/images/searchListImage.png")}
+                  source={{ uri: item }}
                   style={{ width: "100%", height: "100%" }}
                 />
               </View>

@@ -110,35 +110,33 @@ export default function ForgetPasswordScreen() {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <SafeAreaView className="flex-1 bg-beige-primary">
+      <SafeAreaView className="flex-1 bg-white-primary">
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           keyboardVerticalOffset={0}
           className="flex-1"
         >
           <ScrollView
-            contentContainerStyle={{ flexGrow: 1 }}
+            contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }}
             keyboardShouldPersistTaps="handled"
+            className="px-6"
             bounces={false}
           >
-            {/*Banner */}
-            <View className="relative bg-red-200 h-[300px] w-full overflow-hidden">
-              <Image
-                source={require("../../assets/images/signinbanner.jpg")}
-                style={{
-                  width: screenWidth,
-                  height: 300,
-                  position: "absolute",
-                }}
-                resizeMode="cover"
-              />
-              <Text className="absolute bottom-1 left-4 text-beige-primary font-bold text-5xl">
-                Forget Password
+            {/*Logo */}
+            <Image
+              source={require("@assets/images/applogo.png")}
+              className="w-24 h-24 mx-auto rounded-xl"
+            />
+
+            {/*Title */}
+            <View className="my-6">
+              <Text className="text-3xl font-bold text-black text-center">
+                Quên mật khẩu
               </Text>
             </View>
 
             {/*Form */}
-            <View className="my-6 px-4 gap-4">
+            <View className="my-6 gap-4">
               {stepForgetPassword == 1 ? (
                 <TextInputAuth
                   name="email"
@@ -173,7 +171,7 @@ export default function ForgetPasswordScreen() {
                 onPress={handleSubmit}
                 className="h-14 bg-yellow-primary rounded-[50px] items-center justify-center mt-3"
               >
-                <Text className="text-beige-primary text-xl font-medium">
+                <Text className="text-white-primary text-xl font-medium">
                   {stepForgetPassword == 1
                     ? "Receive OTP"
                     : stepForgetPassword == 2
@@ -183,12 +181,12 @@ export default function ForgetPasswordScreen() {
               </TouchableOpacity>
             </View>
 
-            {/*Other way to login */}
-            <View className="items-center justify-center flex-row gap-3 mt-auto mb-10">
-              <AntDesign name="twitter" size={32} color={"#361F5C"} />
-              <AntDesign name="google" size={32} color={"#361F5C"} />
-              <AntDesign name="facebook-square" size={32} color={"#361F5C"} />
-            </View>
+            <TouchableOpacity
+              onPress={() => router.back()}
+              className="mt-[-10px]"
+            >
+              <Text className="text-center">Quay lại</Text>
+            </TouchableOpacity>
           </ScrollView>
         </KeyboardAvoidingView>
       </SafeAreaView>

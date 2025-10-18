@@ -54,7 +54,7 @@ export default function SignUpScreen() {
   const [focusedField, setFocusedField] = useState(null);
 
   const handleImagePick = async () => {
-    const selectedAssets = await pickImage();
+    const selectedAssets = await pickImage("image");
     if (selectedAssets.length > 0) {
       const formattedAssets = selectedAssets.map((asset) => ({
         uri: asset.uri,
@@ -215,7 +215,6 @@ export default function SignUpScreen() {
     } catch (error) {
       console.log("register err", error);
       alert(error?.data?.message);
-      
     }
   };
 

@@ -199,81 +199,85 @@ function CommentModal({ setPostId, postId }) {
       }}
     >
       <View className="flex-1 justify-end bg-black/50">
-        <KeyboardAvoidingView
-          className="h-[70%] rounded-t-2xl pb-0  bg-white-primary"
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          keyboardVerticalOffset={Platform.OS === "ios" ? 20 : 0}
-        >
-          {/* Header */}
-          <View className="flex-row justify-center items-center p-3 pt-4 border-b border-gray-100">
-            <Text className="text-lg font-bold text-black">Bình luận</Text>
-            <TouchableOpacity
-              onPress={() => setPostId(null)}
-              className="absolute right-3 top-4"
-            >
-              <Ionicons name="close" size={24} color="black" />
-            </TouchableOpacity>
-          </View>
-
-          {/* Comments list */}
-          {loading ? (
-            <ActivityIndicator />
-          ) : commentList?.length < 1 ? (
-            <View className="flex-1 items-center justify-center">
-              <Text className="text-gray-500">No comments</Text>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+          <KeyboardAvoidingView
+            className="h-[70%] rounded-t-2xl pb-0  bg-white-primary"
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            keyboardVerticalOffset={Platform.OS === "ios" ? 20 : 0}
+          >
+            {/* Header */}
+            <View className="flex-row justify-center items-center p-3 pt-4 border-b border-gray-100">
+              <Text className="text-lg font-bold text-black">Bình luận</Text>
+              <TouchableOpacity
+                onPress={() => setPostId(null)}
+                className="absolute right-3 top-4"
+              >
+                <Ionicons name="close" size={24} color="black" />
+              </TouchableOpacity>
             </View>
-          ) : (
-            <FlatList
-              data={commentList}
-              keyExtractor={(item) => item.commentId}
-              contentContainerStyle={{ paddingBottom: 20 }}
-              className="px-4"
-              renderItem={({ item: comment }) => (
-                <CommentItem
-                  comment={comment}
-                  onReply={handleReplyComment}
-                  userId={userId}
-                />
-              )}
-            />
-          )}
 
-          {/* Input field */}
-          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View
-              className={`${Platform.OS === "ios" ? "pb-6" : "pb-3"} border-t border-gray-100 pt-3`}
-            >
-              {replyPeople && (
-                <View className="mb-2 bg-gray-100 rounded-lg p-2 flex-row justify-between items-center">
-                  <Text>Đang trả lời @{replyPeople}</Text>
-                  <TouchableOpacity onPress={() => handleCancelReplyComment()}>
-                    <Ionicons name="close" size={20} color="black" />
+            {/* Comments list */}
+            {loading ? (
+              <ActivityIndicator />
+            ) : commentList?.length < 1 ? (
+              <View className="flex-1 items-center justify-center">
+                <Text className="text-gray-500">No comments</Text>
+              </View>
+            ) : (
+              <FlatList
+                data={commentList}
+                keyExtractor={(item) => item.commentId}
+                contentContainerStyle={{ paddingBottom: 20 }}
+                className="px-4"
+                renderItem={({ item: comment }) => (
+                  <CommentItem
+                    comment={comment}
+                    onReply={handleReplyComment}
+                    userId={userId}
+                  />
+                )}
+              />
+            )}
+
+            {/* Input field */}
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+              <View
+                className={`${Platform.OS === "ios" ? "pb-6" : "pb-3"} border-t border-gray-100 pt-3`}
+              >
+                {replyPeople && (
+                  <View className="mb-2 bg-gray-100 rounded-lg p-2 flex-row justify-between items-center">
+                    <Text>Đang trả lời @{replyPeople}</Text>
+                    <TouchableOpacity
+                      onPress={() => handleCancelReplyComment()}
+                    >
+                      <Ionicons name="close" size={20} color="black" />
+                    </TouchableOpacity>
+                  </View>
+                )}
+                <View className="flex-row items-center gap-3 pt-2 px-4">
+                  <Image
+                    source={{ uri: userInfo?.photos[0] }}
+                    className="w-11 h-11 rounded-full bg-gray-200"
+                  />
+                  <TextInput
+                    className="border border-gray-300 rounded-full px-3 pr-12 py-2 flex-1 text-base text-black"
+                    placeholder="Nhập bình luận..."
+                    value={commentDataForm.content}
+                    onChangeText={(text) =>
+                      setCommentDataForm((prev) => ({ ...prev, content: text }))
+                    }
+                  />
+                  <TouchableOpacity
+                    onPress={() => handleCreateComment()}
+                    className="absolute right-7 top-4"
+                  >
+                    <Ionicons name="send" size={22} color="black" />
                   </TouchableOpacity>
                 </View>
-              )}
-              <View className="flex-row items-center gap-3 pt-2 px-4">
-                <Image
-                  source={{ uri: userInfo?.photos[0] }}
-                  className="w-11 h-11 rounded-full bg-gray-200"
-                />
-                <TextInput
-                  className="border border-gray-300 rounded-full px-3 pr-12 py-2 flex-1 text-base text-black"
-                  placeholder="Nhập bình luận..."
-                  value={commentDataForm.content}
-                  onChangeText={(text) =>
-                    setCommentDataForm((prev) => ({ ...prev, content: text }))
-                  }
-                />
-                <TouchableOpacity
-                  onPress={() => handleCreateComment()}
-                  className="absolute right-7 top-4"
-                >
-                  <Ionicons name="send" size={22} color="black" />
-                </TouchableOpacity>
               </View>
-            </View>
-          </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
+            </TouchableWithoutFeedback>
+          </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
       </View>
     </Modal>
   );

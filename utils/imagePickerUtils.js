@@ -1,8 +1,17 @@
 import * as ImagePicker from "expo-image-picker";
 
-export const pickImage = async () => {
-  let result = await ImagePicker.launchImageLibraryAsync({
-    mediaTypes: ["images", "videos"], // "videos"
+export const pickImage = async (type) => {
+  let mediaTypes;
+  if (type === "image") {
+    mediaTypes = ["images"];
+  } else if (type === "video") {
+    mediaTypes = ["videos"];
+  } else {
+    mediaTypes = ["images", "videos"];
+  }
+
+  const result = await ImagePicker.launchImageLibraryAsync({
+    mediaTypes,
     allowsEditing: true,
     aspect: [4, 3],
     quality: 1,

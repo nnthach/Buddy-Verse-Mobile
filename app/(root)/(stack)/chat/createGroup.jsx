@@ -30,7 +30,7 @@ export default function CreateGroup() {
   const [createGroupForm, setCreateGroupForm] = useState({
     creatorId: userId,
     name: "",
-    maxMember: 3,
+    maxMembers: 3,
     interestIds: [],
   });
 
@@ -75,16 +75,16 @@ export default function CreateGroup() {
         imageUrlList.push(url);
       }
 
-      console.log("create gr data", createGroupForm);
-      const res = await createGroupAPI({
+      const newCreateForm = {
         ...createGroupForm,
+        maxMembers: Number(createGroupForm.maxMembers),
         attachmentUrls: imageUrlList,
-      });
-      console.log("create group res", res.data);
+      };
+      const res = await createGroupAPI(newCreateForm);
       setCreateGroupForm({
         creatorId: userId,
         name: "",
-        maxMember: 0,
+        maxMembers: 0,
         interestIds: [],
       });
       Toast.show({
@@ -115,7 +115,7 @@ export default function CreateGroup() {
             <TouchableOpacity
               activeOpacity={0.8}
               onPress={handleSubmit}
-              className={`rounded-xl items-center justify-center ${createGroupForm?.name && createGroupForm?.maxMember ? "bg-yellow-primary" : "bg-gray-200"}`}
+              className={`rounded-xl items-center justify-center ${createGroupForm?.name && createGroupForm?.maxMembers ? "bg-yellow-primary" : "bg-gray-200"}`}
             >
               <Text className={` py-1 px-2 text-lg text-white-primary`}>
                 Tạo
@@ -139,8 +139,8 @@ export default function CreateGroup() {
               <InputField
                 label={"Số lượng thành viên tối đa"}
                 placeholder={"Tối thiểu 3"}
-                value={createGroupForm.maxMember}
-                name="maxMember"
+                value={createGroupForm.maxMembers}
+                name="maxMembers"
                 setDataForm={setCreateGroupForm}
               />
 
