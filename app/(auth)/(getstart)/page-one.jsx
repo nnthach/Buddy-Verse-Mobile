@@ -24,10 +24,10 @@ export default function GetStartOneScreen() {
 
           {/*Content */}
           <View
-            className="absolute bg-white-primary rounded-xl p-10 w-[350px] h-[320px] justify-center items-center border border-yellow-secondary"
+            className="absolute bg-white-primary rounded-xl p-10 w-[350px] h-[320px] justify-center items-center border border-black"
             style={{ bottom: screenHeight * 0.15 }}
           >
-            <Text className="text-yellow-secondary text-[38px] font-bold">
+            <Text className="text-black text-[38px] font-bold">
               Buddy Verse
             </Text>
             <Text className="text-center text-gray-500 text-lg mb-10 mt-8">

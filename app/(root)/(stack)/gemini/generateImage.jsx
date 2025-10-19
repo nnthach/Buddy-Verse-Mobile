@@ -27,12 +27,12 @@ export default function GenerateImage() {
   const [loadingEdit, setLoadingEdit] = useState(false);
   const { userId, userInfo, handleGetUserById } = useContext(AuthContext);
   const userProfile = {
-    firstname: userInfo?.firstname,
-    lastname: userInfo?.lastname,
-    username: userInfo?.username,
-    bio: userInfo?.bio,
-    gender: userInfo?.gender,
-    dob: userInfo?.dob,
+    // firstname: userInfo?.firstname,
+    // lastname: userInfo?.lastname,
+    // username: userInfo?.username,
+    // bio: userInfo?.bio,
+    // gender: userInfo?.gender,
+    // dob: userInfo?.dob,
     // interestIds: userInfo?.interests || [],
     photoUrls: userInfo?.photos || [],
   };

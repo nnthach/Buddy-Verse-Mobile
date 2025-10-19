@@ -11,7 +11,9 @@ import toastConfig from "@components/CustomToast";
 import Notification from "@components/Notification";
 import { NotificationProvider } from "@context/NotificationContext";
 import { ChatGroupProvider } from "@context/ChatGroupContext";
+import { CommentModalProvider } from "@context/CommentModalContext";
 import JoinGroupModal from "@components/JoinGroupModal";
+import CommentModal from "@components/CommentModal";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -40,14 +42,17 @@ export default function RootLayout() {
   return (
     <AuthProvider>
       <MatchProvider>
-        <NotificationProvider>
-          <ChatGroupProvider>
-            <RootLayoutNav />
-            <Toast config={toastConfig} />
-            <Notification />
-            <JoinGroupModal />
-          </ChatGroupProvider>
-        </NotificationProvider>
+        <CommentModalProvider>
+          <NotificationProvider>
+            <ChatGroupProvider>
+              <RootLayoutNav />
+              <Toast config={toastConfig} />
+              <Notification />
+              <JoinGroupModal />
+              <CommentModal />
+            </ChatGroupProvider>
+          </NotificationProvider>
+        </CommentModalProvider>
       </MatchProvider>
     </AuthProvider>
   );

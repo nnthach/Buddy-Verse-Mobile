@@ -16,6 +16,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { AuthContext } from "@context/AuthContext";
 import { memo, useContext, useEffect, useState } from "react";
 import { commentPostAPI, getPostCommentAPI } from "@services/postService";
+import { CommentModalContext } from "@context/CommentModalContext";
 
 // ReplyList.jsx
 const ReplyList = ({ replies, onReply, userId }) => {
@@ -130,7 +131,9 @@ const CommentItem = ({ comment, onReply, userId }) => {
 };
 
 // root
-function CommentModal({ setPostId, postId }) {
+function CommentModal() {
+  const { commentModalPostId, setCommentModalPostId } =
+    useContext(CommentModalContext);
   const { userId, userInfo } = useContext(AuthContext);
   const [commentDataForm, setCommentDataForm] = useState({
     content: "",
@@ -143,7 +146,7 @@ function CommentModal({ setPostId, postId }) {
   const handleGetPostComment = async () => {
     setLoading(true);
     try {
-      const res = await getPostCommentAPI(postId);
+      const res = await getPostCommentAPI(commentModalPostId);
       setCommentList(res.data);
     } catch (error) {
       console.log("get post comment err", error);
@@ -154,7 +157,7 @@ function CommentModal({ setPostId, postId }) {
 
   const handleCreateComment = async () => {
     try {
-      const res = await commentPostAPI(postId, commentDataForm, {
+      const res = await commentPostAPI(commentModalPostId, commentDataForm, {
         accountId: userId,
       });
       setCommentList(res.data);
@@ -191,11 +194,11 @@ function CommentModal({ setPostId, postId }) {
 
   return (
     <Modal
-      visible={!!postId}
+      visible={!!commentModalPostId}
       animationType="slide"
       transparent
       onRequestClose={() => {
-        setPostId(null);
+        setCommentModalPostId(null);
       }}
     >
       <View className="flex-1 justify-end bg-black/50">
@@ -209,7 +212,7 @@ function CommentModal({ setPostId, postId }) {
             <View className="flex-row justify-center items-center p-3 pt-4 border-b border-gray-100">
               <Text className="text-lg font-bold text-black">Bình luận</Text>
               <TouchableOpacity
-                onPress={() => setPostId(null)}
+                onPress={() => setCommentModalPostId(null)}
                 className="absolute right-3 top-4"
               >
                 <Ionicons name="close" size={24} color="black" />

@@ -1,12 +1,13 @@
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import React from "react";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import WebView from "react-native-webview";
 
 export default function PaymentQR() {
   const { url } = useLocalSearchParams();
+  console.log("url", url);
   return (
     <SafeAreaView className="flex-1 bg-white-primary">
       {/*Heading */}
@@ -18,20 +19,12 @@ export default function PaymentQR() {
         <MaterialIcons name="keyboard-arrow-left" size={34} color="white" />
       </View>
       {/*Content */}
-      <ScrollView
+      {/* <ScrollView
         className="flex-1 px-4"
         contentContainerStyle={{ paddingBottom: 20 }}
-      >
-        {url ? (
-          <WebView source={{ uri: url }} className="flex-1" />
-        ) : (
-          <View className="flex-1 items-center justify-center">
-            <Text className="text-gray-500 text-base">
-              Không có URL thanh toán hợp lệ
-            </Text>
-          </View>
-        )}
-      </ScrollView>
+      > */}
+      <WebView source={{ uri: url }} className="flex-1" />
+      {/* </ScrollView> */}
     </SafeAreaView>
   );
 }

@@ -47,7 +47,7 @@ export default function Payment() {
 
       if (res?.data?.checkoutUrl) {
         router.push({
-          pathname: "/paymentQR",
+          pathname: "/(stack)/membershipPayment/paymentQR",
           params: { url: res.data.checkoutUrl },
         });
       }
