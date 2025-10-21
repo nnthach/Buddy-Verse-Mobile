@@ -29,6 +29,33 @@ export default function GenerateCharacter() {
   const [loadingEdit, setLoadingEdit] = useState(false);
   const { userId, handleGetUserById } = useContext(AuthContext);
 
+  const base64ToFile = async (base64String) => {
+    // Bỏ phần đầu "data:image/png;base64," nếu có
+    const base64Data = base64String.replace(/^data:image\/\w+;base64,/, "");
+
+    const fileUri = `${FileSystem.cacheDirectory}ai_image.png`;
+
+    // Ghi file tạm từ base64
+    await FileSystem.writeAsStringAsync(fileUri, base64Data, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
+
+    return {
+      uri: fileUri,
+      type: "image/png",
+      name: "ai_image.png",
+    };
+  };
+
+  const blobToBase64 = (blob) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result.split(",")[1]);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  };
+
   const GEMINI_API_KEY = process.env.EXPO_PUBLIC_GEMINI_KEY;
 
   const baseImage =
@@ -40,6 +67,7 @@ export default function GenerateCharacter() {
     setImageUri(null);
 
     try {
+      // image with gemini
       const imageRes = await fetch(baseImage);
       const blob = await imageRes.blob();
 
@@ -76,10 +104,52 @@ export default function GenerateCharacter() {
         console.log("Gemini response:", data);
 
         const imageBase64 =
-          data?.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+          data?.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data ||
+          data?.candidates?.[0]?.content?.parts?.[1]?.inlineData?.data;
 
-        if (imageBase64) {
+        console.log("image base 64", imageBase64);
+
+        if (!imageBase64) {
+          Toast.show({
+            type: "error",
+            text1: "Chưa thể tạo ảnh ngay lúc này",
+            text2: "Thử lại nhé",
+          });
+        } else {
           setImageUri(`data:image/png;base64,${imageBase64}`);
+        }
+
+        // Gửi blob thay vì base64 string
+        const imageFile = await base64ToFile(imageBase64);
+
+        const form = new FormData();
+        form.append("image_file", {
+          uri: imageFile.uri,
+          name: imageFile.name,
+          type: imageFile.type,
+        });
+        form.append("size", "auto");
+
+        // image with remove background
+        const removeBgRes = await fetch("https://api.remove.bg/v1.0/removebg", {
+          method: "POST",
+          headers: {
+            "X-Api-Key": "yLupy5GwDjheUDNKwENMFVeS",
+            "Content-Type": "multipart/form-data",
+          },
+          body: form,
+        });
+        console.log("removeBgRes", removeBgRes);
+
+        // set image
+        const blob2 = await removeBgRes.blob(); // <--- chạy được tới đây
+        console.log("blob2", blob2);
+        const base64AfterRemove = await blobToBase64(blob2);
+        console.log("Image after remove.bg:", base64AfterRemove);
+
+        // result img
+        if (base64AfterRemove) {
+          setImageUri(`data:image/png;base64,${base64AfterRemove}`);
         } else {
           Toast.show({
             type: "error",
@@ -102,28 +172,11 @@ export default function GenerateCharacter() {
     }
   };
 
-  const base64ToFile = async (base64String) => {
-    // Bỏ phần đầu "data:image/png;base64," nếu có
-    const base64Data = base64String.replace(/^data:image\/\w+;base64,/, "");
-
-    const fileUri = `${FileSystem.cacheDirectory}ai_image.png`;
-
-    // Ghi file tạm từ base64
-    await FileSystem.writeAsStringAsync(fileUri, base64Data, {
-      encoding: FileSystem.EncodingType.Base64,
-    });
-
-    return {
-      uri: fileUri,
-      type: "image/png",
-      name: "ai_image.png",
-    };
-  };
-
   const handleSubmit = async () => {
     setLoadingEdit(true);
 
     const imageFile = await base64ToFile(imageUri);
+    console.log("imageFile", imageFile);
     const uploadedUrl = await uploadImage(imageFile);
 
     try {

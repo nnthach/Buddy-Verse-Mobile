@@ -129,6 +129,7 @@ export default function SignInScreen() {
         const loginGGRes = await loginGoogleAPI({
           idToken: response.data.idToken,
         });
+        console.log("loginGGRes", loginGGRes);
         const { accessToken, refreshToken, accountId } = loginGGRes.data;
 
         AsyncStorage.setItem("accessToken", accessToken);
