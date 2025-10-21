@@ -22,9 +22,10 @@ export default function GroupChat({ userId }) {
     return (
       <View className="py-3">
         <TouchableOpacity
-          onPress={() =>
-            router.push(`/(root)/(stack)/groupChat/${item.roomId}`)
-          }
+          disabled
+          // onPress={() =>
+          //   router.push(`/(root)/(stack)/groupChat/${item.roomId}`)
+          // }
           className="flex-row items-start gap-3"
         >
           {/* avatar */}
@@ -41,7 +42,7 @@ export default function GroupChat({ userId }) {
             <View className="flex-row items-center justify-between">
               <Text
                 numberOfLines={1}
-                className="text-gray-700 font-semibold text-lg"
+                className="text-gray-700 font-semibold text-lg max-w-[82%]"
               >
                 {item?.name}
               </Text>

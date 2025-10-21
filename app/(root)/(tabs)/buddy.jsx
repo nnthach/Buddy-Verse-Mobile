@@ -169,7 +169,7 @@ export default function BuddyScreen() {
           {/*For you */}
           <View className="gap-3">
             <Text className="text-base font-semibold text-black-primary px-6">
-              For you
+              Cộng đồng phù hợp với bạn
             </Text>
             <ScrollView
               horizontal

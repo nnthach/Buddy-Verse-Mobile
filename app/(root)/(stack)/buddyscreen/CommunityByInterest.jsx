@@ -40,7 +40,7 @@ function CommunityByInterest() {
   return (
     <View className="gap-3">
       <Text className="text-base font-semibold text-black px-6">
-        Communities by Interests
+        Cộng đồng
       </Text>
       {/* filter */}
       <ScrollView

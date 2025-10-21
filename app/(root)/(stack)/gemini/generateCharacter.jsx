@@ -57,6 +57,7 @@ export default function GenerateCharacter() {
   };
 
   const GEMINI_API_KEY = process.env.EXPO_PUBLIC_GEMINI_KEY;
+  const REMOVE_BG_API_KEY = process.env.EXPO_PUBLIC_REMOVEBG_KEY;
 
   const baseImage =
     "https://firebasestorage.googleapis.com/v0/b/buddyverse-b64d2.firebasestorage.app/o/8.png?alt=media&token=5ec3b1a6-4e4e-44a6-92ce-47e468622868";
@@ -73,6 +74,8 @@ export default function GenerateCharacter() {
 
       const reader = new FileReader();
       reader.onloadend = async () => {
+        setLoading(true);
+
         const base64Image = reader.result.split(",")[1];
 
         const res = await fetch(
@@ -109,16 +112,6 @@ export default function GenerateCharacter() {
 
         console.log("image base 64", imageBase64);
 
-        if (!imageBase64) {
-          Toast.show({
-            type: "error",
-            text1: "Chưa thể tạo ảnh ngay lúc này",
-            text2: "Thử lại nhé",
-          });
-        } else {
-          setImageUri(`data:image/png;base64,${imageBase64}`);
-        }
-
         // Gửi blob thay vì base64 string
         const imageFile = await base64ToFile(imageBase64);
 
@@ -134,7 +127,7 @@ export default function GenerateCharacter() {
         const removeBgRes = await fetch("https://api.remove.bg/v1.0/removebg", {
           method: "POST",
           headers: {
-            "X-Api-Key": "yLupy5GwDjheUDNKwENMFVeS",
+            "X-Api-Key": REMOVE_BG_API_KEY,
             "Content-Type": "multipart/form-data",
           },
           body: form,
@@ -160,6 +153,7 @@ export default function GenerateCharacter() {
       };
 
       reader.readAsDataURL(blob);
+      setLoading(false);
     } catch (error) {
       console.error(error);
       Toast.show({

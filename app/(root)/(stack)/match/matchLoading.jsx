@@ -11,6 +11,7 @@ import { MatchContext } from "../../../../context/MatchContext";
 import { AuthContext } from "../../../../context/AuthContext";
 
 import { getMatchConnection } from "@services/signalRService";
+import Toast from "react-native-toast-message";
 
 export default function MatchLoading() {
   const { label } = useLocalSearchParams();
@@ -58,6 +59,10 @@ export default function MatchLoading() {
       connectionRef.current = conn;
     } catch (error) {
       console.log("match queue err", error);
+      Toast.show({
+        type: "error",
+        text1: "Chưa thể kết nối lúc này",
+      });
     }
   };
 

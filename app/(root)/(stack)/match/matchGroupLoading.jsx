@@ -11,6 +11,7 @@ import { AuthContext } from "../../../../context/AuthContext";
 import { ChatGroupContext } from "@context/ChatGroupContext";
 import { getMatchConnection } from "@services/signalRService";
 import { matchGroupByInterestAPI } from "@services/matchService";
+import Toast from "react-native-toast-message";
 
 export default function MatchGroupLoading() {
   const { label } = useLocalSearchParams();
@@ -30,6 +31,10 @@ export default function MatchGroupLoading() {
       router.replace("/(tabs)/chat");
     } catch (error) {
       console.log("match group err", error);
+      Toast.show({
+        type: "success",
+        text1: "Chưa tìm thấy nhóm phù hợp",
+      });
     }
   };
   useEffect(() => {
@@ -59,7 +64,7 @@ export default function MatchGroupLoading() {
             className="w-3 h-3 mt-1"
           />
           <Text className="text-white-primary/50 text-sm mt-2">
-            Pro tip: A clear profile photo gets 3x more connections!
+            Cập nhật thông tin đầy đủ để tăng độ uy tín nhé!
           </Text>
         </View>
 

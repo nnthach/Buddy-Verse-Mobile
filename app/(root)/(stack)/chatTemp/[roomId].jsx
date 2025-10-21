@@ -5,6 +5,10 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Platform,
+  Keyboard,
 } from "react-native";
 import React, {
   useCallback,
@@ -276,118 +280,129 @@ export default function ChatTempRoom() {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-black">
-      {/*Heading */}
-      <View className="h-16 flex-row items-center justify-between px-4">
-        {/* Left */}
-        <View className="flex-row items-center gap-3">
-          {/* Countdown */}
-          <View className="bg-yellow-400 px-4 py-2 rounded-md">
-            <Text className="font-bold text-black text-base">
-              {String(Math.floor(countdown / 60)).padStart(2, "0")}:
-              {String(countdown % 60).padStart(2, "0")}
-            </Text>
-          </View>
-
-          {/* userWantContinue */}
-          {userWantContinue !== "" && (
-            <Text className="text-white-primary font-medium" numberOfLines={1}>
-              {userWantContinue}
-            </Text>
-          )}
-        </View>
-
-        {/* Right */}
-        <View className="flex-row items-center gap-4">
-          <MaterialIcons name="error-outline" size={24} color="red" />
-          <TouchableOpacity onPress={() => handleEndChat(roomId)}>
-            <MaterialIcons name="logout" size={24} color="white" />
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <View className="flex-row p-3 items-center justify-center gap-2">
-        <Image
-          source={require("@assets/images/andanhavatar/andanh_daulau.jpg")}
-          className="w-10 h-10 rounded-full bg-gray-200"
-        />
-        <Image
-          source={require("@assets/images/andanhavatar/andanh_ocsen.jpg")}
-          className="w-10 h-10 rounded-full bg-gray-200"
-        />
-      </View>
-
-      {/*Content */}
-      <ScrollView
-        ref={scrollViewRef}
-        className="pt-4 px-4"
-        contentContainerStyle={{ paddingBottom: 20 }}
-      >
-        {messages.length > 0 &&
-          messages.map((item) => (
-            <View
-              key={item?.messageId}
-              className={`flex-row gap-2 items-start mb-3`}
-            >
-              <View
-                className={`${item?.senderId === userId ? "items-end" : "items-start"} gap-1 w-full`}
-              >
-                <View
-                  className={`${item?.senderId === userId ? "bg-[#956F00]" : "bg-[#53435B]"} rounded-md p-3 px-4 max-w-[70%]`}
-                >
-                  <Text
-                    className={`${item?.senderId === userId ? "text-white-primary" : "text-white-primary"}`}
-                  >
-                    {item?.content}
-                  </Text>
-                </View>
-                <Text className="text-gray-400 text-xs">
-                  {new Date(item?.createdAt).toLocaleTimeString("en-US", {
-                    hour: "numeric",
-                    minute: "2-digit",
-                  })}
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <SafeAreaView className="flex-1 bg-black">
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={{ flex: 1 }}
+          keyboardVerticalOffset={90}
+        >
+          {/*Heading */}
+          <View className="h-16 flex-row items-center justify-between px-4">
+            {/* Left */}
+            <View className="flex-row items-center gap-3">
+              {/* Countdown */}
+              <View className="bg-yellow-400 px-4 py-2 rounded-md">
+                <Text className="font-bold text-black text-base">
+                  {String(Math.floor(countdown / 60)).padStart(2, "0")}:
+                  {String(countdown % 60).padStart(2, "0")}
                 </Text>
               </View>
+
+              {/* userWantContinue */}
+              {userWantContinue !== "" && (
+                <Text
+                  className="text-white-primary font-medium"
+                  numberOfLines={1}
+                >
+                  {userWantContinue}
+                </Text>
+              )}
             </View>
-          ))}
-      </ScrollView>
 
-      {/*Input */}
-      <View className="flex-row px-4 items-center gap-4 ">
-        <View className="rounded-md h-12 flex-1 items-center flex-row px-3 bg-[#48434B]">
-          <TextInput
-            className="flex-1 h-full px-3 pb-3 text-xl text-white-primary"
-            onChangeText={(text) =>
-              setSendMessageForm((prev) => ({
-                ...prev,
-                content: text,
-              }))
-            }
-            value={sendMessageForm.content}
-            textAlignVertical="center"
-            placeholder="Nhập tin nhắn..."
-            placeholderTextColor="#00000050"
-          />
-        </View>
+            {/* Right */}
+            <View className="flex-row items-center gap-4">
+              <MaterialIcons name="error-outline" size={24} color="red" />
+              <TouchableOpacity onPress={() => handleEndChat(roomId)}>
+                <MaterialIcons name="logout" size={24} color="white" />
+              </TouchableOpacity>
+            </View>
+          </View>
 
-        {sendMessageForm.content != "" && (
-          <TouchableOpacity onPress={handleSendMessage}>
-            <Ionicons name="send" size={24} color="white" />
-          </TouchableOpacity>
-        )}
-        <Feather name="mic" size={22} color="white" />
-        <Feather name="smile" size={22} color="white" />
-        <Feather name="camera" size={24} color="white" />
-      </View>
+          <View className="flex-row p-3 items-center justify-center gap-2">
+            <Image
+              source={require("@assets/images/andanhavatar/andanh_daulau.jpg")}
+              className="w-10 h-10 rounded-full bg-gray-200"
+            />
+            <Image
+              source={require("@assets/images/andanhavatar/andanh_ocsen.jpg")}
+              className="w-10 h-10 rounded-full bg-gray-200"
+            />
+          </View>
 
-      {/* Floating continue button */}
-      <TouchableOpacity
-        activeOpacity={0.85}
-        onPress={handleContinueChat}
-        className="absolute right-4 bottom-20 bg-yellow-400 w-12 h-12 rounded-full items-center justify-center shadow-md"
-      >
-        <MaterialIcons name="favorite" size={22} color="black" />
-      </TouchableOpacity>
-    </SafeAreaView>
+          {/*Content */}
+          <ScrollView
+            ref={scrollViewRef}
+            className="pt-4 px-4"
+            contentContainerStyle={{ paddingBottom: 20 }}
+          >
+            {messages.length > 0 &&
+              messages.map((item) => (
+                <View
+                  key={item?.messageId}
+                  className={`flex-row gap-2 items-start mb-3`}
+                >
+                  <View
+                    className={`${item?.senderId === userId ? "items-end" : "items-start"} gap-1 w-full`}
+                  >
+                    <View
+                      className={`${item?.senderId === userId ? "bg-[#956F00]" : "bg-[#53435B]"} rounded-md p-3 px-4 max-w-[70%]`}
+                    >
+                      <Text
+                        className={`${item?.senderId === userId ? "text-white-primary" : "text-white-primary"}`}
+                      >
+                        {item?.content}
+                      </Text>
+                    </View>
+                    <Text className="text-gray-400 text-xs">
+                      {new Date(item?.createdAt).toLocaleTimeString("en-US", {
+                        hour: "numeric",
+                        minute: "2-digit",
+                      })}
+                    </Text>
+                  </View>
+                </View>
+              ))}
+          </ScrollView>
+
+          {/*Input */}
+          <View className="flex-row px-4 items-center gap-4 ">
+            <View className="rounded-md h-12 flex-1 items-center flex-row px-3 bg-[#48434B]">
+              <TextInput
+                className="flex-1 h-full px-3 pb-3 text-xl text-white-primary"
+                onChangeText={(text) =>
+                  setSendMessageForm((prev) => ({
+                    ...prev,
+                    content: text,
+                  }))
+                }
+                value={sendMessageForm.content}
+                textAlignVertical="center"
+                placeholder="Nhập tin nhắn..."
+                placeholderTextColor="#00000050"
+              />
+            </View>
+
+            {sendMessageForm.content != "" && (
+              <TouchableOpacity onPress={handleSendMessage}>
+                <Ionicons name="send" size={24} color="white" />
+              </TouchableOpacity>
+            )}
+            <Feather name="mic" size={22} color="white" />
+            <Feather name="smile" size={22} color="white" />
+            <Feather name="camera" size={24} color="white" />
+          </View>
+        </KeyboardAvoidingView>
+
+        {/* Floating continue button */}
+        <TouchableOpacity
+          activeOpacity={0.85}
+          onPress={handleContinueChat}
+          className="absolute right-4 bottom-20 bg-yellow-400 w-12 h-12 rounded-full items-center justify-center shadow-md"
+        >
+          <MaterialIcons name="favorite" size={22} color="black" />
+        </TouchableOpacity>
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 }

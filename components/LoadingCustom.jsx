@@ -20,7 +20,7 @@ export default function LoadingCustom({ label }) {
             className="w-3 h-3 mt-1"
           />
           <Text className="text-white-primary/50 text-sm mt-2">
-            Pro tip: A clear profile photo gets 3x more connections!
+            Tải thật nhiều hình cá nhân để được kết nối tốt hơn
           </Text>
         </View>
       </View>

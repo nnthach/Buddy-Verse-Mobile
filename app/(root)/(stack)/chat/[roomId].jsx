@@ -118,7 +118,7 @@ export default function ChatRoom() {
             style={{ flex: 1 }}
             keyboardVerticalOffset={90}
           >
-            <ScrollView className="flex-1" nestedScrollEnabled={true}>
+            <>
               {/*Heading */}
               <View className="h-16 flex-row justify-between items-center px-4 border-b border-gray-50">
                 {/*Left */}
@@ -167,7 +167,7 @@ export default function ChatRoom() {
               {/*Content */}
               <ScrollView
                 ref={scrollViewRef}
-                className="pt-4 px-4"
+                className="pt-4 px-4 "
                 contentContainerStyle={{ paddingBottom: 20 }}
               >
                 {messages.length > 0 &&
@@ -238,7 +238,7 @@ export default function ChatRoom() {
               </ScrollView>
 
               {/*Input */}
-              <View className="flex-row px-4 items-center gap-4 ">
+              <View className="flex-row px-4 items-center gap-4 mt-auto ">
                 <View className="rounded-xl h-12 flex-1 items-center flex-row px-3 bg-black/5">
                   <TextInput
                     className="flex-1 h-full px-3 pb-2 text-xl text-black"
@@ -263,7 +263,7 @@ export default function ChatRoom() {
                 <Feather name="smile" size={22} color="black" />
                 <Feather name="camera" size={24} color="black" />
               </View>
-            </ScrollView>
+            </>
           </KeyboardAvoidingView>
         </SafeAreaView>
       </TouchableWithoutFeedback>

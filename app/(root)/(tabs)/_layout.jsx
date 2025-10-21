@@ -25,7 +25,8 @@ export default function Layout() {
           backgroundColor: "white",
           overflow: "hidden",
           position: "absolute",
-          borderTopWidth: 0,
+          borderTopWidth: 1,
+          borderTopColor: "black",
           height: 76,
         },
         tabBarItemStyle: {
