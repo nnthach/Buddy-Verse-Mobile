@@ -24,7 +24,7 @@ export default function BuddyScreen() {
 
   //banner
   const imgBannerList = [
-    require("@assets/images/bannerMain.png"),
+    require("@assets/images/applogo.png"),
     require("@assets/images/signinbanner.jpg"),
     require("@assets/images/banner_explore.png"),
   ];
@@ -99,7 +99,7 @@ export default function BuddyScreen() {
         {/*Logo */}
         <View className="w-[150px] overflow-hidden">
           <Image
-            source={require("@assets/images/logoTextBlack.png")}
+            source={require("@assets/images/logo_text_black.png")}
             style={{ width: "100%", height: 84, resizeMode: "contain" }}
           />
         </View>

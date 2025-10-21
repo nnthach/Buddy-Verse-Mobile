@@ -26,3 +26,9 @@ export const createPaymentAPI = async (data) => {
 
   return res;
 };
+
+export const getPaymentAPI = async (id) => {
+  const res = await axiosClient.get(`/payment/${id}`);
+
+  return res;
+};

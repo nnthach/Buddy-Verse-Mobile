@@ -208,6 +208,97 @@ export default function ProfileScreen() {
     );
   };
 
+  const listRender = () => {
+    return (
+      <View className='mb-3'>
+        {/* Cover */}
+        <View className="w-full h-[140px] bg-gray-200">
+          <Image
+            source={require("@assets/images/applogo.png")}
+            className="w-full h-full"
+            resizeMode="cover"
+          />
+        </View>
+
+        {/* Profile header */}
+        <View className="px-6">
+          {/* Avatar overlapping */}
+          <View className="-mt-8 items-center">
+            <Image
+              source={
+                userInfo?.avatarUrl
+                  ? { uri: userInfo?.avatarUrl }
+                  : require("@assets/images/avatar.png")
+              }
+              className="w-24 h-24 rounded-full bg-white-primary"
+              resizeMode="cover"
+            />
+          </View>
+
+          {/* Name and stats */}
+          <View className="mt-2 items-center">
+            <Text className="text-[20px] font-semibold text-black text-center">
+              {userInfo?.lastname} {userInfo?.firstname}
+            </Text>
+          </View>
+
+          {/* Bio */}
+          <View className="mt-2 gap-3 items-center">
+            <Text className="text-[13px] text-gray-700 text-center">
+              {userInfo?.bio}
+            </Text>
+          </View>
+
+          {/*interest */}
+          {userInfo?.interests.length > 0 && (
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              className="mt-3 -mx-1"
+            >
+              {userInfo?.interests?.map((t, idx) => (
+                <View
+                  key={idx}
+                  className="mr-2 bg-gray-100 px-3 py-2 rounded-full"
+                >
+                  <Text className="text-[12px] text-gray-700">{t}</Text>
+                </View>
+              ))}
+            </ScrollView>
+          )}
+
+          {/* Tabs */}
+          <View className="flex-row items-center gap-6 mt-5">
+            {[
+              { key: "posts", label: "Bài viết" },
+              { key: "photo", label: "Hình ảnh" },
+            ].map((tab) => (
+              <TouchableOpacity
+                key={tab.key}
+                onPress={() => setActiveTab(tab.key)}
+              >
+                <View className="items-center">
+                  <Text
+                    className={`text-[13px] ${
+                      activeTab === tab.key
+                        ? "text-black font-semibold"
+                        : "text-gray-500"
+                    }`}
+                  >
+                    {tab.label}
+                  </Text>
+                  {activeTab === tab.key && (
+                    <View className="h-[2px] bg-black w-10 mt-2" />
+                  )}
+                </View>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+      </View>
+    );
+  };
+
   return (
     <>
       <SafeAreaView edges={["top"]} className="flex-1 bg-white-primary">
@@ -216,7 +307,7 @@ export default function ProfileScreen() {
           {/*Logo */}
           <View className="w-[150px] overflow-hidden">
             <Image
-              source={require("@assets/images/logoTextBlack.png")}
+              source={require("@assets/images/logo_text_black.png")}
               style={{ width: "100%", height: 84, resizeMode: "contain" }}
             />
           </View>
@@ -230,115 +321,53 @@ export default function ProfileScreen() {
           </View>
         </View>
 
-        <FlatList
-          data={postList}
-          renderItem={renderPostItem}
-          keyExtractor={(item) => item?.postId?.toString()}
-          ListHeaderComponent={
-            <View>
-              {/* Cover */}
-              <View className="w-full h-[140px] bg-gray-200">
-                <Image
-                  source={require("@assets/images/bannerMain.png")}
-                  className="w-full h-full"
-                  resizeMode="cover"
-                />
-              </View>
-
-              {/* Profile header */}
-              <View className="px-6">
-                {/* Avatar overlapping */}
-                <View className="-mt-8 items-center">
-                  <Image
-                    source={
-                      userInfo?.photos?.[0]
-                        ? { uri: userInfo.photos[0] }
-                        : require("@assets/images/avatar.png")
-                    }
-                    className="w-24 h-24 rounded-full"
-                    resizeMode="cover"
-                  />
-                </View>
-
-                {/* Name and stats */}
-                <View className="mt-2 items-center">
-                  <Text className="text-[20px] font-semibold text-black text-center">
-                    {userInfo?.lastname} {userInfo?.firstname}
-                  </Text>
-                  <View className="flex-row items-center justify-center gap-3 mt-2">
-                    <Text className="text-gray-500 text-[12px]">
-                      San Francisco
-                    </Text>
-                    <Text className="text-gray-400 text-[12px]">
-                      184 following
-                    </Text>
-                    <Text className="text-gray-400 text-[12px]">
-                      611 followers
-                    </Text>
-                  </View>
-                </View>
-
-                {/* Bio */}
-                <View className="mt-3 gap-3 items-center">
-                  <Text className="text-[13px] text-gray-700 text-center">
-                    {userInfo?.bio}
-                  </Text>
-                </View>
-
-                {/*interest */}
-                {userInfo?.interests.length > 0 && (
-                  <ScrollView
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    className="mt-3 -mx-1"
+        {activeTab === "posts" ? (
+          <FlatList
+            key={"posts"}
+            data={postList}
+            renderItem={renderPostItem}
+            keyExtractor={(item) => item?.postId?.toString()}
+            ListHeaderComponent={listRender}
+            contentContainerStyle={{ paddingBottom: 50 }}
+            refreshing={loading}
+            onRefresh={refresh}
+            showsVerticalScrollIndicator={false}
+          />
+        ) : (
+            <FlatList
+              key={"photo"}
+              data={userInfo?.photos || []}
+              renderItem={({ item }) => {
+                const screenWidth = Dimensions.get("window").width;
+                const itemSize = (screenWidth - 4) / 3;
+                return (
+                  <View
+                    style={{
+                      width: itemSize,
+                      height: itemSize,
+                      margin: 1,
+                      backgroundColor: "#f3f3f3",
+                    }}
                   >
-                    {userInfo?.interests?.map((t, idx) => (
-                      <View
-                        key={idx}
-                        className="mr-2 bg-gray-100 px-3 py-2 rounded-full"
-                      >
-                        <Text className="text-[12px] text-gray-700">{t}</Text>
-                      </View>
-                    ))}
-                  </ScrollView>
-                )}
-
-                {/* Tabs */}
-                <View className="flex-row items-center gap-6 mt-5">
-                  {[
-                    { key: "posts", label: "My posts" },
-                    { key: "likes", label: "Likes" },
-                    { key: "bookmarks", label: "Bookmarks" },
-                  ].map((tab) => (
-                    <TouchableOpacity
-                      key={tab.key}
-                      onPress={() => setActiveTab(tab.key)}
-                    >
-                      <View className="items-center">
-                        <Text
-                          className={`text-[13px] ${
-                            activeTab === tab.key
-                              ? "text-black font-semibold"
-                              : "text-gray-500"
-                          }`}
-                        >
-                          {tab.label}
-                        </Text>
-                        {activeTab === tab.key && (
-                          <View className="h-[2px] bg-black w-10 mt-2" />
-                        )}
-                      </View>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              </View>
-            </View>
-          }
-          contentContainerStyle={{ paddingBottom: 50 }}
-          refreshing={loading}
-          onRefresh={refresh}
-          showsVerticalScrollIndicator={false}
-        />
+                    <Image
+                      source={{ uri: item }}
+                      style={{ width: "100%", height: "100%" }}
+                      resizeMode="cover"
+                    />
+                  </View>
+                );
+              }}
+              keyExtractor={(_, index) => index.toString()}
+              ListHeaderComponent={listRender}
+              numColumns={3}
+              contentContainerStyle={{
+                paddingBottom: 50,
+              }}
+              refreshing={loading}
+              onRefresh={refresh}
+              showsVerticalScrollIndicator={false}
+            />
+        )}
 
         {/*floating btn */}
         <TouchableOpacity

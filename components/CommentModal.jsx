@@ -189,6 +189,7 @@ function CommentModal() {
   };
 
   useEffect(() => {
+    if (!commentModalPostId) return;
     handleGetPostComment();
   }, []);
 
@@ -221,7 +222,9 @@ function CommentModal() {
 
             {/* Comments list */}
             {loading ? (
-              <ActivityIndicator />
+              <View className="flex-1 items-center justify-center">
+                <ActivityIndicator />
+              </View>
             ) : commentList?.length < 1 ? (
               <View className="flex-1 items-center justify-center">
                 <Text className="text-gray-500">No comments</Text>
@@ -259,7 +262,7 @@ function CommentModal() {
                 )}
                 <View className="flex-row items-center gap-3 pt-2 px-4">
                   <Image
-                    source={{ uri: userInfo?.photos[0] }}
+                    source={{ uri: userInfo?.avatarUrl }}
                     className="w-11 h-11 rounded-full bg-gray-200"
                   />
                   <TextInput

@@ -38,7 +38,7 @@ export default function GetStartTwoScreen() {
         <View className="h-16 justify-center items-start">
           <View className="w-[150px] overflow-hidden">
             <Image
-              source={require("@assets/images/logoTextBlack.png")}
+              source={require("@assets/images/logo_text_black.png")}
               style={{ width: "100%", height: 84, resizeMode: "contain" }}
             />
           </View>

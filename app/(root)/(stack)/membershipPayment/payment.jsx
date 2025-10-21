@@ -24,7 +24,6 @@ export default function Payment() {
       try {
         setLoading(true);
         const res = await getSubscriptionPlanDetailAPI(planId);
-        console.log("fetch res detail", res.data);
         setSubscriptionDetail(res?.data);
       } catch (error) {
         console.error("Fetch subscription failed:", error);
@@ -43,12 +42,14 @@ export default function Payment() {
         planId,
         paymentMethod: "Payos",
       });
-      console.log("payment create res", res);
 
       if (res?.data?.checkoutUrl) {
         router.push({
           pathname: "/(stack)/membershipPayment/paymentQR",
-          params: { url: res.data.checkoutUrl },
+          params: {
+            url: res.data.checkoutUrl.checkoutUrl,
+            orderCode: res.data.checkoutUrl.orderCode,
+          },
         });
       }
     } catch (error) {
@@ -84,7 +85,7 @@ export default function Payment() {
       <ScrollView className="flex-1 px-6">
         {/*Payment method */}
         <View className="mt-6">
-          <Text className="text-black/70 text-lg">Payment Method</Text>
+          <Text className="text-black/70 text-lg">Phương thức thanh toán</Text>
           {/*Payment method item */}
           <View className="mt-1">
             {methodPayment.map((item, index) => (
@@ -106,7 +107,7 @@ export default function Payment() {
               </View>
             ))}
             <View className="pt-4 items-center justify-between flex-row">
-              <Text className="text-black font-medium text-lg">Other</Text>
+              <Text className="text-black font-medium text-lg">Khác</Text>
               <MaterialIcons
                 name="keyboard-arrow-right"
                 size={30}
@@ -118,7 +119,7 @@ export default function Payment() {
 
         {/*Payment detail */}
         <View className="mt-6">
-          <Text className="text-black/70 text-lg">Payment Method</Text>
+          <Text className="text-black/70 text-lg">Thông tin thanh toán</Text>
 
           <View className="flex-row items-start gap-4 mt-3">
             <View className="bg-white w-14 h-14 rounded-xl bg-yellow-200">
@@ -149,7 +150,7 @@ export default function Payment() {
             onValueChange={setIsChecked}
             color={"black"}
           />
-          <Text className="text-black ml-2">Agree with payment policy</Text>
+          <Text className="text-black ml-2">Đồng ý với các quy định</Text>
         </View>
 
         {/*Accept BTN */}
@@ -161,7 +162,7 @@ export default function Payment() {
           }`}
         >
           <Text className="text-white-primary text-lg font-semibold">
-            Payment
+            Thanh toán
           </Text>
         </TouchableOpacity>
       </ScrollView>

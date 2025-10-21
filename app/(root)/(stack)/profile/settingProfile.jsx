@@ -26,14 +26,13 @@ export default function SettingProfile() {
       onPress: () => router.push("/profile/editProfileForm"),
     },
     {
-      icon: <Feather name="bell-off" size={24} color="black" />,
-      label: "Thông báo",
-      onPress: () => router.push("/(stack)/reward/mainScreenReward"),
-      type: "onoff",
+      icon: <Feather name="image" size={24} color="black" />,
+      label: "Thêm hình ảnh",
+      onPress: () => router.push("/(stack)/profile/addMoreImage"),
+      type: "nest",
     },
     {
       icon: <Feather name="message-square" size={24} color="black" />,
-      // onPress: () => router.push("/(stack)/gemini/chatSupport"),
       label: "Tin nhắn",
       type: "nest",
     },
@@ -85,8 +84,8 @@ export default function SettingProfile() {
         <View className="p-6 justify-start items-center flex-row gap-3 bg-gray-100">
           <Image
             source={
-              userInfo?.photos?.[0]
-                ? { uri: userInfo.photos[0] }
+              userInfo?.avatarUrl
+                ? { uri: userInfo?.avatarUrl }
                 : require("@assets/images/avatar.png")
             }
             className="w-10 h-10 rounded-full"

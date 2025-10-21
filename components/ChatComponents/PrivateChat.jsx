@@ -39,7 +39,7 @@ export default function PrivateChat({ userId }) {
           {/* avatar */}
           <View className="w-12 h-12 bg-gray-500 rounded-full">
             <Image
-              source={{ uri: otherMember?.photos[0] }}
+              source={{ uri: otherMember?.avatarUrl }}
               className="w-full h-full rounded-full"
               resizeMode="cover"
             />

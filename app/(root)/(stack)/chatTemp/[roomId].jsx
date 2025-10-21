@@ -88,6 +88,11 @@ export default function ChatTempRoom() {
           }
         } catch (err) {
           console.error("Error in UserWantsContinue handler:", err);
+          Toast.show({
+            type: "error",
+            text1: "Thử lại nhé",
+            text2: "",
+          });
         }
       });
 
@@ -111,6 +116,11 @@ export default function ChatTempRoom() {
           }
         } catch (err) {
           console.error("Error in RoomPermanent handler:", err);
+          Toast.show({
+            type: "error",
+            text1: "Thử lại nhé",
+            text2: "",
+          });
         }
       });
 
@@ -128,6 +138,11 @@ export default function ChatTempRoom() {
           router.replace("/(tabs)/home");
         } catch (err) {
           console.error("Error in ChatEnded handler:", err);
+          Toast.show({
+            type: "error",
+            text1: "Thử lại nhé",
+            text2: "",
+          });
         }
       });
 
@@ -188,6 +203,11 @@ export default function ChatTempRoom() {
           setMessages(res.data);
         } catch (error) {
           console.log("get mess room between err", error);
+          Toast.show({
+            type: "error",
+            text1: "Thử lại nhé",
+            text2: "",
+          });
         } finally {
           setIsLoading(false);
         }
@@ -209,6 +229,11 @@ export default function ChatTempRoom() {
       setSendMessageForm({ ...sendMessageForm, content: "" });
     } catch (error) {
       console.log("send mess err", error);
+      Toast.show({
+        type: "error",
+        text1: "Thử lại nhé",
+        text2: "",
+      });
     }
   };
 
@@ -217,6 +242,11 @@ export default function ChatTempRoom() {
       await matchDeleteAPI(roomId);
     } catch (err) {
       console.log("Delete match chat API error:", err);
+      Toast.show({
+        type: "error",
+        text1: "Thử lại nhé",
+        text2: "",
+      });
     }
   };
 
@@ -226,6 +256,11 @@ export default function ChatTempRoom() {
       console.log("continue chat res", res.data);
     } catch (err) {
       console.log("continue chat API error:", err);
+      Toast.show({
+        type: "error",
+        text1: "Thử lại nhé",
+        text2: "",
+      });
     }
   };
 

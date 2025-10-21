@@ -124,18 +124,18 @@ export default function SearchScreen() {
         <View className="flex-row items-center gap-3 mb-3 px-6">
           <TouchableOpacity
             onPress={() => {
-              router.push(`/(stack/profile/${post?.author?.accountId})`);
+              router.push(`/(stack)/profile/${post?.author?.accountId})`);
             }}
           >
             <Image
-              source={{ uri: post?.author?.photoUrls?.[0] }}
+              source={{ uri: post?.author?.avatarUrl }}
               className="w-10 h-10 rounded-full border"
               resizeMode="cover"
             />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              router.push(`/(stack/profile/${post?.author?.accountId})`);
+              router.push(`/(stack)/profile/${post?.author?.accountId})`);
             }}
             className="flex-1"
           >
@@ -248,7 +248,7 @@ export default function SearchScreen() {
             <Ionicons name="search" size={22} color="#9CA3AF" />
             <TextInput
               className="flex-1 ml-3 text-gray-900 text-base"
-              placeholder="Search for tags and users"
+              placeholder="Tìm kiếm"
               placeholderTextColor="#9CA3AF"
               // value={query.name}
               // onChangeText={(text) => handleSearchName(text)}

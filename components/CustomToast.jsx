@@ -68,8 +68,8 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   icon: {
-    width: 60,
-    height: 60,
+    width: 50,
+    height: 50,
     resizeMode: "contain",
   },
 });

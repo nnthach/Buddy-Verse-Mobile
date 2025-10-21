@@ -28,6 +28,7 @@ import ModalReportMessage from "@components/ReportComponent/ModalReportMessage";
 import { createReportMessageAPI } from "@services/reportService";
 import Feather from "@expo/vector-icons/Feather";
 import useChatRoom from "../../../../hooks/useChatRoom";
+import Toast from "react-native-toast-message";
 
 export default function ChatRoom() {
   const { roomId, accountId2 } = useLocalSearchParams();
@@ -82,6 +83,11 @@ export default function ChatRoom() {
       setMessageReportId(null);
     } catch (error) {
       console.log("submit report err", error);
+      Toast.show({
+        type: "error",
+        text1: "Thử lại nhé",
+        text2: "",
+      });
     }
   }, [reportMessageForm]);
 
@@ -132,7 +138,7 @@ export default function ChatRoom() {
                     <View className="w-12 h-12 rounded-full bg-gray-400">
                       <Image
                         source={{
-                          uri: userInfoTwo?.photos[0],
+                          uri: userInfoTwo?.avatarUrl,
                         }}
                         className="w-12 h-12 rounded-full"
                         resizeMode="cover"
@@ -148,7 +154,7 @@ export default function ChatRoom() {
                       <Text className="font-semibold text-xl">
                         {userInfoTwo?.lastname} {userInfoTwo?.firstname}
                       </Text>
-                      <Text className="text-gray-500">Online</Text>
+                      <Text className="text-gray-500">Trực tuyến</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -176,7 +182,7 @@ export default function ChatRoom() {
                         <View className="w-11 h-11 bg-gray-400 rounded-full overflow-hidden items-center justify-center">
                           <Image
                             source={{
-                              uri: userInfoTwo?.photos[0],
+                              uri: userInfoTwo?.avatarUrl,
                             }}
                             className="w-11 h-11 rounded-full"
                             resizeMode="cover"

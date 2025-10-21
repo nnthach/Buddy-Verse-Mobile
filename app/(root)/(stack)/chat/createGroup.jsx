@@ -94,7 +94,12 @@ export default function CreateGroup() {
       });
       router.back();
     } catch (error) {
-      console.log("create post error", error);
+      console.log("create gr error", error);
+      Toast.show({
+        type: "error",
+        text1: "Tạo nhóm thất bại",
+        text2: "Thử lại nhé",
+      });
     }
   };
 

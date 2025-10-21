@@ -18,64 +18,6 @@ export default function MatchGroupLoading() {
     useContext(ChatGroupContext);
   const { userId } = useContext(AuthContext);
 
-  const connectionRef = useRef(null);
-
-  // const joinMatchQueue = async () => {
-  //   try {
-  //     const conn = await getMatchConnection();
-
-  //     if (conn.state === "Disconnected") {
-  //       await conn.start();
-  //       console.log(
-  //         "[MatchHub] Connection started matchloading:",
-  //         conn.connectionId
-  //       );
-  //     }
-
-  //     conn.on("Matched", (roomId, members) => {
-  //       if (roomId && members) {
-  //         router.replace({
-  //           pathname: `/(stack)/chatTemp/${roomId}`,
-  //           params: {
-  //             accountId1: members[0],
-  //             accountId2: members[1],
-  //           },
-  //         });
-  //       }
-  //     });
-
-  //     conn.on("JoinedQueue", () => {
-  //       console.log("joined queue alo alo");
-  //     });
-
-  //     await conn.invoke(
-  //       "JoinMatchQueue",
-  //       userId,
-  //       matchForm.roomType,
-  //       matchForm.interestIds
-  //     );
-
-  //     connectionRef.current = conn;
-  //   } catch (error) {
-  //     console.log("match queue err", error);
-  //   }
-  // };
-
-  // const handleDisconnect = async () => {
-  //   try {
-  //     if (connectionRef.current) {
-  //       await connectionRef.current.stop(); // Ngắt kết nối
-  //       console.log("[MatchHub] Connection stopped manually");
-  //       connectionRef.current = null;
-  //     }
-
-  //     setMatchForm(initialMatchForm);
-  //     router.replace("/(tabs)/buddy"); // Điều hướng về màn hình Buddy
-  //   } catch (error) {
-  //     console.log("Error disconnecting MatchHub:", error);
-  //   }
-  // };
-
   const handleMatchGroup = async () => {
     try {
       const newMatchGroupData = {

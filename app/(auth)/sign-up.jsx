@@ -49,7 +49,7 @@ export default function SignUpScreen() {
   const [openSelect, setOpenSelect] = useState(false);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
-  const [imageUpload, setImageUpload] = useState([]);
+  const [imageUpload, setImageUpload] = useState("");
 
   const [focusedField, setFocusedField] = useState(null);
 
@@ -93,6 +93,15 @@ export default function SignUpScreen() {
     // Validate dob
     if (!submitRegisterForm.dob) {
       errors.dob = "Vui lòng chọn ngày sinh!";
+      isError = true;
+    }
+
+    // Validate bio
+    if (!submitRegisterForm.bio.trim()) {
+      errors.bio = "Vui lòng nhập tiểu sử!";
+      isError = true;
+    } else if (submitRegisterForm.bio.length < 3) {
+      errors.bio = "Tiểu sử phải có ít nhất 3 ký tự.";
       isError = true;
     }
 
@@ -153,16 +162,16 @@ export default function SignUpScreen() {
     let errors = {};
     let isError = false;
 
-    if (imageUpload.length < 1) {
-      errors.avatar = "Vui lòng tải lên ít nhất 1 ảnh đại diện!";
+    if (imageUpload.length == 0) {
+      errors.avatar = "Vui lòng tải lên 1 ảnh đầu tiên!";
       isError = true;
+      Toast.show({
+        type: "error",
+        text1: "Hãy tải 1 ảnh lên",
+        text2: "Lỗi",
+      });
     }
 
-    Toast.show({
-      type: "error",
-      text1: "Hãy tải 1 ảnh lên",
-      text2: "Lỗi",
-    });
     return isError;
   };
 
@@ -186,6 +195,8 @@ export default function SignUpScreen() {
       return;
     }
 
+    if (handleValidationStep3()) return;
+
     try {
       const imageUrlList = [];
 
@@ -194,16 +205,10 @@ export default function SignUpScreen() {
         imageUrlList.push(url);
       }
 
-      console.log("register form", {
-        ...submitRegisterForm,
-        photoUrls: imageUrlList,
-      });
-
       const res = await registerAPI({
         ...submitRegisterForm,
         photoUrls: imageUrlList,
       });
-      console.log("register res", res.data);
 
       setSubmitRegisterForm(initialRegisterForm);
       Toast.show({
@@ -213,8 +218,11 @@ export default function SignUpScreen() {
       });
       router.replace("/sign-in");
     } catch (error) {
-      console.log("register err", error);
-      alert(error?.data?.message);
+      Toast.show({
+        type: "error",
+        text1: "Đăng ký thất bại!",
+        text2: "Thử lại nhé",
+      });
     }
   };
 
@@ -265,9 +273,21 @@ export default function SignUpScreen() {
             break;
           default:
             console.log("gg sign in err", error);
+            Toast.show({
+              type: "error",
+              text1: "Hãy thử cách khác nhé!",
+              text2: "Xin lỗi bạn",
+            });
+            break;
         }
       } else {
         console.log("gg sign in err", error);
+
+        Toast.show({
+          type: "error",
+          text1: "Hãy thử cách khác nhé!",
+          text2: "Xin lỗi bạn",
+        });
       }
     }
   };
@@ -381,7 +401,7 @@ export default function SignUpScreen() {
                             onPress={() => {
                               setSubmitRegisterForm((prev) => ({
                                 ...prev,
-                                gender: "nam",
+                                gender: "Nam",
                               }));
                               setOpenSelect(false);
                             }}
@@ -394,7 +414,7 @@ export default function SignUpScreen() {
                             onPress={() => {
                               setSubmitRegisterForm((prev) => ({
                                 ...prev,
-                                gender: "nữ",
+                                gender: "Nữ",
                               }));
                               setOpenSelect(false);
                             }}
@@ -454,6 +474,17 @@ export default function SignUpScreen() {
                       </Text>
                     )}
                   </View>
+
+                  <TextInputAuth
+                    name="bio"
+                    label={"Tiểu sử"}
+                    value={submitRegisterForm.bio}
+                    onChangeText={(text) => handleChange("bio", text)}
+                    error={errors?.bio}
+                    focusedField={focusedField}
+                    setFocusedField={setFocusedField}
+                    multiline
+                  />
                 </>
               ) : signupStep == 2 ? (
                 <>
@@ -502,22 +533,22 @@ export default function SignUpScreen() {
                 </>
               ) : (
                 <View className="items-center gap-4">
-                  <Text className="text-gray-primary font-medium text-2xl">
-                    Upload your avatar
+                  <Text className="text-gray-primary font-medium text-xl">
+                    Hãy chọn 1 tấm hình thật xinh
                   </Text>
                   {imageUpload.length < 1 && (
                     // add image
                     <TouchableOpacity
-                      className="bg-gray-200 p-2 items-center justify-center w-26 h-26"
+                      className="bg-gray-200 p-2 items-center justify-center w-28 h-28"
                       onPress={handleImagePick}
                     >
-                      <Text style={{ color: "black" }}>Add Images</Text>
+                      <Text style={{ color: "black" }}>Thêm ảnh</Text>
                     </TouchableOpacity>
                   )}
 
                   {imageUpload.length > 0 && (
                     <View>
-                      <View className="w-24 h-24 overflow-hidden">
+                      <View className="w-28 h-28 overflow-hidden">
                         <Image
                           source={{ uri: imageUpload[0].uri }}
                           className="w-full h-full"

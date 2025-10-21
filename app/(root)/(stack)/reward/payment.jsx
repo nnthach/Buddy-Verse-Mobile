@@ -55,7 +55,7 @@ export default function Payment() {
         <TouchableOpacity onPress={() => router.back()}>
           <MaterialIcons name="keyboard-arrow-left" size={34} color="black" />
         </TouchableOpacity>
-        <Text className="text-black font-semibold text-2xl">Payment</Text>
+        <Text className="text-black font-semibold text-2xl">Thành viên</Text>
         <AntDesign name="questioncircleo" size={24} color="black" />
       </View>
       {/*Content */}
@@ -74,12 +74,12 @@ export default function Payment() {
                   className="w-5 h-5"
                 />
                 <Text className="font-semibold text-xl text-black">
-                  6,868 Pts
+                  6,868 điểm
                 </Text>
               </View>
 
               <View className="flex-row items-center">
-                <Text className="text-black/50 text-md">History</Text>
+                <Text className="text-black/50 text-md">Lịch sử</Text>
                 <MaterialIcons
                   name="keyboard-arrow-right"
                   size={20}
@@ -93,7 +93,7 @@ export default function Payment() {
               <View className="mt-6 justify-center items-center">
                 <Image
                   source={{
-                    uri: userInfo?.photos[0],
+                    uri: userInfo?.avatarUrl,
                   }}
                   className="w-32 h-32 rounded-full bg-gray-100"
                   resizeMode="cover"
@@ -111,7 +111,7 @@ export default function Payment() {
                     resizeMode="cover"
                   />
                   <Text className="text-white-primary font-medium">
-                    Premium Member
+                    Thành viên cao cấp
                   </Text>
                 </View>
                 <View className="flex-row items-center">
@@ -122,7 +122,7 @@ export default function Payment() {
                       )
                     }
                   >
-                    <Text className="text-black/50 text-md">See benefits</Text>
+                    <Text className="text-black/50 text-md">Lợi ích</Text>
                   </TouchableOpacity>
                   <MaterialIcons
                     name="keyboard-arrow-right"
@@ -138,7 +138,7 @@ export default function Payment() {
         {/*Recent transactions*/}
         <View className="bg-gray-50 rounded-2xl p-4 mb-10">
           <Text className="text-xl text-black font-semibold">
-            Recent transactions
+            Thanh toán gần đây
           </Text>
           <View className="mt-4">
             <FlatList
@@ -151,7 +151,7 @@ export default function Payment() {
             />
           </View>
           <Text className="text-center border border-black self-center p-2 rounded-full text-black font-medium mt-4">
-            View More
+            Xem thêm
           </Text>
         </View>
       </ScrollView>

@@ -8,16 +8,10 @@ import {
   ScrollView,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import React, { useCallback, useContext, useState } from "react";
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-import { router, useFocusEffect } from "expo-router";
+import React, {  useContext } from "react";
+import { router } from "expo-router";
 import MainHeader from "@components/MainHeader";
-import { getAllPostAPI, likePostAPI } from "@services/postService";
 import { AuthContext } from "@context/AuthContext";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import CommentModal from "@components/CommentModal";
-import { VideoView, useVideoPlayer } from "expo-video";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
@@ -53,6 +47,7 @@ export default function HomeScreen() {
       id: 2,
       name: "AI tạo nhân vật",
       icon: <Ionicons name="calendar-outline" size={24} color="black" />,
+      onPress: () => router.push("/(root)/(stack)/gemini/generateCharacter"),
     },
     {
       id: 3,
@@ -72,9 +67,7 @@ export default function HomeScreen() {
       <MainHeader />
       {/*Content */}
       <ScrollView
-        // className="px-6"
         contentContainerStyle={{
-          // justifyContent: "center",
           alignItems: "center",
           flexGrow: 1,
         }}
@@ -82,7 +75,7 @@ export default function HomeScreen() {
         {/* Cover */}
         <View className="w-full h-[120px] bg-gray-200">
           <Image
-            source={require("@assets/images/bannerMain.png")}
+            source={require("@assets/images/applogo.png")}
             className="w-full h-full"
             resizeMode="cover"
           />
@@ -90,8 +83,8 @@ export default function HomeScreen() {
         {/*character */}
         <Image
           source={
-            userInfo?.photos[1]
-              ? { uri: userInfo?.photos[1] }
+            userInfo?.characterUrl
+              ? { uri: userInfo?.characterUrl }
               : require("@assets/images/character/white_body.png")
           }
           className="w-72 h-72"
@@ -112,7 +105,7 @@ export default function HomeScreen() {
           className="w-[88%] my-6 p-4 bg-gray-100 border border-gray-400 flex-row justify-center items-center gap-3 rounded-lg"
         >
           <Ionicons name={"search-outline"} size={24} color={"black"} />
-          <Text className="font-medium">Explore Buddy Verse</Text>
+          <Text className="font-medium">Khám phá Buddy Verse</Text>
         </TouchableOpacity>
         {/*more btn */}
         <View className="flex-row flex-wrap w-[88%] justify-between gap-y-4">

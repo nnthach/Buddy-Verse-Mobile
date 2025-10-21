@@ -176,8 +176,8 @@ export default function CreatePost() {
             <View className="flex-row items-center gap-3">
               <Image
                 source={
-                  userInfo?.photos[0]
-                    ? { uri: userInfo.photos[0] }
+                  userInfo?.avatarUrl
+                    ? { uri: userInfo?.avatarUrl }
                     : require("@assets/images/applogo.png")
                 }
                 className="w-12 h-12 rounded-full bg-gray-200"

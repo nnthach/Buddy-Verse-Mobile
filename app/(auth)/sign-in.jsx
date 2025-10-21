@@ -112,7 +112,6 @@ export default function SignInScreen() {
         router.replace("/(root)/(tabs)/home");
       }, 1500);
     } catch (error) {
-      console.log("login err", error);
       Toast.show({
         type: "error",
         text1: error?.data?.message,

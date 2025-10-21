@@ -16,10 +16,13 @@ import { AuthContext } from "@context/AuthContext";
 import Toast from "react-native-toast-message";
 import uploadImage from "utils/uploadImage";
 import * as FileSystem from "expo-file-system";
-import { updateUserAvatarAPI } from "@services/userService";
+import {
+  updateUserAvatarAPI,
+  updateUserCharacterAPI,
+} from "@services/userService";
 import LoadingCustom from "@components/LoadingCustom";
 
-export default function GenerateImage() {
+export default function GenerateCharacter() {
   const [prompt, setPrompt] = useState("");
   const [imageUri, setImageUri] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -60,7 +63,7 @@ export default function GenerateImage() {
                       },
                     },
                     {
-                      text: `Giữ lại khuôn mặt và tỉ lệ người. Thay đổi tóc, mắt, mũi, miệng, quần áo và phông nền theo mô tả: ${prompt}`,
+                      text: `Giữ lại khuôn mặt và tỉ lệ người. Thay đổi tóc, mắt, mũi, miệng, quần áo theo mô tả: ${prompt} và chỉ lấy người, loại bỏ hoàn toàn nền, trả về ảnh PNG với nền trong suốt.`,
                     },
                   ],
                 },
@@ -73,8 +76,7 @@ export default function GenerateImage() {
         console.log("Gemini response:", data);
 
         const imageBase64 =
-          data?.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data ||
-          data?.candidates?.[0]?.content?.parts?.[1]?.inlineData?.data;
+          data?.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
 
         if (imageBase64) {
           setImageUri(`data:image/png;base64,${imageBase64}`);
@@ -125,7 +127,7 @@ export default function GenerateImage() {
     const uploadedUrl = await uploadImage(imageFile);
 
     try {
-      const res = await updateUserAvatarAPI(userId, uploadedUrl);
+      const res = await updateUserCharacterAPI(userId, uploadedUrl);
 
       await handleGetUserById(userId);
 
@@ -136,7 +138,7 @@ export default function GenerateImage() {
       });
       setImageUri(null);
       setPrompt("");
-      router.replace("/(tabs)/profile");
+      router.replace("/(tabs)/home");
     } catch (error) {
       Toast.show({
         type: "error",

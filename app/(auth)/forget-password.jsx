@@ -12,7 +12,6 @@ import {
   ScrollView,
 } from "react-native";
 import React, { useContext, useState } from "react";
-import AntDesign from "@expo/vector-icons/AntDesign";
 import TextInputAuth from "../../components/TextInputAuth";
 import {
   forgotPasswordAPI,
@@ -54,10 +53,8 @@ export default function ForgetPasswordScreen() {
       };
 
       try {
-        console.log("form data email 1", formData);
         const res = await forgotPasswordAPI(formData);
 
-        console.log("fgpw email 1 res", res);
         setForgetPasswordForm((prev) => ({
           ...prev,
           accountId: res.data.accountId,
@@ -66,6 +63,11 @@ export default function ForgetPasswordScreen() {
         setStepForgetPassword(2);
       } catch (error) {
         console.log("email fgpw 1 err", error);
+        Toast.show({
+          type: "error",
+          text1: "Thử lại nhé",
+          text2: "",
+        });
       }
 
       // forgot step 2
@@ -77,14 +79,16 @@ export default function ForgetPasswordScreen() {
         otpCode: forgetPasswordForm?.otpCode,
       };
       try {
-        console.log("form data otp 2", formData);
         const res = await verifyOTPAPI(formData);
-
-        console.log("fgpw otp 2 res", res);
 
         setStepForgetPassword(3);
       } catch (error) {
         console.log("otp fgpw 2 err", error);
+        Toast.show({
+          type: "error",
+          text1: "Thử lại nhé",
+          text2: "",
+        });
       }
     } else {
       const formData = {
@@ -93,7 +97,6 @@ export default function ForgetPasswordScreen() {
       };
 
       try {
-        console.log("form data pw 3", formData);
         const res = await resetPasswordAPI(formData);
 
         Toast.show({
@@ -104,6 +107,11 @@ export default function ForgetPasswordScreen() {
         router.replace("/sign-in");
       } catch (error) {
         console.log("pw fgpw 3 err", error);
+        Toast.show({
+          type: "error",
+          text1: "Thử lại nhé",
+          text2: "",
+        });
       }
     }
   };

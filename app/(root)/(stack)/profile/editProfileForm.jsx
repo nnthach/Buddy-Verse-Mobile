@@ -27,13 +27,7 @@ import uploadImage from "utils/uploadImage";
 import ModalOptionSelectAvatar from "@components/ModalOptionSelectAvatar";
 
 export default function EditProfileForm() {
-  const ADDRESS_BASE_URL = "https://countriesnow.space/api/v0.1";
   const [modalVisible, setModalVisible] = useState(false);
-  const [countryData, setCountryData] = useState({
-    country: "",
-    state: "",
-    city: "",
-  });
 
   const { userId, userInfo, handleGetUserById } = useContext(AuthContext);
 
@@ -44,50 +38,19 @@ export default function EditProfileForm() {
     bio: userInfo?.bio,
     gender: userInfo?.gender,
     dob: userInfo?.dob,
-    // interestIds: userInfo?.interests || [],
     photoUrls: userInfo?.photos || [],
-    // phone: userInfo?.phone,
-    // country: "",
-    // state: "",
-    // city: "",
-    // permanentAddress: "",
-    // presentAddress: "",
-    // postalCode: "",
   });
 
-  const [countries, setCountries] = useState([]);
-  const [cities, setCities] = useState([]);
-  const [states, setStates] = useState([]);
-  const [isLoadingFetchCountry, setIsLoadingFetchCountry] = useState(false);
   const genderData = [
     {
-      label: "nam",
+      label: "Nam",
     },
     {
-      label: "nữ",
+      label: "Nữ",
     },
   ];
 
   const [isLoading, setIsLoading] = useState(false);
-
-  const [imageUpload, setImageUpload] = useState([]);
-
-  const handleImagePick = async () => {
-    const selectedAssets = await pickImage("image");
-    if (selectedAssets.length > 0) {
-      const formattedAssets = selectedAssets.map((asset) => ({
-        uri: asset.uri,
-        type: "image",
-      }));
-      console.log("format assets", formattedAssets);
-      setImageUpload((prev) => [...prev, ...formattedAssets]);
-      const newFormatToRender = selectedAssets.map((asset) => asset.uri);
-      setUserProfile((prev) => ({
-        ...prev,
-        photoUrls: [newFormatToRender[0], ...(prev.photoUrls.slice(1) || [])],
-      }));
-    }
-  };
 
   const [openSelect, setOpenSelect] = useState({
     dob: false,
@@ -95,109 +58,12 @@ export default function EditProfileForm() {
     country: false,
   });
 
-  // fetch country
-  useEffect(() => {
-    const handleGetAllCountry = async () => {
-      setIsLoadingFetchCountry(true);
-      try {
-        const res = await axios.get(`${ADDRESS_BASE_URL}/countries/iso`);
-        setCountries(
-          res.data.data.map((c) => ({
-            value: c.name,
-            label: c.name,
-          }))
-        );
-        setIsLoadingFetchCountry(false);
-        console.log("countries after fetch", countries);
-      } catch (error) {
-        console.log("get country err", error);
-        setIsLoadingFetchCountry(false);
-      }
-    };
-    handleGetAllCountry();
-  }, []);
-
-  // fetch state
-  useEffect(() => {
-    console.log("start fetch sate");
-
-    if (!userProfile.country) return;
-
-    const handleGetAllState = async () => {
-      try {
-        const res = await axios.post(`${ADDRESS_BASE_URL}/countries/states`, {
-          country: userProfile.country,
-        });
-        console.log("res state list", res);
-        setStates(
-          res.data.data.states.map((s) => ({
-            value: s.name,
-            label: s.name,
-          }))
-        );
-      } catch (error) {
-        console.log("get states err", error);
-      }
-    };
-    handleGetAllState();
-  }, [userProfile.country]);
-
-  // fetch city
-  useEffect(() => {
-    if (!userProfile.state) return;
-
-    console.log("start fetch city");
-    const handleGetAllCity = async () => {
-      try {
-        const res = await axios.post(
-          `${ADDRESS_BASE_URL}/countries/state/cities`,
-          {
-            country: userProfile.country,
-            state: userProfile.state,
-          }
-        );
-        console.log("city after fetch", res);
-        setCities(
-          res.data.data.map((c) => ({
-            value: c,
-            label: c,
-          }))
-        );
-      } catch (error) {
-        console.log("get city err", error);
-      }
-    };
-
-    handleGetAllCity();
-  }, [userProfile.state]);
-
   const handleSubmit = async () => {
     setIsLoading(true);
     try {
-      const imageUrlList = [];
-
-      for (const img of imageUpload) {
-        const url = await uploadImage(img);
-        imageUrlList.push(url);
-      }
-
-      const newUserProfileEditData = {
-        ...userProfile,
-        photoUrls: [
-          imageUrlList[0],
-          ...(userProfile.photoUrls?.slice(1) || []),
-        ],
-      };
-
-      console.log("edit newUserProfileEditData data", newUserProfileEditData);
-
       const res = await updateUserProfileAPI(userId, userProfile);
 
       await handleGetUserById(userId);
-
-      setTimeout(async () => {
-        setIsLoading(false);
-      }, 1500);
 
       Toast.show({
         type: "success",
@@ -205,16 +71,15 @@ export default function EditProfileForm() {
         text2: "Thành công",
       });
     } catch (error) {
-      console.log("update profile err", error);
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 1500);
-
       Toast.show({
         type: "error",
         text1: "Cập nhật thông tin thất bại!",
         text2: "Thử lại nhé",
       });
+    } finally {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1500);
     }
   };
 
@@ -247,8 +112,8 @@ export default function EditProfileForm() {
               <View className="mt-6 justify-center items-center">
                 <Image
                   source={
-                    userProfile?.photoUrls?.[0]
-                      ? { uri: userProfile.photoUrls[0] }
+                    userInfo?.avatarUrl
+                      ? { uri: userInfo?.avatarUrl }
                       : require("@assets/images/avatar.png")
                   }
                   className="w-32 h-32 rounded-full"
@@ -264,7 +129,6 @@ export default function EditProfileForm() {
                 <ModalOptionSelectAvatar
                   modalVisible={modalVisible}
                   setModalVisible={setModalVisible}
-                  handleImagePick={handleImagePick}
                 />
               </View>
 
@@ -303,7 +167,6 @@ export default function EditProfileForm() {
                   placeholder={userProfile?.gender || "Chọn giới tính"}
                   type="select"
                   openSelect={openSelect === "gender"}
-                  isLoading={isLoadingFetchCountry}
                   setOpenSelect={() =>
                     setOpenSelect(openSelect === "gender" ? null : "gender")
                   }
@@ -324,68 +187,6 @@ export default function EditProfileForm() {
                   }
                   value={userProfile.dob}
                 />
-                {/* <InputField
-                  label={"Country"}
-                  placeholder={"Country"}
-                  type="select"
-                  openSelect={openSelect === "country"}
-                  isLoading={isLoadingFetchCountry}
-                  setOpenSelect={() =>
-                    setOpenSelect(openSelect === "country" ? null : "country")
-                  }
-                  data={countries}
-                  setUserProfile={setUserProfile}
-                  name="country"
-                  value={userProfile.country}
-                />
-                <InputField
-                  label={"State"}
-                  placeholder={"State"}
-                  type="select"
-                  openSelect={openSelect === "state"}
-                  isLoading={isLoadingFetchCountry}
-                  setOpenSelect={() =>
-                    setOpenSelect(openSelect === "state" ? null : "state")
-                  }
-                  data={states}
-                  setUserProfile={setUserProfile}
-                  name="state"
-                  value={userProfile.state}
-                />
-                <InputField
-                  label={"City"}
-                  placeholder={"City"}
-                  type="select"
-                  openSelect={openSelect === "city"}
-                  setOpenSelect={() =>
-                    setOpenSelect(openSelect === "city" ? null : "city")
-                  }
-                  data={cities}
-                  setUserProfile={setUserProfile}
-                  name="city"
-                  value={userProfile.city}
-                />
-                <InputField
-                  label={"Present Address"}
-                  placeholder={"Nguyen Thi Thap, District 8, HCMC"}
-                  value={userProfile.presentAddress}
-                  name="presentAddress"
-                  setUserProfile={setUserProfile}
-                />
-                <InputField
-                  label={"Permanent Address"}
-                  placeholder={"Nguyen Thi Thap, District 8, HCMC"}
-                  value={userProfile.permanentAddress}
-                  name="permanentAddress"
-                  setUserProfile={setUserProfile}
-                />
-                <InputField
-                  label={"Postal Code"}
-                  placeholder={"56789"}
-                  value={userProfile.postalCode}
-                  name="postalCode"
-                  setUserProfile={setUserProfile}
-                /> */}
               </View>
 
               <View className="mt-6">

@@ -12,7 +12,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { AuthContext } from "../../../../context/AuthContext";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { router, useLocalSearchParams } from "expo-router";
+import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { getUserByIdAPI } from "@services/userService";
 import ModalReportAccount from "@components/ReportComponent/ModalReportAccount";
 import { createReportMessageAPI } from "@services/reportService";
@@ -266,7 +266,7 @@ export default function ProfileByIdScreen() {
               {/* Cover */}
               <View className="w-full h-[140px] bg-gray-200">
                 <Image
-                  source={require("@assets/images/bannerMain.png")}
+                  source={require("@assets/images/applogo.png")}
                   className="w-full h-full"
                   resizeMode="cover"
                 />
@@ -278,11 +278,11 @@ export default function ProfileByIdScreen() {
                 <View className="-mt-8 items-center">
                   <Image
                     source={
-                      userInfo?.photos?.[0]
-                        ? { uri: userInfo.photos[0] }
+                      userInfo?.avatarUrl
+                        ? { uri: userInfo?.avatarUrl }
                         : require("@assets/images/avatar.png")
                     }
-                    className="w-24 h-24 rounded-full"
+                    className="w-24 h-24 rounded-full bg-white-primary"
                     resizeMode="cover"
                   />
                 </View>
@@ -333,8 +333,8 @@ export default function ProfileByIdScreen() {
                 {/* Tabs */}
                 <View className="flex-row items-center gap-6 mt-5">
                   {[
-                    { key: "posts", label: "My posts" },
-                    { key: "likes", label: "Likes" },
+                    { key: "posts", label: "Bài viết" },
+                    { key: "likes", label: "Hình ảnh" },
                     { key: "bookmarks", label: "Bookmarks" },
                   ].map((tab) => (
                     <TouchableOpacity
