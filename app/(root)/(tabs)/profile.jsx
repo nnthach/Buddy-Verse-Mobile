@@ -125,7 +125,7 @@ export default function ProfileScreen() {
         {/* Post header */}
         <View className="flex-row items-center gap-3 mb-3 px-6">
           <Image
-            source={{ uri: post?.author?.photoUrls?.[0] }}
+            source={{ uri: post?.author?.avatarUrl }}
             className="w-10 h-10 rounded-full border"
             resizeMode="cover"
           />
@@ -210,7 +210,7 @@ export default function ProfileScreen() {
 
   const listRender = () => {
     return (
-      <View className='mb-3'>
+      <View className="mb-3">
         {/* Cover */}
         <View className="w-full h-[140px] bg-gray-200">
           <Image
@@ -334,39 +334,39 @@ export default function ProfileScreen() {
             showsVerticalScrollIndicator={false}
           />
         ) : (
-            <FlatList
-              key={"photo"}
-              data={userInfo?.photos || []}
-              renderItem={({ item }) => {
-                const screenWidth = Dimensions.get("window").width;
-                const itemSize = (screenWidth - 4) / 3;
-                return (
-                  <View
-                    style={{
-                      width: itemSize,
-                      height: itemSize,
-                      margin: 1,
-                      backgroundColor: "#f3f3f3",
-                    }}
-                  >
-                    <Image
-                      source={{ uri: item }}
-                      style={{ width: "100%", height: "100%" }}
-                      resizeMode="cover"
-                    />
-                  </View>
-                );
-              }}
-              keyExtractor={(_, index) => index.toString()}
-              ListHeaderComponent={listRender}
-              numColumns={3}
-              contentContainerStyle={{
-                paddingBottom: 50,
-              }}
-              refreshing={loading}
-              onRefresh={refresh}
-              showsVerticalScrollIndicator={false}
-            />
+          <FlatList
+            key={"photo"}
+            data={userInfo?.photos || []}
+            renderItem={({ item }) => {
+              const screenWidth = Dimensions.get("window").width;
+              const itemSize = (screenWidth - 4) / 3;
+              return (
+                <View
+                  style={{
+                    width: itemSize,
+                    height: itemSize,
+                    margin: 1,
+                    backgroundColor: "#f3f3f3",
+                  }}
+                >
+                  <Image
+                    source={{ uri: item }}
+                    style={{ width: "100%", height: "100%" }}
+                    resizeMode="cover"
+                  />
+                </View>
+              );
+            }}
+            keyExtractor={(_, index) => index.toString()}
+            ListHeaderComponent={listRender}
+            numColumns={3}
+            contentContainerStyle={{
+              paddingBottom: 50,
+            }}
+            refreshing={loading}
+            onRefresh={refresh}
+            showsVerticalScrollIndicator={false}
+          />
         )}
 
         {/*floating btn */}

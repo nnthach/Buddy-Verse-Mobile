@@ -89,6 +89,12 @@ export default function ChatTempRoom() {
             });
 
             setUserWantContinue("Đối phương muốn tiếp tục");
+          }else{
+            Toast.show({
+              type: "success",
+              text1: "Hãy chờ đối phương nhé!",
+            });
+            setUserWantContinue("Bạn muốn tiếp tục");
           }
         } catch (err) {
           console.error("Error in UserWantsContinue handler:", err);

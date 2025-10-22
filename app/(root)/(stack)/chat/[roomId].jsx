@@ -125,7 +125,7 @@ export default function ChatRoom() {
                 <View className="flex-row items-center gap-4 w-[80%]">
                   <TouchableOpacity
                     onPress={() => {
-                      router.replace("/(tabs)/chat");
+                      router.back();
                     }}
                   >
                     <MaterialIcons
@@ -147,7 +147,7 @@ export default function ChatRoom() {
                     {/*Name & active */}
                     <TouchableOpacity
                       onPress={() => {
-                        router.push(`/profile/${accountId2}`);
+                        router.push(`/(stack)/profile/${accountId2}`);
                       }}
                       className="flex-1"
                     >
@@ -159,7 +159,10 @@ export default function ChatRoom() {
                   </View>
                 </View>
                 {/*Right */}
-                <TouchableOpacity onPress={() => setIsOpenReport(true)}>
+                <TouchableOpacity
+                  disabled
+                  onPress={() => setIsOpenReport(true)}
+                >
                   <MaterialIcons name="error-outline" size={24} color="red" />
                 </TouchableOpacity>
               </View>

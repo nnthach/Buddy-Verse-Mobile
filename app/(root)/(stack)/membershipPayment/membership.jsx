@@ -45,7 +45,7 @@ export default function Membership() {
           <MaterialIcons name="keyboard-arrow-left" size={34} color="black" />
         </TouchableOpacity>
         <Text className="text-black font-semibold text-2xl">
-          Membership Benefits
+          Lợi ích thành viên
         </Text>
         <Text className="w-[34px]" />
       </View>

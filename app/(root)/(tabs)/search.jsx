@@ -124,7 +124,7 @@ export default function SearchScreen() {
         <View className="flex-row items-center gap-3 mb-3 px-6">
           <TouchableOpacity
             onPress={() => {
-              router.push(`/(stack)/profile/${post?.author?.accountId})`);
+              router.push(`/(stack)/profile/${post?.author?.accountId}`);
             }}
           >
             <Image
@@ -135,7 +135,7 @@ export default function SearchScreen() {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              router.push(`/(stack)/profile/${post?.author?.accountId})`);
+              router.push(`/(stack)/profile/${post?.author?.accountId}`);
             }}
             className="flex-1"
           >

@@ -78,6 +78,8 @@ export default function GenerateCharacter() {
 
         const base64Image = reader.result.split(",")[1];
 
+        console.log("start fetch gemini");
+
         const res = await fetch(
           `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${GEMINI_API_KEY}`,
           {
@@ -102,6 +104,8 @@ export default function GenerateCharacter() {
             }),
           }
         );
+
+        console.log("res fetch gemini", res);
 
         const data = await res.json();
         console.log("Gemini response:", data);

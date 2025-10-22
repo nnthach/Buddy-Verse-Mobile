@@ -36,12 +36,18 @@ export default function GenerateImage() {
     setLoading(true);
     setImageUri(null);
 
+    console.log("start");
+
     try {
       const imageRes = await fetch(baseImage);
       const blob = await imageRes.blob();
 
+      console.log("imageRes", imageRes);
+
       const reader = new FileReader();
       reader.onloadend = async () => {
+        setLoading(true);
+
         const base64Image = reader.result.split(",")[1];
 
         const res = await fetch(
@@ -88,6 +94,7 @@ export default function GenerateImage() {
       };
 
       reader.readAsDataURL(blob);
+      setLoading(false);
     } catch (error) {
       console.error(error);
       Toast.show({

@@ -16,7 +16,7 @@ import { AuthContext } from "@context/AuthContext";
 
 export default function Payment() {
   const [transactionList, setTransactionList] = useState(fakeDataTransaction);
-  const { userInfo } = useContext(AuthContext);
+  const { userInfo, userSubscriptionInfo } = useContext(AuthContext);
 
   const transactionItem = ({ item }) => {
     return (

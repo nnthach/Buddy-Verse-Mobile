@@ -145,7 +145,9 @@ export default function BuddyScreen() {
                 className={`${matchForm?.roomType == "Private" ? "bg-gray-300" : "bg-gray-100"} h-[80px] flex-1 rounded-md items-center justify-center flex-row gap-2`}
               >
                 <FontAwesome name="user" size={16} color="black" />
-                <Text className="text-gray-700 font-semibold">Chat</Text>
+                <Text className="text-gray-700 font-semibold">
+                  Kết nối cá nhấn
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() =>
@@ -154,7 +156,9 @@ export default function BuddyScreen() {
                 className={`${matchForm?.roomType == "group" ? "bg-gray-300" : "bg-gray-100"} h-[80px] flex-1 rounded-md items-center justify-center flex-row gap-2`}
               >
                 <FontAwesome name="users" size={16} color="black" />
-                <Text className="text-gray-700 font-semibold">Group Chat</Text>
+                <Text className="text-gray-700 font-semibold">
+                  Kết nối nhóm
+                </Text>
               </TouchableOpacity>
             </View>
 

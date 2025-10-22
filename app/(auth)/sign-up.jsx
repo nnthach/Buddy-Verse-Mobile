@@ -9,6 +9,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import React, { useContext, useState } from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -43,6 +44,7 @@ export default function SignUpScreen() {
   } = useContext(AuthContext);
 
   const [signupStep, setSignupStep] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [errors, setErrors] = useState({});
 
@@ -196,7 +198,7 @@ export default function SignUpScreen() {
     }
 
     if (handleValidationStep3()) return;
-
+    setIsLoading(true);
     try {
       const imageUrlList = [];
 
@@ -223,6 +225,8 @@ export default function SignUpScreen() {
         text1: "Đăng ký thất bại!",
         text2: "Thử lại nhé",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -569,12 +573,17 @@ export default function SignUpScreen() {
 
               <TouchableOpacity
                 activeOpacity={0.8}
+                disabled={isLoading}
                 onPress={handleSignUp}
-                className="h-14 bg-yellow-primary rounded-xl items-center justify-center mt-3"
+                className={`h-14 bg-yellow-primary rounded-xl items-center justify-center mt-3`}
               >
-                <Text className="text-white-primary text-lg font-bold">
-                  {signupStep == 1 || 2 ? "Tiếp tục" : "Tạo tài khoản"}
-                </Text>
+                {isLoading ? (
+                  <ActivityIndicator />
+                ) : (
+                  <Text className="text-white-primary text-lg font-bold">
+                    {signupStep == 1 || 2 ? "Tiếp tục" : "Tạo tài khoản"}
+                  </Text>
+                )}
               </TouchableOpacity>
               <TouchableOpacity onPress={() => router.replace("/sign-in")}>
                 <Text className="text-center text-gray-primary text-base">
