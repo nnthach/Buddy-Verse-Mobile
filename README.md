@@ -91,6 +91,7 @@ This AI-driven visual personalization helps make every user experience more imme
 ### 🖥 Backend
 - **.NET (ASP.NET Core Web API)**
 - RESTful APIs
+- SQL Server
 
 ### ⚡ Realtime Communication
 - **SignalR**
@@ -116,4 +117,5 @@ This AI-driven visual personalization helps make every user experience more imme
 ---
 
 ## 🏗️ System Architecture Overview
+
 
