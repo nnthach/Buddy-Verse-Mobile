@@ -116,6 +116,11 @@ This AI-driven visual personalization helps make every user experience more imme
 
 ---
 
-## 🏗️ System Architecture Overview
+## 📱 App UI Preview
+
+Below is an overview screenshot showcasing the overall user interface and main features of the Buddy Verse mobile application.
+
+![Buddy Verse App UI Overview](https://github.com/user-attachments/assets/024531c2-760a-467a-8b72-8f18338641bc)
+
 
 
